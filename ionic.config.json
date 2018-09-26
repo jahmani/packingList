@@ -1,0 +1,7 @@
+{
+  "name": "PackingList",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
