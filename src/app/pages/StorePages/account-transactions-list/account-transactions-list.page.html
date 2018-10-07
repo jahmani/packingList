@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button ></ion-back-button>
+      <ion-menu-toggle menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>
+      <ng-container *ngIf="extAccount |async as account; else waiting">
+        {{account.data.name}}
+      </ng-container>
+      <ng-template #waiting>Waiting...</ng-template>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content no-padding>
+  <div>
+  </div>
+  <ion-list lines="full">
+    <ion-item text-wrap *ngIf="extAccount |async as account">
+      <span class="balance ammount-bold" text-end>الرصيد : </span>
+      <span slot="end" class="ammount-bold" [style.color]='account.ext?.$balanceObj?.data?.isDirty ? "red" :""'>
+        {{account.ext.$balanceObj.data.balance}}
+      </span>
+      <span *ngIf="account.ext?.$balanceObj?.data?.isDirty"> ! </span>
+      <span>{{account.ext?.$balance > 0 ? 'له': 'عليه'}}</span>
+    </ion-item>
+    <ion-item-sliding *ngFor="let transSnapshot of transSnapshotsArray|async; let i=index">
+      <ion-item>
+        <div slot="start" style="font-weight:bolder ">
+          <span>
+            <ion-icon *ngIf="transSnapshot.data.type < 0 ; else plusIcon" name="remove" style="color:red"></ion-icon>
+            <ng-template #plusIcon>
+              <ion-icon name="add" style="color:green"></ion-icon>
+            </ng-template>
+          </span>
+          <span>{{(transSnapshot.data.ammount)| number : '1.2-2'}}</span>
+        </div>
+        <ion-label>
+
+          <ion-grid no-padding (click)="presentEditTransactionModal(transSnapshot)">
+            <ion-row>
+              <ion-col text-start>
+                <span>{{transSnapshot.data.type == 1 ? 'له': 'عليه'}}</span>
+                <span>:</span>
+                <span>{{transSnapshot.ext?.catigory?.data.name}}</span>
+              </ion-col>
+
+
+              <ion-col text-end>
+                <ion-note class="date-small">{{transSnapshot.data.date | date:"shortDate"}} </ion-note>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="transSnapshot.data.notice">
+              <ion-col text-start>
+                <ion-note class="date-small">
+                  <span class="note-italic" > \ {{transSnapshot.data.notice}}</span>
+                </ion-note>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-label>
+        <ion-spinner *ngIf="transSnapshot.meta.hasPendingWrites" item-right name="bubbles"></ion-spinner>
+      </ion-item>
+      <ion-item-options>
+        <ion-button (click)="presentEditTransactionModal(transSnapshot)" primary>
+          <ion-icon name="text"></ion-icon>
+          Edit
+        </ion-button>
+        <ion-button (click)="onDelete(transSnapshot)" primary>
+          <ion-icon name="trash"></ion-icon>
+          Delete
+        </ion-button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <!--
+    <ion-fab right bottom>
+      <ion-button ion-fab mini color="primary">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+      <ion-fab-list side="left">
+        <ion-button ion-fab mini (click)="presentNewTransactionModal(-1)"> عليه</ion-button>
+        <ion-button ion-fab mini (click)="presentNewTransactionModal(1)"> له</ion-button>
+      </ion-fab-list>
+    </ion-fab>
+  -->
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="presentNewTransactionModal(1)" icon-only color="royal">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+      <ion-button (click)="presentNewTransactionModal(-1)" icon-only color="royal">
+        <ion-icon name="remove"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-searchbar></ion-searchbar>
+  </ion-toolbar>
+</ion-footer>

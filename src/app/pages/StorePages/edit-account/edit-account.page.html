@@ -1,0 +1,54 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <ion-menu-toggle menuToggle>
+                <ion-button>
+                    <ion-icon slot="icon-only" name="menu"></ion-icon>
+                </ion-button>
+            </ion-menu-toggle>
+        </ion-buttons>
+        <ion-title>
+            {{accountName}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form *ngIf="account$|async as account" novalidate ng-submit="onSubmit()" [formGroup]="form">
+        <ion-list>
+            <ion-item [class.invalid]="!nameControl.valid && (nameControl.touched || submitAttempt)">
+                <ion-label floating>Name</ion-label>
+                <ion-input #focusInput formControlName="name" type="text"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="nameControl.touched || submitAttempt">
+                <p *ngIf="nameControl.hasError('required')" class="err">* name is rquired</p>
+                <p *ngIf="nameControl.hasError('maxlength')" class="err">* maximum name length is 50!</p>
+            </ion-item>
+
+            <ion-item>
+                <ion-label floating>City</ion-label>
+                <ion-input type="text" formControlName="city"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label floating>Mobile</ion-label>
+                <ion-input type="text" formControlName="mobile"></ion-input>
+            </ion-item>
+        </ion-list>
+
+    </form>
+</ion-content>
+<ion-footer>
+    <ion-grid>
+        <ion-row>
+            <!--  <ion-col *ngIf="accountCopy.$key"><ion-button  full (click)="remove()" color="danger">remove</ion-button></ion-col> -->
+            <ion-col>
+                <ion-button type="ion-button" expand="full" (click)="onCancel()" color="light">cancel</ion-button>
+            </ion-col>
+            <ion-col>
+                <ion-button type="submit" expand="full" (click)="onSubmit(form)" color="primary"> save</ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-footer>

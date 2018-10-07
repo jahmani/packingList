@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 import { StoreDataService } from "./store-data.service";
 import { AccountInfo, ExtType, Extended } from "../../interfaces/data-models";
-import { DatePipe } from "@angular/common";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
@@ -9,13 +8,11 @@ import { Observable } from "rxjs";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { map, combineLatest } from "rxjs/operators";
 import { AccountsBalanceService } from "./accounts-balance.service";
+import { StoreBasePageModule } from "../../pages/store-base/store-base.module";
 
-@Injectable({
-  providedIn: "root"
-})
+@Injectable()
 export class AccountsDataService extends StoreDataService<AccountInfo> {
   constructor(
-    private datePipe: DatePipe,
     afs: AngularFirestore,
     activeStoreService: ActiveStoreService,
     private accountsBalanceFBRepository: AccountsBalanceService

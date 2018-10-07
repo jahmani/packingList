@@ -1,0 +1,14 @@
+    <ion-header>
+        <ion-toolbar>
+          <ion-title>Menu Wworkk</ion-title>
+      
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-list padding>
+          <ion-item (click)="menu.close()" [routerLink]="link.path"  *ngFor="let link of links">
+            <ion-label>
+              {{link.title}}
+            </ion-label>
+          </ion-item>
+        </ion-list>

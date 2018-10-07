@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-toggle>
+        <ion-button>
+          <ion-icon name="menu" slot="icon-only">
+
+          </ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>EditStoreInfo</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form *ngIf="storeDoc$|async as storeDoc" novalidate ng-submit="onSubmit()" [formGroup]="form">
+    <ion-list>
+      <ion-item [class.invalid]="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
+        <ion-label floating>Name</ion-label>
+        <ion-input formControlName="name" type="text"></ion-input>
+      </ion-item>
+      <ion-item color="danger" *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
+        <p *ngIf="nameCtrl.hasError('required')" class="err">* ammount is rquired</p>
+        <p *ngIf="nameCtrl.hasError('max')" class="err">*too much big ammount!</p>
+      </ion-item>
+      <ion-item [class.invalid]="!currencyCtrl.valid && (nameCtrl.touched || submitAttempt)">
+        <ion-label floating>Currency</ion-label>
+        <ion-input formControlName="currency" type="text"></ion-input>
+      </ion-item>
+      <ion-item color="danger" *ngIf="!currencyCtrl.valid && (currencyCtrl.touched || submitAttempt)">
+        <p *ngIf="currencyCtrl.hasError('required')" class="err">* ammount is rquired</p>
+        <p *ngIf="currencyCtrl.hasError('max')" class="err">*too much big ammount!</p>
+      </ion-item>
+    </ion-list>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button full (click)="onCancel()" color="light">cancel</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button type="submit" full (click)="onSubmit(form)" color="primary"> save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

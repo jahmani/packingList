@@ -1,3 +1,8 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane>
+    <ion-menu #menu>
+       <app-menu [menu]="menu"></app-menu>
+    </ion-menu>
+    <ion-router-outlet  stack="true" main></ion-router-outlet>
+  </ion-split-pane>
 </ion-app>
