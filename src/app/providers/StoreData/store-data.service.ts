@@ -4,6 +4,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { conatctPaths } from "../../Util/contact-paths";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
+import { map } from "rxjs/operators";
 
 export class StoreDataService<T extends Editable> extends FirestoreData<T> {
   constructor(
@@ -13,7 +14,8 @@ export class StoreDataService<T extends Editable> extends FirestoreData<T> {
   ) {
     super(
       afs,
-      conatctPaths(StorePathConfig.basePath, ass.activeStoreKey, dataSubPath)
+      ass.activeStoreKey$.pipe(map(storePath => {
+        return conatctPaths(StorePathConfig.basePath, storePath, dataSubPath); }))
     );
   }
 }

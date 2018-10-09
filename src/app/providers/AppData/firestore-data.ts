@@ -1,6 +1,6 @@
 import { Editable, Extended, ExtMap } from "../../interfaces/data-models";
 import { Observable } from "rxjs";
-import { map, share, refCount, publishReplay, first } from "rxjs/operators";
+import { map, share, refCount, publishReplay, first, switchMap } from "rxjs/operators";
 import {
   AngularFirestoreCollection,
   AngularFirestore,
@@ -10,6 +10,7 @@ import {
 import { firestore } from "firebase";
 import * as firebase from "firebase";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
+import { instanceAvailability } from "@ionic-native/core";
 
 export class FirestoreData<T extends Editable> {
   get FormatedList(): Observable<any[]> {
@@ -19,9 +20,30 @@ export class FirestoreData<T extends Editable> {
   protected collection: AngularFirestoreCollection<T>;
   dataMap: Observable<ExtMap<Extended<T>>>;
 
-  constructor(protected afs: AngularFirestore, protected path: string) {
+  constructor(protected afs: AngularFirestore,
+     protected path: string | Observable<string>) {
     console.log("Hello FBRepository Provider");
-    this.initialize(path);
+    if (typeof path === "string") {
+      this.initialize(path);
+    } else if (path instanceof Observable) {
+      this.reactiveInitialize(path);
+    }
+  }
+
+  private reactiveInitialize(path$: Observable<string>) {
+
+    const snapshotChanges = path$.pipe(switchMap(path => {
+      this.path = path;
+
+      this.collection = this.afs.collection(path);
+      return this.collection.snapshotChanges();
+    })).pipe(share());
+    this.initData(snapshotChanges);
+  }
+
+  private initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
+    this.dataList = this.snapList(snapshotChanges).pipe(publishReplay(1), refCount());
+    this.dataMap = this.snapshotMap(snapshotChanges).pipe(publishReplay(1), refCount());
   }
 
   initialize(path: string) {
@@ -30,14 +52,7 @@ export class FirestoreData<T extends Editable> {
 
     this.collection = this.afs.collection(path);
     const snapshotChanges = this.collection.snapshotChanges().pipe(share());
-    this.dataList = this.snapList(snapshotChanges).pipe(
-      publishReplay(1),
-      refCount()
-    );
-    this.dataMap = this.snapshotMap(snapshotChanges).pipe(
-      publishReplay(1),
-      refCount()
-    );
+    this.initData(snapshotChanges);
   }
   snapList(
     snapshotChanges: Observable<DocumentChangeAction<T>[]>
