@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { share } from "rxjs/operators";
+import { share, tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +11,7 @@ export class ActiveStoreService {
   _activeStoreKey$: Observable<string>;
   constructor() {
     this.subject = new BehaviorSubject("HW1TAwI2hz0pLNINa51Q");
-    this._activeStoreKey$ = this.subject.asObservable().pipe(share());
+    this._activeStoreKey$ = this.subject.asObservable();
   }
   get activeStoreKey() {
     return this._activeStoreKey;

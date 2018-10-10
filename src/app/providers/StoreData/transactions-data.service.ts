@@ -9,6 +9,7 @@ import { AccountsDataService } from './accounts-data.service';
 import { ImagesDataService } from './images-data.service';
 import { TransactionCatsDataService } from './transaction-cats-data.service';
 import { AccountsBalanceService } from './accounts-balance.service';
+import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +28,13 @@ export class TransactionsDataService extends StoreDataService<Transaction> {
     console.log('Hello TransactionsFsRepository Provider');
   }
   forAccount(accountKey: string) {
-    const transactionsColl = this.afs.collection<Transaction>(this.collection.ref.path, (ref) => ref.where('accountId', '==', accountKey));
+    const transactionsColl$ = this.path$.pipe(map((path) => {
+      return this.afs.collection<Transaction>(path, (ref) => ref.where('accountId', '==', accountKey));
+    }));
    // const transactionsList = super.snapList(transactionsColl);
-    const transactionsMap = super.snapshotMap(transactionsColl.snapshotChanges());
+    const transactionsMap = transactionsColl$.pipe(switchMap((transactionsColl) => {
+        return super.snapshotMap(transactionsColl.snapshotChanges());
+    }));
     // return transactionsMap
     return this.extendedDataMap(transactionsMap);
   }
