@@ -3,6 +3,7 @@ export const StorePathConfig = {
     transCatsTemplatPath :
       "/versions/v4/dataTemplates/transactionCats/cats",
     basePath : "versions/v4/stores",
+    storesInfo : "versions/v4/storesInfo",
     AccountsInfo : "AccountsInfo",
     Images : "Images",
     Orders: "orders",
