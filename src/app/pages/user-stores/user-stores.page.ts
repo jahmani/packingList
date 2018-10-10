@@ -37,10 +37,6 @@ export class UserStoresPage implements OnInit {
     this.userPendingStores = this.userPendingStoresFsRepository.FormatedList;
   }
 
-  replicateStoreInfo() {
-    this.storesFsRepository.replicateStoreInfo();
-  }
-
   createNewStore() {
     return this.auth.user.pipe(take(1)).subscribe(user => {
       return this.storesFsRepository.createNewStore(user.uid);
