@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FirestoreData } from "./firestore-data";
-import { StoreDoc, StoreInfo, StoreUser } from "../../interfaces/data-models";
+import { StoreInfo, StoreUser } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import * as firebase from "firebase";
@@ -10,7 +10,7 @@ import * as firebase from "firebase";
 })
 export class StoreInfoService extends FirestoreData<StoreInfo> {
   constructor(afs: AngularFirestore) {
-    super(afs, StorePathConfig.basePath);
+    super(afs, StorePathConfig.storesInfo);
     console.log("Hello StoreInfoService Provider");
   }
 

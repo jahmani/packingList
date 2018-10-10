@@ -25,7 +25,7 @@
     <ion-item text-wrap *ngFor="let userStore of userStores|async" (click)="onStoreSelected(userStore)">
       <ion-icon name="person" slot="start"></ion-icon>
       <ion-label>
-        {{userStore.ext.store?.storeInfo?.name }}
+        {{userStore.ext.store?.name }}
         <ion-note>{{userStore.id}}</ion-note>
       </ion-label>
       <ion-icon slot="end" name="open"></ion-icon>
@@ -38,7 +38,7 @@
       <ion-item *ngFor="let userStore of userPendingStores|async" text-wrap>
         <ion-icon name="person" slot="start"></ion-icon>
         <ion-label>
-          {{userStore.ext.store?.storeInfo.name }}
+          {{userStore.ext.store?.name }}
           <ion-note>{{userStore.id}} </ion-note>
         </ion-label>
 
