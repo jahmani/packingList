@@ -38,7 +38,12 @@ export class EditStoreInfoPage {
     });
 
     const paramStoreId = this.rout.snapshot.paramMap.get("id");
-    this.storeId = paramStoreId || this.activeStoreService.activeStoreKey;
+    if (!paramStoreId) {
+      const activeStoreId = this.activeStoreService.activeStoreKey;
+
+      router.navigate(["/EditStoreInfo", activeStoreId]);
+    }
+    this.storeId = paramStoreId ;
     this.storeDoc$ = this.storesFsRepository.get(this.storeId).pipe(tap(str => {
       this.storeDoc = str;
       this.form.patchValue(this.storeDoc.data);
