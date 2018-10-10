@@ -7,8 +7,6 @@ import {
   AccountInfo
 } from "../../../interfaces/data-models";
 import {
-  NavController,
-  NavParams,
   AlertController,
   ModalController
 } from "@ionic/angular";

@@ -4,9 +4,9 @@ import { AccountInfo, ExtType, Extended } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
-import { map, combineLatest } from "rxjs/operators";
+import { map } from "rxjs/operators";
 import { AccountsBalanceService } from "./accounts-balance.service";
 import { StoreBasePageModule } from "../../pages/store-base/store-base.module";
 
@@ -21,37 +21,32 @@ export class AccountsDataService extends StoreDataService<AccountInfo> {
     console.log("Hello AccountsFBRepository Provider");
   }
   get FormatedList(): Observable<any[]> {
-    return this.List()
+    return combineLatest(this.accountsBalanceFBRepository.dataMap, this.List())
       .pipe(
-        /*  */
-
-        combineLatest(
-          this.accountsBalanceFBRepository.dataMap,
-          (accounts, balancesMap) => {
-            accounts.forEach(account => {
-              account.ext = account.ext || ({} as ExtType);
-              account.ext.$balance = 0;
-              account.ext.$computedLastEditedOn = account.data.lastEditedOn;
-              const balanceObj = balancesMap.get(account.id);
-              if (balanceObj) {
-                account.ext.$balanceObj = balanceObj;
-                account.ext.$balance = balanceObj.data.balance;
-                if (
-                  compareTimeStamp(
-                    account.ext.$computedLastEditedOn,
-                    balanceObj.data.lastEditedOn
-                  ) > 0
-                ) {
-                  account.ext.$computedLastEditedOn =
-                    balanceObj.data.lastEditedOn;
-                }
-                //   if (balanceObj.lastEditedDate > account.$computedLastEditDate)
-                //     account.$computedLastEditDate = balanceObj.lastEditedDate;
+        map(([balancesMap, accounts]) => {
+          accounts.forEach(account => {
+            account.ext = account.ext || ({} as ExtType);
+            account.ext.$balance = 0;
+            account.ext.$computedLastEditedOn = account.data.lastEditedOn;
+            const balanceObj = balancesMap.get(account.id);
+            if (balanceObj) {
+              account.ext.$balanceObj = balanceObj;
+              account.ext.$balance = balanceObj.data.balance;
+              if (
+                compareTimeStamp(
+                  account.ext.$computedLastEditedOn,
+                  balanceObj.data.lastEditedOn
+                ) > 0
+              ) {
+                account.ext.$computedLastEditedOn =
+                  balanceObj.data.lastEditedOn;
               }
-            });
-            return accounts;
-          }
-        )
+              //   if (balanceObj.lastEditedDate > account.$computedLastEditDate)
+              //     account.$computedLastEditDate = balanceObj.lastEditedDate;
+            }
+          });
+          return accounts;
+        })
       )
       .pipe(
         map(accountsArray => {
@@ -71,12 +66,14 @@ export class AccountsDataService extends StoreDataService<AccountInfo> {
   getExtended(accountId: string): Observable<Extended<AccountInfo>> {
     const account = super.get(accountId);
     const balance = this.accountsBalanceFBRepository.get(accountId);
-    const extended = account.pipe(
-      combineLatest(balance, (extAccount, extBalance) => {
+    const extended = combineLatest(
+      account,
+      balance,
+      (extAccount, extBalance) => {
         extAccount.ext = extAccount.ext || {};
         extAccount.ext.$balanceObj = extBalance;
         return extAccount;
-      })
+      }
     );
     return extended;
   }

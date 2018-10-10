@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FirestoreData } from "./firestore-data";
-import { StoreDoc, StoreInfo, StoreUser } from "../../interfaces/data-models";
+import { StoreInfo, StoreUser } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import * as firebase from "firebase";
@@ -8,11 +8,22 @@ import * as firebase from "firebase";
 @Injectable({
   providedIn: "root"
 })
-export class StoreInfoService extends FirestoreData<StoreDoc> {
+export class StoreInfoService extends FirestoreData<StoreInfo> {
   constructor(afs: AngularFirestore) {
-    super(afs, StorePathConfig.basePath);
+    super(afs, StorePathConfig.storesInfo);
     console.log("Hello StoreInfoService Provider");
   }
+
+
+  replicateStoreInfo() {
+   /*   const col = this.afs.collection(StorePathConfig.storesInfo);
+    this.List().subscribe((storDos => {
+      storDos.forEach((stor => {
+        const doc = col.doc(stor.id);
+        doc.set(stor.data.storeInfo);
+      }));
+    }));
+*/  }
 
   createNewStore(ownerUid: string, storeName: string = "new Store") {
     const storeInfo: StoreInfo = { name: storeName } as StoreInfo;
@@ -29,12 +40,16 @@ export class StoreInfoService extends FirestoreData<StoreDoc> {
       .firestore()
       .collection(StorePathConfig.basePath)
       .doc();
+    const storeInfoDoc = firebase
+      .firestore()
+      .collection(StorePathConfig.storesInfo)
+      .doc();
     const storeId = storeDoc.id;
     const userDoc = firebase.firestore().doc(`users/${ownerUid}`);
     const storeUserDoc = storeDoc.collection("users").doc(ownerUid);
     const userStoreDoc = userDoc.collection("stores").doc(storeId);
 
-    batch.set(storeDoc, { storeInfo });
+    batch.set(storeInfoDoc,  storeInfo );
     batch.set(storeUserDoc, storeUser);
     batch.set(userStoreDoc, {});
 

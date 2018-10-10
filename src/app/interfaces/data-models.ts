@@ -27,7 +27,7 @@ export interface StoreUserExt {
   user?: User;
 }
 export interface UserStoreExt {
-  store?: StoreDoc;
+  store?: StoreInfo;
 }
 export interface InviteExt {
   store?: StoreDoc;
@@ -218,7 +218,7 @@ export interface StoreDoc extends Editable {
   storeInfo: StoreInfo;
 }
 
-export interface StoreInfo {
+export interface StoreInfo  extends Editable {
   name: string;
   code: string;
 }

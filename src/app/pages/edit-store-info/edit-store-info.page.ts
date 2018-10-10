@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Extended, StoreDoc, StoreInfo } from "../../interfaces/data-models";
+import { Extended, StoreInfo } from "../../interfaces/data-models";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 import { StoreInfoService } from "../../providers/AppData/store-info.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -16,9 +16,9 @@ import { Observable } from "rxjs";
 export class EditStoreInfoPage {
   form: FormGroup;
   submitAttempt = false;
-  storeDoc: Extended<StoreDoc>;
+  storeDoc: Extended<StoreInfo>;
   storeId: string;
-  storeDoc$: Observable<Extended<StoreDoc>>;
+  storeDoc$: Observable<Extended<StoreInfo>>;
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +41,7 @@ export class EditStoreInfoPage {
     this.storeId = paramStoreId || this.activeStoreService.activeStoreKey;
     this.storeDoc$ = this.storesFsRepository.get(this.storeId).pipe(tap(str => {
       this.storeDoc = str;
-      this.form.patchValue(this.storeDoc.data.storeInfo);
+      this.form.patchValue(this.storeDoc.data);
     }));
   }
 
@@ -57,7 +57,7 @@ export class EditStoreInfoPage {
     if (valid) {
       const updatedStoreDoc = {
         ...this.storeDoc,
-        data: { ...this.storeDoc.data, storeInfo: value }
+        data: { ...value }
       };
       return this.storesFsRepository.saveOld(updatedStoreDoc).then(() => {
         this.location.back();

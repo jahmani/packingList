@@ -1,6 +1,13 @@
 import { Editable, Extended, ExtMap } from "../../interfaces/data-models";
-import { Observable } from "rxjs";
-import { map, share, refCount, publishReplay, first } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import {
+  map,
+  share,
+  refCount,
+  publishReplay,
+  first,
+  switchMap
+} from "rxjs/operators";
 import {
   AngularFirestoreCollection,
   AngularFirestore,
@@ -10,26 +17,46 @@ import {
 import { firestore } from "firebase";
 import * as firebase from "firebase";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
+import { instanceAvailability } from "@ionic-native/core";
 
 export class FirestoreData<T extends Editable> {
   get FormatedList(): Observable<any[]> {
     return this.dataList;
   }
+  protected path: string;
+  protected path$: Observable<string>;
   private dataList: Observable<Extended<T>[]>;
   protected collection: AngularFirestoreCollection<T>;
   dataMap: Observable<ExtMap<Extended<T>>>;
 
-  constructor(protected afs: AngularFirestore, protected path: string) {
+  constructor(
+    protected afs: AngularFirestore,
+    path: string | Observable<string>
+  ) {
     console.log("Hello FBRepository Provider");
-    this.initialize(path);
+    if (typeof path === "string") {
+      this.initialize(path);
+    } else if (path instanceof Observable) {
+      this.reactiveInitialize(path);
+    }
   }
 
-  initialize(path: string) {
-    this.path = path;
-    console.log(`path : ${path} `);
+  private reactiveInitialize(path$: Observable<string>) {
+    this.path$ = path$;
+    const snapshotChanges = path$
+      .pipe(
+        switchMap(path => {
+          this.path = path;
 
-    this.collection = this.afs.collection(path);
-    const snapshotChanges = this.collection.snapshotChanges().pipe(share());
+          this.collection = this.afs.collection(path);
+          return this.collection.snapshotChanges();
+        })
+      )
+      .pipe(share());
+    this.initData(snapshotChanges);
+  }
+
+  private initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
     this.dataList = this.snapList(snapshotChanges).pipe(
       publishReplay(1),
       refCount()
@@ -38,6 +65,16 @@ export class FirestoreData<T extends Editable> {
       publishReplay(1),
       refCount()
     );
+  }
+
+  initialize(path: string) {
+    this.path = path;
+    this.path$ = of(path);
+    console.log(`path : ${path} `);
+
+    this.collection = this.afs.collection(path);
+    const snapshotChanges = this.collection.snapshotChanges().pipe(share());
+    this.initData(snapshotChanges);
   }
   snapList(
     snapshotChanges: Observable<DocumentChangeAction<T>[]>
@@ -56,10 +93,9 @@ export class FirestoreData<T extends Editable> {
   snapshotMap(
     snapshotChanges: Observable<DocumentChangeAction<T>[]>
   ): Observable<ExtMap<Extended<T>>> {
-    const _map = new ExtMap<Extended<T>>();
-
     return snapshotChanges.pipe(
       map(actions => {
+        const _map = new ExtMap<Extended<T>>();
         actions.forEach(a => {
           const docData = this.extractSnapshotData(a.payload.doc);
           _map.set(docData.id, docData);
@@ -73,9 +109,12 @@ export class FirestoreData<T extends Editable> {
   }
 
   get(key): Observable<Extended<T>> {
-    return this.afs
-      .doc<T>(this.path + `/${key}`)
-      .snapshotChanges()
+    return this.path$
+      .pipe(
+        switchMap(path => {
+          return this.afs.doc<T>(path + `/${key}`).snapshotChanges();
+        })
+      )
       .pipe(map(a => this.extractSnapshotData(a.payload)));
   }
 
