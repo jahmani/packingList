@@ -9,14 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   templateUrl: 'app.component.html'
 })
 export class AppComponent {
-  links = [
-    { path: "/UserStores", title: "User Stores" },
-    { path: "/home", title: "Home" },
-    { path: "/login", title: "login" },
-    { path: "/signup", title: "Sign up" },
-    { path: "/EditStoreInfo", title: "EditStoreInfo" },
-    { path: "/StoreBase", title: "Store base" }
-  ];
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,

@@ -1,0 +1,31 @@
+<ion-header no-border color="dark">
+  <ion-toolbar>
+  <ion-buttons slot="start">
+    <ion-button ion-button (click)="close()">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="canDelete" (click)="delete()">
+      Delete<ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="canRemove" (click)="remove()">
+      Remove<ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+
+  <ion-buttons slot="end">
+    <ion-button *ngIf="canSelect" ion-button icon-only (click)="select()">
+      <ion-icon name="checkmark"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
+</ion-header>
+
+<ion-content no-badding color="dark" dir="ltr">
+  <ion-slides zoom pager="true" options="{initialSlide:open_at_index}">
+    <ion-slide *ngFor="let image of images">
+      <div class="swiper-zoom-container">
+        <img [src]="image.data.url">
+      </div>
+    </ion-slide>
+  </ion-slides>
+</ion-content>

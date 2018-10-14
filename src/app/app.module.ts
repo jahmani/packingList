@@ -16,6 +16,7 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { MenuComponent } from './components/menu/menu.component';
 
 
+
 @NgModule({
   declarations: [AppComponent,  MenuComponent ],
   entryComponents: [],

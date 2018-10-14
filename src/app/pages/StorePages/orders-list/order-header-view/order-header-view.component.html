@@ -1,0 +1,45 @@
+<!-- Generated template for the OrderHeaderViewComponent component -->
+<ion-card-header no-padding padding-horizontal>
+  <ion-item>
+    <ion-icon name="person" slot='start'></ion-icon>
+    <ion-row>
+      <ion-col size="auto">
+          {{order.ext.account?.data.name}}
+      </ion-col>
+      <ion-col size="auto" *ngIf="order.ext.account?.data.city">
+        <ion-note>
+            - {{order.ext.account?.data.city}}
+        </ion-note>
+      </ion-col>
+    </ion-row>
+  </ion-item>
+</ion-card-header>
+<ion-card-content *ngIf="order.data.imageUrl" no-padding padding-horizontal>
+  <ion-item>
+    <ion-thumbnail (click)=" onImageClicked($event)" slot="end">
+      <img [src]="order.data.imageUrl">
+    </ion-thumbnail>
+    <ion-row>
+        <ion-col text-left size="auto" *ngIf="order.data.ammount ">
+          <span><ion-icon  name="logo-usd"></ion-icon>
+          القيمة:{{order.data.ammount}}</span>
+        </ion-col>
+        <ion-col  size="auto" *ngIf="order.data.date">
+            <ion-icon name="calendar"></ion-icon>
+            التاريخ:{{order.data.date}}
+        </ion-col>
+      </ion-row>
+  </ion-item>
+</ion-card-content>
+
+<ion-row>
+  <ion-col text-right size="auto" *ngIf="order.data.cbm">
+    <ion-icon name="cube"></ion-icon>
+    CBM:{{order.data.cbm}}
+  </ion-col>
+
+  <ion-col  size="auto" *ngIf="order.data.deliveryDate">
+    <ion-icon name="calendar"></ion-icon>
+    Delivery:{{order.data.deliveryDate}}
+  </ion-col>
+</ion-row>

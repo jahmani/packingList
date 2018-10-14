@@ -10,7 +10,9 @@ import { map } from "rxjs/operators";
 import { AccountsBalanceService } from "./accounts-balance.service";
 import { StoreBasePageModule } from "../../pages/store-base/store-base.module";
 
-@Injectable()
+@Injectable({
+  providedIn: "root"
+})
 export class AccountsDataService extends StoreDataService<AccountInfo> {
   constructor(
     afs: AngularFirestore,

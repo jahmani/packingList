@@ -14,8 +14,6 @@ import { ImagesDataService } from "./images-data.service";
   providedIn: "root"
 })
 export class OrdersDataService extends StoreDataService<Order> {
-  private formatedList;
-
   constructor(
     afs: AngularFirestore,
     activeStoreService: ActiveStoreService,
