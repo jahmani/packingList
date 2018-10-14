@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
-import { OrderHeaderViewComponent } from './order-header-view/order-header-view.component';
 import { OrdersListPage } from './orders-list.page';
 import { SharedModule } from '../../../shared/shared.module';
 
@@ -19,11 +18,12 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedModule
+
   ],
-  declarations: [OrdersListPage, OrderHeaderViewComponent]
+  declarations: [OrdersListPage]
 })
 export class OrdersListPageModule {}

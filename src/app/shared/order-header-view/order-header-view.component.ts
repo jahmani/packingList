@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ModalController } from "@ionic/angular";
-import { Extended, Order } from "../../../../interfaces/data-models";
-import { ImagesDataService } from "../../../../providers/StoreData/images-data.service";
-import { PhotoViewComponent } from "../../../../shared/photo-view/photo-view.component";
+import { Extended, Order } from "../../interfaces/data-models";
+import { ImagesDataService } from "../../providers/StoreData/images-data.service";
+import { PhotoViewComponent } from "../photo-view/photo-view.component";
 
 
 @Component({

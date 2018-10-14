@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PhotoViewComponent } from './photo-view/photo-view.component';
 import { IonicModule } from '@ionic/angular';
+import { OrderHeaderViewComponent } from './order-header-view/order-header-view.component';
 
 @NgModule({
   imports: [
@@ -9,7 +10,8 @@ import { IonicModule } from '@ionic/angular';
     IonicModule,
 
   ],
-  declarations: [PhotoViewComponent],
-  entryComponents: [PhotoViewComponent]
+  declarations: [PhotoViewComponent, OrderHeaderViewComponent],
+  entryComponents: [PhotoViewComponent],
+  exports: [OrderHeaderViewComponent]
 })
 export class SharedModule { }

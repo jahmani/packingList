@@ -21,7 +21,7 @@
 </ion-header>
 
 <ion-content no-badding color="dark" dir="ltr">
-  <ion-slides zoom pager="true" options="{initialSlide:open_at_index}">
+  <ion-slides zoom pager="true" options="{initialSlide:open_at_index, }">
     <ion-slide *ngFor="let image of images">
       <div class="swiper-zoom-container">
         <img [src]="image.data.url">
