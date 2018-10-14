@@ -41,7 +41,7 @@ export class EditStoreInfoPage {
     if (!paramStoreId) {
       const activeStoreId = this.activeStoreService.activeStoreKey;
 
-      router.navigate(["/EditStoreInfo", activeStoreId]);
+      router.navigate(["/EditStoreInfo", activeStoreId],{replaceUrl:true});
     }
     this.storeId = paramStoreId ;
     this.storeDoc$ = this.storesFsRepository.get(this.storeId).pipe(tap(str => {
