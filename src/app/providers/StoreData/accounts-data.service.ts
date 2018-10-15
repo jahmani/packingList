@@ -8,7 +8,6 @@ import { Observable, combineLatest } from "rxjs";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { map } from "rxjs/operators";
 import { AccountsBalanceService } from "./accounts-balance.service";
-import { StoreBasePageModule } from "../../pages/store-base/store-base.module";
 
 @Injectable({
   providedIn: "root"

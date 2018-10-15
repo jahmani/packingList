@@ -2,11 +2,8 @@ import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Routes, RouterModule } from "@angular/router";
-
 import { IonicModule } from "@ionic/angular";
-
 import { StoreBasePage } from "./store-base.page";
-import { AccountsDataService } from "../../providers/StoreData/accounts-data.service";
 
 const routes: Routes = [
   {
@@ -17,20 +14,27 @@ const routes: Routes = [
       {
         path: "AccountsList",
         loadChildren:
-          "accounts-list/accounts-list.module#AccountsListPageModule"
-      },
-      {
-        path: "AccountTransactionsList/:id",
-        loadChildren:
-          "account-transactions-list/account-transactions-list.module#AccountTransactionsListPageModule"
+          "../accounts-list/accounts-list.module#AccountsListPageModule"
       },
       {
         path: "EditAccount/:id",
         loadChildren:
-          "/edit-account/edit-account.module#EditAccountPageModule"
+          "../edit-account/edit-account.module#EditAccountPageModule"
       },
-      { path: 'OrdersList', loadChildren: './orders-list/orders-list.module#OrdersListPageModule' },
-
+      {
+        path: "AccountTransactionsList/:id",
+        loadChildren:
+          "../account-transactions-list/account-transactions-list.module#AccountTransactionsListPageModule"
+      },
+      {
+        path: "OrdersList",
+        loadChildren: "../orders-list/orders-list.module#OrdersListPageModule"
+      },
+      {
+        path: "ProductsList",
+        loadChildren:
+          "../products-list/products-list.module#ProductsListPageModule"
+      }
     ]
   }
 ];

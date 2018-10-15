@@ -10,7 +10,9 @@ export class ActiveStoreService {
   private _activeStoreKey = "HW1TAwI2hz0pLNINa51Q";
   _activeStoreKey$: Observable<string>;
   constructor() {
-    this.subject = new BehaviorSubject("HW1TAwI2hz0pLNINa51Q");
+    const defaultk = this.getDefaultStoreKey();
+    this._activeStoreKey = defaultk  || "HW1TAwI2hz0pLNINa51Q";
+    this.subject = new BehaviorSubject(this._activeStoreKey);
     this._activeStoreKey$ = this.subject.asObservable();
   }
   get activeStoreKey() {
@@ -31,7 +33,7 @@ export class ActiveStoreService {
   setActiveStoreKey(newKey) {
     if (newKey !== this._activeStoreKey) {
       this._activeStoreKey = newKey;
-      //  this.setDefaultStoreKey(newKey);
+      this.setDefaultStoreKey(newKey);
       this.subject.next(newKey);
     }
   }

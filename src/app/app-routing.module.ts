@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'UserStores', loadChildren: './pages/user-stores/user-stores.module#UserStoresPageModule' },
   { path: 'EditStoreInfo/:id', loadChildren: './pages/edit-store-info/edit-store-info.module#EditStoreInfoPageModule' },
   { path: 'EditStoreInfo', loadChildren: './pages/edit-store-info/edit-store-info.module#EditStoreInfoPageModule' },
-  { path: 'StoreBase', loadChildren: './pages/store-base/store-base.module#StoreBasePageModule' },
+  { path: 'StoreBase', loadChildren: './StorePages/store-base/store-base.module#StoreBasePageModule' },
 ];
 
 @NgModule({
