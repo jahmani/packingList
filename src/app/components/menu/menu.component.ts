@@ -15,7 +15,7 @@ export class MenuComponent implements OnInit {
     { path: "/EditStoreInfo", title: "EditStoreInfo" },
     { path: "/StoreBase/OrdersList", title: "Orders List" },
     { path: "/StoreBase/ProductsList", title: "Products List" },
-    { path: "/StoreBase", title: "Store base" },
+    { path: "/StoreBase", title: "Accounts List" },
 
   ];
   @Input() menu: Menu;

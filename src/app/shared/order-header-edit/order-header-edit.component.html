@@ -1,0 +1,76 @@
+<!--
+  Generated template for the OrderHeaderEditPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+<ion-content padding>
+
+
+-->
+
+
+    <form novalidate *ngIf="order$|async as p" ng-submit="onSubmit()" [formGroup]="form">
+        <ion-list>
+          <!---->
+          <ion-row no-padding>
+            <ion-col class="image-selector">
+              <ion-thumbnail item-start>
+                <app-photo-picker formControlName="imageUrl"></app-photo-picker>
+              </ion-thumbnail>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <app-account-picker autofocus formControlName="accountId"></app-account-picker>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        
+    
+          <ion-item>
+            <ion-label>Ammount</ion-label>
+            <ion-input autofocus formControlName="ammount" type="number"></ion-input>
+          </ion-item>
+    
+    
+          <ion-item>
+            <ion-label>CBM</ion-label>
+            <ion-input autofocus formControlName="cbm" type="number"></ion-input>
+          </ion-item>
+    
+          <ion-item>
+            <ion-label>Date</ion-label>
+            <ion-datetime autofocus formControlName="date" type="text"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>deliveryDate</ion-label>
+            <ion-datetime autofocus formControlName="deliveryDate" type="text"></ion-datetime>
+          </ion-item>
+        </ion-list>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-button type="button"  expand="full" (click)="onCancel()" color="light">cancel</ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button   expand="full"
+               (click)="onSubmit(form)" color="primary"> save</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    <!--
+</ion-content>
+
+<ion-footer>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button type="button" ion-button full (click)="onCancel()" color="light">cancel</button>
+        </ion-col>
+        <ion-col>
+          <button type="submit" ion-button full (click)="onSubmit(form)" color="primary"> save</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>
+  -->
