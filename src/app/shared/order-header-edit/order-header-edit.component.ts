@@ -6,6 +6,7 @@ import { NavController, NavParams } from "@ionic/angular";
 import { map, distinctUntilChanged, take, tap } from "rxjs/operators";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
 import { OrderPackingLinesService } from "../../providers/StoreData/order-packing-lines.service";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-order-header-edit",
@@ -25,7 +26,7 @@ export class OrderHeaderEditComponent implements OnInit, OnChanges {
   constructor(
     private fb: FormBuilder,
     private ordersFsRep: OrdersDataService,
-    private pLLinesFsRepository: OrderPackingLinesService
+    private location: Location
   ) {
     //    this.orderId = this.navParams.get("orderId");
     this.form = this.fb.group({
@@ -55,6 +56,7 @@ export class OrderHeaderEditComponent implements OnInit, OnChanges {
   }
 
   dismiss(data) {
+    return this.location.back();
     /*
     this.callBack = this.navParams.get("callBack");
     if (this.callBack) {
@@ -77,6 +79,8 @@ export class OrderHeaderEditComponent implements OnInit, OnChanges {
     }
     // throw "please take care , invalid form"
   }
+
+
 
   onSave(order: Order) {
     const extOrder = { data: order } as Extended<Order>;

@@ -39,6 +39,11 @@ const routes: Routes = [
         path: "EditOrderHeader/:id",
         loadChildren:
           "../edit-order-header/edit-order-header.module#EditOrderHeaderPageModule"
+      },
+      {
+        path: "OrderView/:id",
+        loadChildren:
+          "../order-view/order-view.module#OrderViewPageModule"
       }
     ]
   }

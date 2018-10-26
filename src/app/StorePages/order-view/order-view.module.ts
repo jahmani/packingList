@@ -5,26 +5,23 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditOrderHeaderPage } from './edit-order-header.page';
+import { OrderViewPage } from './order-view.page';
 import { SharedModule } from '../../shared/shared.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: EditOrderHeaderPage
+    component: OrderViewPage
   }
 ];
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-
-    SharedModule,
-
+    SharedModule
   ],
-  declarations: [EditOrderHeaderPage]
+  declarations: [OrderViewPage]
 })
-export class EditOrderHeaderPageModule {}
+export class OrderViewPageModule {}

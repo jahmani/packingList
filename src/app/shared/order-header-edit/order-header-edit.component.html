@@ -11,19 +11,13 @@
 
     <form novalidate *ngIf="order$|async as p" ng-submit="onSubmit()" [formGroup]="form">
         <ion-list>
-          <!---->
-          <ion-row no-padding>
-            <ion-col class="image-selector">
-              <ion-thumbnail item-start>
-                <app-photo-picker formControlName="imageUrl"></app-photo-picker>
-              </ion-thumbnail>
-            </ion-col>
-            <ion-col>
+
               <ion-item>
                 <app-account-picker autofocus formControlName="accountId"></app-account-picker>
-              </ion-item>
-            </ion-col>
-          </ion-row>
+              <ion-thumbnail slot="end">
+                <app-photo-picker formControlName="imageUrl"></app-photo-picker>
+              </ion-thumbnail>
+            </ion-item>
         
     
           <ion-item>

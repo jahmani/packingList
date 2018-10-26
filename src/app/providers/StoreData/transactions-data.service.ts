@@ -28,6 +28,7 @@ export class TransactionsDataService extends StoreDataService<Transaction> {
     console.log('Hello TransactionsFsRepository Provider');
   }
   forAccount(accountKey: string) {
+
     const transactionsColl$ = this.path$.pipe(map((path) => {
       return this.afs.collection<Transaction>(path, (ref) => ref.where('accountId', '==', accountKey));
     }));

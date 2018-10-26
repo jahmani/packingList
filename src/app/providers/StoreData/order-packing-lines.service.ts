@@ -5,7 +5,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { Observable } from "rxjs";
-import { map, combineLatest } from "rxjs/operators";
+import { map, combineLatest, switchMap } from "rxjs/operators";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { OrdersDataService } from "./orders-data.service";
 import { ProductsDataService } from "./products-data.service";
@@ -26,14 +26,24 @@ export class OrderPackingLinesService extends StoreDataService<PLLine> {
     console.log("Hello OrderPLLinesPLLinesFsRepository Provider");
   }
   forOrder(orderKey: string) {
+
+    const OrderPLLinesColl$ = this.path$.pipe(map((path) => {
+      return this.afs.collection<PLLine>(path, (ref) => ref.where('orderId', '==', orderKey));
+    }));
+
+    const orderPLLinesList = OrderPLLinesColl$.pipe(switchMap((orderPLLinesColl) => {
+      return super.snapList(orderPLLinesColl.snapshotChanges());
+  }));
+/*
     const OrderPLLinesColl = this.afs.collection<PLLine>(
       this.collection.ref.path,
       ref => ref.where("orderId", "==", orderKey)
     );
     // const transactionsList = super.snapList(transactionsColl);
     const orderPLLinesMap = super.snapList(OrderPLLinesColl.snapshotChanges());
+    */
     // return transactionsMap
-    return this.formateList(orderPLLinesMap);
+    return this.formateList(orderPLLinesList);
   }
   get FormatedList(): Observable<Extended<PLLine>[]> {
     return this.formateList(this.List());

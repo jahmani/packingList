@@ -1,0 +1,43 @@
+<div class="datatable-summery">
+  <div class="datatable-header-inner">
+      <div class="datatable-row-left" style="width: 0px;">
+      </div>
+      <div class="datatable-row-center">
+          <div *ngFor="let plHeader of plSummery" class="datatable-header-cell sortable resizeable" title="ctns" [ngStyle]="{'width':plHeader.width}">
+              <div class="datatable-summery-cell-template-wrap">
+                  <span class="datatable-header-cell-wrapper">
+                      <span class="datatable-header-cell-label draggable">{{plHeader.title}}</span>
+                  </span>
+                  <span class="sort-btn">
+                  </span>
+              </div>
+              <span class="resize-handle"></span>
+          </div>
+      </div>
+  </div>
+</div>
+<div class="datatable-header" >
+  <div class="datatable-header-inner">
+      <div class="datatable-row-left" style="width: 0px;">
+      </div>
+      <div class="datatable-row-center">
+          <div *ngFor="let plHeader of plHeaders" class="datatable-header-cell sortable resizeable" title="ctns" [ngStyle]="{'width':plHeader.width}">
+              <div class="datatable-header-cell-template-wrap">
+                  <span class="datatable-header-cell-wrapper">
+                      <span class="datatable-header-cell-label draggable">{{plHeader.title}}</span>
+                  </span>
+                  <span class="sort-btn">
+                  </span>
+              </div>
+              <span class="resize-handle"></span>
+          </div>
+      </div>
+  </div>
+</div>
+
+<app-order-row *ngFor="let plLine of lines, let i=index" (plLineClicked)="onPlLineClicked(i)" (plLineEditClicked)="onPlLineEditClicked($event)"
+  (plLineCopyClicked)="onPlLineCopyClicked($event)" [plLine]="plLine" [index]="i" [isActive]="i==activeLineIndex"></app-order-row>
+
+<div *ngIf="totals">
+  <strong>Totals</strong>: Quantity: {{totals.qty}} | Cartons: {{totals.ctns}} | Ammount: {{totals.ammount}} |
+</div>
