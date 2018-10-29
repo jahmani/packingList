@@ -3,62 +3,51 @@
   <ion-item>
 
     <ion-thumbnail (click)="onImageClicked($event)">
-        <!--
+      <!--
           onerror="this.src='../assets/img/6.jpg'"
         -->
-        <img [src]="plLine.ext.Product.data.thumbUrl">
-      </ion-thumbnail>
-  <ion-row>
-    <ion-col >
-      <div class="pline-body-row">
-        <div class="pline-row-center pline-row-group">
-          <div class="pline-body-cell qty-cell" style=" height: auto;">
-            <div class="pline-body-cell-label">
-              <!--bindings={}-->
-              <!--bindings={
-        "ng-reflect-ng-if": "true"
-      }-->
-              <span title="2208">{{plLine.data.qty}}</span>
-              <!--bindings={}-->
+      <img [src]="plLine.ext.Product.data.thumbUrl">
+    </ion-thumbnail>
+    <ion-row>
+      <ion-col>
+        <div class="pline-body-row">
+          <div class="pline-row-center pline-row-group">
+            <div class="pline-body-cell qty-cell" style=" height: auto;">
+              <div class="pline-body-cell-label">
+                <span title="qty">{{plLine.data.qty}}</span>
+              </div>
             </div>
-          </div>
-          <div class="pline-body-cell price-cell" style=" height: auto;">
-            <div class="pline-body-cell-label">
-              <span title="21.9">{{plLine.data.price}}</span>
-              <!--bindings={}-->
+            <div class="pline-body-cell price-cell" style=" height: auto;">
+              <div class="pline-body-cell-label">
+                <span title="price">{{plLine.data.price}}</span>
+              </div>
             </div>
-          </div>
-          <div class="pline-body-cell ammount-cell">
-            <div class="pline-body-cell-label">
-              <!--bindings={}-->
-              <!--bindings={
-        "ng-reflect-ng-if": "true"
-      }-->
-              <span title="48355.2">{{plLine.data.ammount}}</span>
-              <!--bindings={}-->
+            <div class="pline-body-cell ammount-cell">
+              <div class="pline-body-cell-label">
+                <span title="ammount">{{plLine.data.ammount}}</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="pline-row-detail">
-        <ion-item no-lines>
-          <ion-label>
-          <p>{{plLine.data.shippingMark}}</p>
-          <span class="name-bold">{{plLine.ext.Product.data.name}}</span>
-          <ion-note *ngIf="plLine.ext.Product.data.style">- {{plLine.ext.Product.data.style}}</ion-note>
-        </ion-label>
-        </ion-item>
-      </div>
+        <div class="pline-row-detail">
+          <ion-item no-lines>
+            <ion-label>
+              <p>{{plLine.data.shippingMark}}</p>
+              <span class="name-bold">{{plLine.ext.Product.data.name}}</span>
+              <ion-note *ngIf="plLine.ext.Product.data.style">- {{plLine.ext.Product.data.style}}</ion-note>
+            </ion-label>
+          </ion-item>
+        </div>
 
-    </ion-col>
+      </ion-col>
 
-  </ion-row>
-</ion-item>
+    </ion-row>
+  </ion-item>
 
   <ion-fab *ngIf="isActive" vertical="top" horizontal="start" color="secondery" slot="fixed">
-    <ion-fab-button mini (click)="onPlLineEditClicked($event)">
+    <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderLine/', plLine.id]">
       <ion-icon name="create"></ion-icon>
-    </ion-fab-button>    
+    </ion-fab-button>
   </ion-fab>
 
 </div>

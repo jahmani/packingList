@@ -6,7 +6,8 @@ import {
   refCount,
   publishReplay,
   first,
-  switchMap
+  switchMap,
+  take
 } from "rxjs/operators";
 import {
   AngularFirestoreCollection,
@@ -43,6 +44,10 @@ export class FirestoreData<T extends Editable> {
 
   private reactiveInitialize(path$: Observable<string>) {
     this.path$ = path$;
+    this.path$.pipe(take(1)).subscribe((path => {
+      this.path = path;
+      this.collection = this.afs.collection(path);
+    }));
     const snapshotChanges = path$
       .pipe(
         switchMap(path => {
@@ -192,6 +197,7 @@ export class FirestoreData<T extends Editable> {
   }
   saveOld(editedItem: Extended<T>) {
     // let key = editedItem.$key;
+
     const data = editedItem.data;
     data.lastEditedOn = firebase.firestore.FieldValue.serverTimestamp();
     // this.parseBeforeSave(copy);
@@ -199,5 +205,17 @@ export class FirestoreData<T extends Editable> {
       .doc(editedItem.id)
       .update(data)
       .catch(this.catch);
+  }
+
+  reactiveSaveOld(editedItem: Extended<T>) {
+    // let key = editedItem.$key;
+    const data = editedItem.data;
+    data.lastEditedOn = firebase.firestore.FieldValue.serverTimestamp();
+    // this.parseBeforeSave(copy);
+    return this.path$.toPromise().then((path => {
+      this.afs.collection(path).doc(editedItem.id)
+      .update(data)
+      .catch(this.catch);
+    }));
   }
 }

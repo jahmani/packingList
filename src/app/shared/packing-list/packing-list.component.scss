@@ -1,7 +1,19 @@
+.thumbnail-placeholder{
+    height: 10px !important;
+}
+.header-item{
+    background: #a4c0d6;
+    ion-label{
+        margin-top: 1px;
+        margin-bottom: 1px;
+    }
+
+}
 .datatable-row-center{
     display:flex;
     text-align: center;
 }
+
 .datatable-header{
     padding-left: 8px;
     padding-right: 8px;

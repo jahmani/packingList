@@ -71,8 +71,9 @@ export class AccountPickerComponent implements OnInit {
         canGoBack: true
       }
     });
-    modal.onDidDismiss().then((extAccountInfo: Extended<AccountInfo>) => {
-      if (extAccountInfo) {
+    modal.onDidDismiss().then((result: {[s: string]: Extended<AccountInfo>}) => {
+      if (result) {
+        const extAccountInfo = result.data;
         this.account = extAccountInfo;
         this.accountId = extAccountInfo.id;
         this.srcChangeFunction(extAccountInfo.id);

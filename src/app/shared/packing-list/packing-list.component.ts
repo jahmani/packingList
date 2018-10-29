@@ -3,8 +3,8 @@ import { Extended, PLLine } from '../../interfaces/data-models';
 
 @Component({
   selector: 'app-packing-list',
-  templateUrl: './packing-list.component.html',
-  styleUrls: ['./packing-list.component.scss']
+  templateUrl: './packing-list.component.1.html',
+  styleUrls: ['./packing-list.component.1.scss']
 })
 export class PackingListComponent implements OnInit {
 

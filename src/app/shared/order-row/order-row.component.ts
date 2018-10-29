@@ -6,8 +6,8 @@ import { PhotoViewComponent } from '../photo-view/photo-view.component';
 
 @Component({
   selector: 'app-order-row',
-  templateUrl: './order-row.component.html',
-  styleUrls: ['./order-row.component.scss'],
+  templateUrl: './order-row.component.1.html',
+  styleUrls: ['./order-row.component.1.scss'],
 })
 export class OrderRowComponent implements OnInit {
   @Input()

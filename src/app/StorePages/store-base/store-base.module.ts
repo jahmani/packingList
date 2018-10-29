@@ -42,8 +42,17 @@ const routes: Routes = [
       },
       {
         path: "OrderView/:id",
+        loadChildren: "../order-view/order-view.module#OrderViewPageModule"
+      },
+      {
+        path: "EditOrderLine/:lineId",
         loadChildren:
-          "../order-view/order-view.module#OrderViewPageModule"
+          "../edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+      },
+      {
+        path: "NewOrderLine/:orderId",
+        loadChildren:
+          "../edit-order-line/edit-order-line.module#EditOrderLinePageModule"
       }
     ]
   }

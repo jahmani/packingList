@@ -1,0 +1,20 @@
+.name-bold {
+  font-weight: bold;
+}
+
+ion-fab-button[mini] {
+  --size: 30px;
+  zoom: 0.75;
+}
+.row-wrapper {
+  position: relative;
+}
+.odd-row {
+  background-color: white;
+}
+.even-row {
+  background: rgba(240, 240, 240, 1);
+}
+.active {
+  background-color: rgb(215, 217, 245);
+}

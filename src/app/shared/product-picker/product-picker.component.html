@@ -1,0 +1,11 @@
+<ion-item no-padding no-lines detail-push text-wrap (click)="selectProduct($event)">
+  <span *ngIf="!product; else productDetails">select Product</span>
+  <ion-thumbnail *ngIf="product" slot="start">
+      <img [src]="product.data.thumbUrl">
+  </ion-thumbnail>
+<ng-template #productDetails>
+     <span >{{product.data.name}}</span>
+      <ion-note>/{{product.data.style}}</ion-note>
+  </ng-template>
+<ion-icon name="left-Arrow" slot="end"></ion-icon>
+</ion-item>

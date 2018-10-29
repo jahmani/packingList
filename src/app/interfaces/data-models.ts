@@ -180,6 +180,15 @@ export interface PLLine extends Editable, Delteable {
   ctns: number;
   qty: number;
   siblingPLLineId: string;
+  packingLines: PackingLine[];
+}
+export interface PackingLine extends Editable, Delteable {
+  shippingMark: string;
+  ctnNo: string;
+  notice: string;
+  packing: number;
+  ctns: number;
+  groupId: string;
 }
 export interface AccountBalance extends Editable {
   balance: number;

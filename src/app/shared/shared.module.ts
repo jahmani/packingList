@@ -10,9 +10,11 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { PackingListComponent } from './packing-list/packing-list.component';
 import { PackingRowComponent } from './packing-row/packing-row.component';
 import { OrderRowComponent } from './order-row/order-row.component';
+import { ProductPickerComponent } from './product-picker/product-picker.component';
+import { RouterModule } from "@angular/router";
 
 @NgModule({
-  imports: [CommonModule, IonicModule, ReactiveFormsModule],
+  imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
   declarations: [
     PhotoViewComponent,
     OrderHeaderViewComponent,
@@ -21,7 +23,8 @@ import { OrderRowComponent } from './order-row/order-row.component';
     PhotoPickerComponent,
     PackingListComponent,
     PackingRowComponent,
-    OrderRowComponent
+    OrderRowComponent,
+    ProductPickerComponent
   ],
   entryComponents: [PhotoViewComponent],
   exports: [
@@ -29,7 +32,8 @@ import { OrderRowComponent } from './order-row/order-row.component';
     OrderHeaderEditComponent,
     PhotoPickerComponent,
     AccountPickerComponent,
-    PackingListComponent
+    PackingListComponent,
+    ProductPickerComponent
   ]
 })
 export class SharedModule {}

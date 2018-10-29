@@ -14,17 +14,22 @@ import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { MenuComponent } from './components/menu/menu.component';
+import { AccountsListPage } from './StorePages/accounts-list/accounts-list.page';
+import { AccountsListPageModule } from './StorePages/accounts-list/accounts-list.module';
+import { ProductsListPage } from './StorePages/products-list/products-list.page';
+import { ProductsListPageModule } from './StorePages/products-list/products-list.module';
 
 
 
 @NgModule({
   declarations: [AppComponent,  MenuComponent ],
-  entryComponents: [],
+  entryComponents: [AccountsListPage],
   imports: [BrowserModule , IonicModule.forRoot(), AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
-    AngularFireStorageModule],
+    AngularFireStorageModule,
+    AccountsListPageModule, ProductsListPageModule],
   providers: [
     StatusBar,
     SplashScreen,

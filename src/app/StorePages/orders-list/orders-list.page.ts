@@ -15,11 +15,11 @@ export class OrdersListPage implements OnInit {
   orders: Observable<Extended<Order>[]>;
 
   constructor(
-    public router: Router,
     private ordersRep: OrdersDataService,
     public route: ActivatedRoute,
     private alertController: AlertController,
     private modalController: ModalController,
+    public router: Router,
   ) {
     this.orders = this.ordersRep.FormatedList;
     /*

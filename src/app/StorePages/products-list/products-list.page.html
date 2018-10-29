@@ -21,7 +21,7 @@
 <ion-content *ngIf="products|async as products">
 
   <ion-list>
-    <ion-item-sliding *ngFor="let product of products">
+    <ion-item-sliding (click)="onProductClicked(product)" *ngFor="let product of products">
       <ion-item>
         <ion-thumbnail slot="end">
           <img [src]="product.data.thumbUrl">

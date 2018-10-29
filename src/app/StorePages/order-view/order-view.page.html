@@ -16,8 +16,8 @@
       </ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content padding>
-  <ng-container *ngIf="order$|async as or">
+  <ion-content no-padding  *ngIf="order$|async as or">
+  <ng-container >
     <app-order-header-view [order]="or" (click)="showEditButton = !showEditButton"></app-order-header-view>
     <ion-fab *ngIf="showEditButton" vertical="top" horizontal="start" edge slot="fixed">
       <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderHeader',order.id]">
@@ -29,7 +29,7 @@
     (plLineWantCopy)="presentCopyPlLine($event)"></app-packing-list>
 
     <ion-fab vertical="bottom" horizontal="start"  slot="fixed">
-      <ion-fab-button mini >
+      <ion-fab-button mini  [routerLink]="['/StoreBase/NewOrderLine/', or.id]" >
         <ion-icon name="add"></ion-icon>
       </ion-fab-button>
     </ion-fab>

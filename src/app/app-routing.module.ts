@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'StoreBase', loadChildren: './StorePages/store-base/store-base.module#StoreBasePageModule' },
 
 
+
 ];
 
 @NgModule({

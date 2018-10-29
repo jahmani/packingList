@@ -57,7 +57,7 @@
   </div>
 
   <ion-fab *ngIf="isActive" left top>
-    <ion-fab-button ion-fab mini icon-only (click)="onPlLineCopyClicked($event)">
+    <ion-fab-button  mini icon-only [routerLink]="['/StoreBase/EditOrderLine/', plLine.id]">
       <ion-icon name="copy"></ion-icon>
     </ion-fab-button>
   </ion-fab>

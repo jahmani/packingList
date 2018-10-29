@@ -17,6 +17,7 @@ import { AccountsDataService } from "../../providers/StoreData/accounts-data.ser
 import { UserStoresService } from "../../providers/AppData/user-stores.service";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-accounts-list",
@@ -31,6 +32,8 @@ export class AccountsListPage implements OnInit {
   constructor(
     public accountsDataService: AccountsDataService,
     private modalController: ModalController,
+    private navParams: NavParams,
+    private router: Router
   //  private alertController: AlertController
   ) {
   //  this.accountsFsRepository = this.accountsFsRepository;
@@ -83,20 +86,20 @@ export class AccountsListPage implements OnInit {
   }
 
   onClick(extAccount: Extended<AccountInfo>) {
-    /*
+    /**/
     const canSelect = this.navParams.get("canSelect");
     if (canSelect) {
       this.selectAccount(extAccount);
     } else {
       this.showAccountTransactions(extAccount);
     }
-    */
   }
   showAccountTransactions(accSnapshot: Extended<AccountInfo>) {
-    //  this.navCtrl.push("AccountTransactionsPage", { accountId: accSnapshot.id });
+      this.router.navigateByUrl(`/StoreBase/EditAccount/${accSnapshot.id}`);
   }
 
   selectAccount(extAccount: Extended<AccountInfo>) {
+    this.modalController.dismiss(extAccount);
     /*
     const callBack = this.navParams.get("callBack");
     callBack(extAccount).then(() => {

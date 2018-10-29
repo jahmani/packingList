@@ -21,7 +21,8 @@
       </h2>
     </ion-item>
     <ion-item-sliding *ngFor="let account of accounts |async">
-      <ion-item [routerLink]="['/StoreBase/AccountTransactionsList', account.id]" text-wrap>
+      <!--[routerLink]="['/StoreBase/AccountTransactionsList', account.id]" -->
+      <ion-item (click)="onClick(account)" text-wrap>
         <ion-icon name="person" slot="start"></ion-icon>
         <ion-label>
           <span>{{account.data.name}}</span>
@@ -45,11 +46,12 @@
   </ion-list>
 </ion-content>
 <ion-footer>
+  <ion-toolbar>
   <ion-buttons start>
     <ion-button [routerLink]="['/StoreBase/EditAccount', 'new']" icon-only color="royal">
       <ion-icon name="person-add"></ion-icon>
     </ion-button>
     <ion-searchbar aria-label="search" [showCancelButton]="true" [formControl]="searchControl"></ion-searchbar>
   </ion-buttons>
-
+</ion-toolbar>
 </ion-footer>
