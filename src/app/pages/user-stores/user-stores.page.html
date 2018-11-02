@@ -18,9 +18,9 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item text-wrap *ngFor="let userStore of userStores|async" (click)="onStoreSelected(userStore)">
+    <ion-item  *ngFor="let userStore of userStores|async" (click)="onStoreSelected(userStore)">
       <ion-icon name="person" slot="start"></ion-icon>
-      <ion-label>
+      <ion-label text-wrap>
         {{userStore.ext.store?.name }}
         <ion-note>{{userStore.id}}</ion-note>
       </ion-label>

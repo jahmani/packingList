@@ -1,5 +1,7 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Menu } from "@ionic/angular";
+import { Extended, User, StoreInfo } from "../../interfaces/data-models";
+import { AuthService } from "../../providers/Auth/auth.service";
 
 @Component({
   selector: "app-menu",
@@ -7,19 +9,34 @@ import { Menu } from "@ionic/angular";
   styleUrls: ["./menu.component.scss"]
 })
 export class MenuComponent implements OnInit {
-  links = [
-    { path: "/UserStores", title: "User Stores" },
-    { path: "/home", title: "Home" },
-    { path: "/login", title: "login" },
-    { path: "/signup", title: "Sign up" },
+  storeLinks = [
     { path: "/EditStoreInfo", title: "EditStoreInfo" },
     { path: "/StoreBase/OrdersList", title: "Orders List" },
     { path: "/StoreBase/ProductsList", title: "Products List" },
     { path: "/StoreBase", title: "Accounts List" },
-
   ];
+  noUserLinks = [
+    { path: "/login", title: "login" },
+    { path: "/signup", title: "Sign up" },
+  ];
+  userLinks = [
+    { path: "/UserStores", title: "User Stores" },
+    { path: "/logout", title: "LogOut", logOut: true },
+  ];
+
+
   @Input() menu: Menu;
-  constructor() {}
+  @Input() user: Extended<User>;
+  @Input() store: Extended<StoreInfo>;
+  @Output() logOut: EventEmitter<boolean>;
+
+  constructor(private authService: AuthService) {
+    this.logOut = new EventEmitter();
+  }
+
+  onLogOut() {
+    this.authService.signOut();
+  }
 
   ngOnInit() {}
 }

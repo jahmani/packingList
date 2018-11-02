@@ -4,6 +4,7 @@ import { StoreInfo, StoreUser } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import * as firebase from "firebase";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root"
@@ -14,7 +15,17 @@ export class StoreInfoService extends FirestoreData<StoreInfo> {
     console.log("Hello StoreInfoService Provider");
   }
 
-
+  getUserStores(uid: string) {
+    const storesInfoColl$ = this.path$.pipe(
+      map(path => {
+        return this.afs.collection<StoreInfo>(path, ref =>
+          ref.where("users", "array-contains", uid)
+        );
+      })
+    );
+    // todo continue coding this method
+    throw new Error("in Complete method");
+  }
   replicateStoreInfo() {
    /*   const col = this.afs.collection(StorePathConfig.storesInfo);
     this.List().subscribe((storDos => {
