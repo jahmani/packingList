@@ -3,7 +3,8 @@ import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { Routes, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
-import { StoreBasePage } from "./store-base.page";
+import { StoreBasePage } from "./store-base/store-base.page";
+
 
 const routes: Routes = [
   {
@@ -14,45 +15,45 @@ const routes: Routes = [
       {
         path: "AccountsList",
         loadChildren:
-          "../accounts-list/accounts-list.module#AccountsListPageModule"
+          "./accounts-list/accounts-list.module#AccountsListPageModule"
       },
       {
         path: "EditAccount/:id",
         loadChildren:
-          "../edit-account/edit-account.module#EditAccountPageModule"
+          "./edit-account/edit-account.module#EditAccountPageModule"
       },
       {
         path: "AccountTransactionsList/:id",
         loadChildren:
-          "../account-transactions-list/account-transactions-list.module#AccountTransactionsListPageModule"
+          "./account-transactions-list/account-transactions-list.module#AccountTransactionsListPageModule"
       },
       {
         path: "OrdersList",
-        loadChildren: "../orders-list/orders-list.module#OrdersListPageModule"
+        loadChildren: "./orders-list/orders-list.module#OrdersListPageModule"
       },
       {
         path: "ProductsList",
         loadChildren:
-          "../products-list/products-list.module#ProductsListPageModule"
+          "./products-list/products-list.module#ProductsListPageModule"
       },
       {
         path: "EditOrderHeader/:id",
         loadChildren:
-          "../edit-order-header/edit-order-header.module#EditOrderHeaderPageModule"
+          "./edit-order-header/edit-order-header.module#EditOrderHeaderPageModule"
       },
       {
         path: "OrderView/:id",
-        loadChildren: "../order-view/order-view.module#OrderViewPageModule"
+        loadChildren: "./order-view/order-view.module#OrderViewPageModule"
       },
       {
         path: "EditOrderLine/:lineId",
         loadChildren:
-          "../edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+          "./edit-order-line/edit-order-line.module#EditOrderLinePageModule"
       },
       {
         path: "NewOrderLine/:orderId",
         loadChildren:
-        "../edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+        "./edit-order-line/edit-order-line.module#EditOrderLinePageModule"
       }
 
     ]
