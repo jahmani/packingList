@@ -1,47 +1,38 @@
 <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-back-button ></ion-back-button>
-        <ion-menu-toggle menuToggle>
-          <ion-button>
-            <ion-icon slot="icon-only" name="menu"></ion-icon>
-          </ion-button>
-        </ion-menu-toggle>
-      </ion-buttons>
-      <ion-title>
-        <ng-container *ngIf="order$|async as or; else waiting">
-          Edit Order
-        </ng-container>
-        <ng-template #waiting>Waiting...</ng-template>
-      </ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content no-padding  *ngIf="order$|async as or">
-  <ng-container >
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+      <ion-menu-toggle menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>
+      <ng-container *ngIf="order$|async as or; else waiting">
+        Edit Order
+      </ng-container>
+      <ng-template #waiting>Waiting...</ng-template>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content no-padding *ngIf="order$|async as or">
+  <ng-container>
     <app-order-header-view [order]="or" (click)="showEditButton = !showEditButton"></app-order-header-view>
     <ion-fab *ngIf="showEditButton" vertical="top" horizontal="start" edge slot="fixed">
-      <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderHeader',order.id]">
+      <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderHeader',or.id]">
         <ion-icon name="create"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   </ng-container>
-  <app-packing-list *ngIf="orderPlLines$|async as lines" [lines]="lines" (plLineWantEdit)="presentEditPlLine($event)"
-    (plLineWantCopy)="presentCopyPlLine($event)"></app-packing-list>
-
-    <ion-fab vertical="bottom" horizontal="start"  slot="fixed">
-      <ion-fab-button mini  [routerLink]="['/StoreBase/NewOrderLine/', or.id]" >
-        <ion-icon name="add"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
-
-  <!--
-        <pl-line-list *ngIf="orderPlLines$|async as lines" 
-        [plLines]="lines"
-        (plLineWantEdit)="presentEditPlLine($event)"></pl-line-list>
-        -->
-
-
-  <!--  <image-select formControlName="imageUrl"></image-select>
-      -->
-
+  <app-packing-list *ngIf="(orderPlLines$|async) as lines; else noLines" [lines]="lines" >
+  </app-packing-list>
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button mini [routerLink]="['/StoreBase/NewOrderLine/', or.id]">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ng-template #noLines>
+    no linnnnnnnnes
+  </ng-template>
 </ion-content>

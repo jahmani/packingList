@@ -4,7 +4,6 @@ import { AccountsDataService } from '../../providers/StoreData/accounts-data.ser
 @Component({
   selector: 'app-store-base',
   templateUrl: './store-base.page.html',
-  providers: [AccountsDataService],
   styleUrls: ['./store-base.page.scss'],
 
 })

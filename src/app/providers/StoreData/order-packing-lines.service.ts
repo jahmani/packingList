@@ -4,8 +4,8 @@ import { PLLine, Extended, ExtType } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
-import { Observable } from "rxjs";
-import { map, combineLatest, switchMap } from "rxjs/operators";
+import { Observable, combineLatest } from "rxjs";
+import { map, switchMap } from "rxjs/operators";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { OrdersDataService } from "./orders-data.service";
 import { ProductsDataService } from "./products-data.service";
@@ -26,15 +26,20 @@ export class OrderPackingLinesService extends StoreDataService<PLLine> {
     console.log("Hello OrderPLLinesPLLinesFsRepository Provider");
   }
   forOrder(orderKey: string) {
+    const OrderPLLinesColl$ = this.path$.pipe(
+      map(path => {
+        return this.afs.collection<PLLine>(path, ref =>
+          ref.where("orderId", "==", orderKey)
+        );
+      })
+    );
 
-    const OrderPLLinesColl$ = this.path$.pipe(map((path) => {
-      return this.afs.collection<PLLine>(path, (ref) => ref.where('orderId', '==', orderKey));
-    }));
-
-    const orderPLLinesList = OrderPLLinesColl$.pipe(switchMap((orderPLLinesColl) => {
-      return super.snapList(orderPLLinesColl.snapshotChanges());
-  }));
-/*
+    const orderPLLinesList = OrderPLLinesColl$.pipe(
+      switchMap(orderPLLinesColl => {
+        return super.snapList(orderPLLinesColl.snapshotChanges());
+      })
+    );
+    /*
     const OrderPLLinesColl = this.afs.collection<PLLine>(
       this.collection.ref.path,
       ref => ref.where("orderId", "==", orderKey)
@@ -51,9 +56,8 @@ export class OrderPackingLinesService extends StoreDataService<PLLine> {
   formateList(
     list: Observable<Extended<PLLine>[]>
   ): Observable<Extended<PLLine>[]> {
-    return list.pipe(
-      /*  */
-      combineLatest(this.productsRep.dataMap, (orderPLLines, productsMap) => {
+    return combineLatest(list, this.productsRep.dataMap).pipe(
+      map(([orderPLLines, productsMap]) => {
         orderPLLines.forEach(orderPLLine => {
           orderPLLine.ext = orderPLLine.ext || ({} as ExtType);
           orderPLLine.ext.Product = productsMap.get(orderPLLine.data.productId);

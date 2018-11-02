@@ -1,6 +1,6 @@
 <!-- Generated template for the OrderHeaderViewComponent component -->
 <ion-card-header no-padding padding-horizontal>
-  <ion-item>
+  <ion-item lines="none">
     <ion-icon name="person" slot='start'></ion-icon>
     <ion-label>
       {{order.ext.account?.data.name}}
@@ -11,7 +11,7 @@
 
   </ion-item>
 </ion-card-header>
-<ion-item>
+<ion-item lines="none">
   <ion-thumbnail *ngIf="order.data.imageUrl" (click)=" onImageClicked($event)" slot="end">
     <img [src]="order.data.imageUrl">
   </ion-thumbnail>

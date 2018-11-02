@@ -75,7 +75,7 @@ export class ProductPickerComponent implements OnInit {
 
     modal.present();
     modal.onDidDismiss().then((result: {[s: string]: Extended<Product>}) => {
-      if (result) {
+      if (result && result.data) {
         const extProduct = result.data;
         this.product = extProduct;
         this.productId = extProduct.id;

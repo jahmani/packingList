@@ -6,8 +6,47 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-<app-order-header-edit [orderId]='orderId$|async'>
+  <form novalidate *ngIf="order$|async as p" ng-submit="onSubmit()" [formGroup]="form">
+    <ion-list>
+          <ion-item lines="none">
+            <app-account-picker autofocus formControlName="accountId"></app-account-picker>
+          <ion-thumbnail slot="end">
+            <app-photo-picker formControlName="imageUrl"></app-photo-picker>
+          </ion-thumbnail>
+        </ion-item>
+    
 
-</app-order-header-edit>
+      <ion-item>
+        <ion-label>Ammount</ion-label>
+        <ion-input autofocus formControlName="ammount" type="number"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label>CBM</ion-label>
+        <ion-input autofocus formControlName="cbm" type="number"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime autofocus formControlName="date" ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>deliveryDate</ion-label>
+        <ion-datetime autofocus formControlName="deliveryDate" ></ion-datetime>
+      </ion-item>
+    </ion-list>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button type="button"  expand="full" (click)="onCancel()" color="light">cancel</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button   expand="full"
+           (click)="onSubmit(form)" color="primary"> save</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
   
 </ion-content>

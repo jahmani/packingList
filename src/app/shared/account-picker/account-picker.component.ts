@@ -72,7 +72,7 @@ export class AccountPickerComponent implements OnInit {
       }
     });
     modal.onDidDismiss().then((result: {[s: string]: Extended<AccountInfo>}) => {
-      if (result) {
+      if (result && result.data) {
         const extAccountInfo = result.data;
         this.account = extAccountInfo;
         this.accountId = extAccountInfo.id;

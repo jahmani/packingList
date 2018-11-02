@@ -66,11 +66,6 @@ export class EditOrderLinePage implements OnInit {
       if (productId) {
         this.preoductsFsRep.getOnce(productId).then(product => {
           this.product = product;
-          if (product.data) {
-            if (!this.shippingMarkControl.value && product.data.code) {
-              this.shippingMarkControl.setValue(product.data.code);
-            }
-          }
         });
       }
     });
@@ -108,9 +103,6 @@ export class EditOrderLinePage implements OnInit {
   }
   get qtyControl() {
     return this.form.get("qty");
-  }
-  get shippingMarkControl() {
-    return this.form.get("shippingMark");
   }
   get priceControl() {
     return this.form.get("price");

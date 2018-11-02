@@ -33,7 +33,7 @@ import { ProductsListPageModule } from './StorePages/products-list/products-list
   providers: [
     StatusBar,
     SplashScreen,
-  //  { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

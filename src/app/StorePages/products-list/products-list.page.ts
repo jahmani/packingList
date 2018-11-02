@@ -18,7 +18,7 @@ export class ProductsListPage implements OnInit {
   constructor(
     public router: Router,
     private rout: ActivatedRoute,
-    public navParams: NavParams,
+    @Optional() private navParams: NavParams,
     private alertController: AlertController,
     private modalController: ModalController,
     private productsRep: ProductsDataService,
@@ -54,16 +54,12 @@ export class ProductsListPage implements OnInit {
       .catch(console.log);
   }
   onProductClicked(product?: Extended<Product>) {
-    this.canSelect = this.navParams.get("canSelect");
     if (product && this.canSelect) {
       this.modalController.dismiss(product);
-      /*const callback = this.navParams.get("callback");
-
-      callback(product).then(() => {
-        this.modalController.dismiss();
-      });
-      */
     }
+  }
+  cancel(product?: Extended<Product>) {
+      this.modalController.dismiss();
   }
 
   copyAndEdit(product?: Extended<Product>) {
@@ -114,5 +110,9 @@ export class ProductsListPage implements OnInit {
 
     return this.presentEditProductModal();
   }
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.navParams) {
+      this.canSelect = this.navParams.get("canSelect");
+    }
+  }
 }

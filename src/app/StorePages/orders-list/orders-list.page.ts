@@ -5,6 +5,7 @@ import { NavController, NavParams, AlertController, ModalController } from "@ion
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
+import { tap } from "rxjs/operators";
 
 @Component({
   selector: "app-orders-list",
@@ -21,7 +22,10 @@ export class OrdersListPage implements OnInit {
     private modalController: ModalController,
     public router: Router,
   ) {
-    this.orders = this.ordersRep.FormatedList;
+    this.orders = this.ordersRep.FormatedList.pipe(tap((orders) => {
+      console.log("orderssssssssss");
+      console.log(orders);
+    }));
     /*
     this.orders.pipe(tap((orders)=>{
       console.log("orderssssssssss")

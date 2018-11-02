@@ -7,6 +7,9 @@
       <ion-button (click)="presentNewProductModal()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
+      <ion-button *ngIf="canSelect" (click)="cancel()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
       <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>

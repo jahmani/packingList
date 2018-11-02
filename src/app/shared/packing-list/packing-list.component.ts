@@ -14,6 +14,7 @@ export class PackingListComponent implements OnInit {
   @Input("lines") set _lines (val: Extended<PLLine>[]) {
     this.lines = val;
     this.computeTotal();
+    console.log("linnnnes: ", val);
   }
   @Output() plLineWantEdit: EventEmitter<string> = new EventEmitter();
   @Output() plLineWantCopy: EventEmitter<Extended<PLLine>> = new EventEmitter();

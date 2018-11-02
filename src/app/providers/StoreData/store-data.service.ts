@@ -14,8 +14,11 @@ export class StoreDataService<T extends Editable> extends FirestoreData<T> {
   ) {
     super(
       afs,
-      ass.activeStoreKey$.pipe(map(storePath => {
-        return conatctPaths(StorePathConfig.basePath, storePath, dataSubPath); }))
+      ass.activeStoreKey$.pipe(
+        map(storePath => {
+          return conatctPaths(StorePathConfig.basePath, storePath, dataSubPath);
+        })
+      )
     );
   }
 }

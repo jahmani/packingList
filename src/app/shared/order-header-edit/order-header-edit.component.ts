@@ -17,7 +17,6 @@ export class OrderHeaderEditComponent implements OnInit, OnChanges {
   submitAttempt: boolean;
   order: Extended<Order>;
   order$: Observable<Extended<Order>>;
-  orderPlLines$: Observable<Extended<PLLine>[]>;
   view = "LIST";
   callBack;
   form: FormGroup;

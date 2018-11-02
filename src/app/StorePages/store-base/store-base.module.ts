@@ -52,8 +52,9 @@ const routes: Routes = [
       {
         path: "NewOrderLine/:orderId",
         loadChildren:
-          "../edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+        "../edit-order-line/edit-order-line.module#EditOrderLinePageModule"
       }
+
     ]
   }
 ];

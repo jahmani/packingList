@@ -8,7 +8,7 @@
 <ion-content padding>
   <form novalidate *ngIf="pLLine$|async as pl" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
-      <ion-item no-padding>
+      <ion-item lines="none" no-padding>
         <app-product-picker formControlName="productId"></app-product-picker>
       </ion-item>
       <ion-item *ngIf="(productIdControl.touched || submitAttempt) && productIdControl.hasError('required')">
@@ -98,7 +98,7 @@
       </ion-col>
 
       <ion-col>
-        <ion-button size="full" (click)="onDelete(form)" color="primary"> delete</ion-button>
+        <ion-button size="full" (click)="onDelete()" color="primary"> delete</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

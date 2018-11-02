@@ -7,12 +7,10 @@ import {
 } from "../../interfaces/data-models";
 import { FormControl } from "@angular/forms";
 import {
-  NavController,
   NavParams,
   ModalController,
-  AlertController
 } from "@ionic/angular";
-import { debounceTime, startWith, map } from "rxjs/operators";
+import { debounceTime, startWith, map, tap } from "rxjs/operators";
 import { AccountsDataService } from "../../providers/StoreData/accounts-data.service";
 import { UserStoresService } from "../../providers/AppData/user-stores.service";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
@@ -29,17 +27,20 @@ export class AccountsListPage implements OnInit {
   filteredAccounts: Observable<Extended<AccountInfo>[]>;
   searchControl: FormControl;
   totalBalanceObj: Observable<AccountBalance>;
+  canSelect: any;
   constructor(
     public accountsDataService: AccountsDataService,
     private modalController: ModalController,
-    private navParams: NavParams,
+    @Optional() private navParams: NavParams,
     private router: Router
-  //  private alertController: AlertController
   ) {
-  //  this.accountsFsRepository = this.accountsFsRepository;
-    this.accounts = this.accountsDataService.FormatedList;
+    //  this.accountsFsRepository = this.accountsFsRepository;
+    this.accounts = this.accountsDataService.FormatedList.pipe(
+      tap(accounts => {
+        console.log(accounts);
+      })
+    );
     this.searchControl = new FormControl();
-    this.accounts.subscribe(console.log);
   }
   ionViewDidLoad() {
     // searchControl.valueChanges will not emit values untill the user make input
@@ -86,16 +87,18 @@ export class AccountsListPage implements OnInit {
   }
 
   onClick(extAccount: Extended<AccountInfo>) {
-    /**/
-    const canSelect = this.navParams.get("canSelect");
-    if (canSelect) {
+    if (this.canSelect) {
       this.selectAccount(extAccount);
     } else {
       this.showAccountTransactions(extAccount);
     }
   }
+  cancel() {
+    this.modalController.dismiss();
+  }
+
   showAccountTransactions(accSnapshot: Extended<AccountInfo>) {
-      this.router.navigateByUrl(`/StoreBase/EditAccount/${accSnapshot.id}`);
+    this.router.navigateByUrl(`/StoreBase/EditAccount/${accSnapshot.id}`);
   }
 
   selectAccount(extAccount: Extended<AccountInfo>) {
@@ -143,6 +146,9 @@ export class AccountsListPage implements OnInit {
     */
   }
 
-  ionViewDidEnter() {}
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.navParams) {
+    this.canSelect = this.navParams.get("canSelect");
+    }
+  }
 }

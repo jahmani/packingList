@@ -1,4 +1,4 @@
-<ion-item no-padding no-lines detail-push (click)="selectAccountInfo($event)">
+<ion-item lines="none"  detail-push (click)="selectAccountInfo($event)">
   <ion-icon name="person" item-start></ion-icon>
   <span *ngIf="!account; else accountDetails">select Account</span>
   <ng-template #accountDetails>

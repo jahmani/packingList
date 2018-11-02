@@ -52,23 +52,23 @@ export class FirestoreData<T extends Editable> {
       .pipe(
         switchMap(path => {
           this.path = path;
-
           this.collection = this.afs.collection(path);
           return this.collection.snapshotChanges();
         })
-      )
-      .pipe(share());
+      );
     this.initData(snapshotChanges);
   }
 
   private initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
     this.dataList = this.snapList(snapshotChanges).pipe(
-      publishReplay(1),
-      refCount()
+      share()
+    //  publishReplay(1),
+    //  refCount()
     );
     this.dataMap = this.snapshotMap(snapshotChanges).pipe(
-      publishReplay(1),
-      refCount()
+      share()
+    //  publishReplay(1),
+    //  refCount()
     );
   }
 
