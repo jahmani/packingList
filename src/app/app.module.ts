@@ -18,6 +18,7 @@ import { AccountsListPage } from './StorePages/accounts-list/accounts-list.page'
 import { AccountsListPageModule } from './StorePages/accounts-list/accounts-list.module';
 import { ProductsListPage } from './StorePages/products-list/products-list.page';
 import { ProductsListPageModule } from './StorePages/products-list/products-list.module';
+import { PhotoGalleryPageModule } from './StorePages/photo-gallery/photo-gallery.module';
 
 
 
@@ -29,7 +30,7 @@ import { ProductsListPageModule } from './StorePages/products-list/products-list
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireStorageModule,
-    AccountsListPageModule, ProductsListPageModule],
+    AccountsListPageModule, ProductsListPageModule, PhotoGalleryPageModule],
   providers: [
     StatusBar,
     SplashScreen,

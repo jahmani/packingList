@@ -25,7 +25,7 @@ export class EditOrderLinePage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private pLLinesFsRep: OrderPackingLinesService,
-    private preoductsFsRep: ProductsDataService,
+    private productsFsRep: ProductsDataService,
     private rout: ActivatedRoute,
     private location: Location
   ) {
@@ -64,7 +64,7 @@ export class EditOrderLinePage implements OnInit {
 
     const sub = this.productIdControl.valueChanges.subscribe(productId => {
       if (productId) {
-        this.preoductsFsRep.getOnce(productId).then(product => {
+        this.productsFsRep.getOnce(productId).then(product => {
           this.product = product;
         });
       }

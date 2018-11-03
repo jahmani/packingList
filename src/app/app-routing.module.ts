@@ -10,6 +10,8 @@ const routes: Routes = [
   { path: 'EditStoreInfo/:id', loadChildren: './pages/edit-store-info/edit-store-info.module#EditStoreInfoPageModule' },
   { path: 'EditStoreInfo', loadChildren: './pages/edit-store-info/edit-store-info.module#EditStoreInfoPageModule' },
   { path: 'StoreBase', loadChildren: './StorePages/store-base.module#StoreBasePageModule' },
+
+
 ];
 
 @NgModule({

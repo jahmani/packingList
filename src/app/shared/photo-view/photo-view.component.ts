@@ -41,7 +41,7 @@ export class PhotoViewComponent implements OnInit {
   }
   remove() {
     if (this.canRemove) {
-      this.modalCtrl.dismiss({ action: "REMOVE" });
+      this.modalCtrl.dismiss("REMOVE");
     }
   }
   async delete() {

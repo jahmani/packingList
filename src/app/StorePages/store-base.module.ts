@@ -5,7 +5,6 @@ import { Routes, RouterModule } from "@angular/router";
 import { IonicModule } from "@ionic/angular";
 import { StoreBasePage } from "./store-base/store-base.page";
 
-
 const routes: Routes = [
   {
     path: "",
@@ -19,8 +18,7 @@ const routes: Routes = [
       },
       {
         path: "EditAccount/:id",
-        loadChildren:
-          "./edit-account/edit-account.module#EditAccountPageModule"
+        loadChildren: "./edit-account/edit-account.module#EditAccountPageModule"
       },
       {
         path: "AccountTransactionsList/:id",
@@ -53,9 +51,18 @@ const routes: Routes = [
       {
         path: "NewOrderLine/:orderId",
         loadChildren:
-        "./edit-order-line/edit-order-line.module#EditOrderLinePageModule"
-      }
+          "./edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+      },
+      {
+        path: "EditProduct/:id",
+        loadChildren: "./edit-product/edit-product.module#EditProductPageModule"
+      },
+      {
 
+        path: "PhotoGallery",
+        loadChildren:
+          "./photo-gallery/photo-gallery.module#PhotoGalleryPageModule"
+      }
     ]
   }
 ];

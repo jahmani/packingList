@@ -5,6 +5,7 @@ import { ImagesDataService } from "../../providers/StoreData/images-data.service
 import { ImageService } from "../../providers/Image/image.service";
 import { PhotoViewComponent } from "../photo-view/photo-view.component";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
+import { PhotoGalleryPage } from "../../StorePages/photo-gallery/photo-gallery.page";
 
 @Component({
   selector: "app-photo-picker",
@@ -47,22 +48,25 @@ export class PhotoPickerComponent implements OnInit {
     this.srcChangeFunction(this.imgFileId);
   }
   async selectImage($event?) {
-    /*
-    let modal = await this.modalCtrl.create("ImageGalleryPage", {
-      imagesFsRepository: this.imagesFsRepository,
-      canSelect: true,
-      canGoBack: true
+    /*    */
+
+    const modal = await this.modalCtrl.create({
+      component: PhotoGalleryPage,
+      componentProps: {
+        canSelect: true,
+        canGoBack: true
+      }
     });
 
     modal.present();
-    modal.onDidDismiss((extImageFile: Extended<ImageFile>) => {
-      if (extImageFile) {
+    modal.onDidDismiss().then((res) => {
+      if (res && res.data) {
+        const extImageFile: Extended<ImageFile> = res.data.data;
         this.imgFile = extImageFile;
         this.imgFileId = extImageFile.id;
         this.srcChangeFunction(extImageFile.data.thumbUrl);
       }
     });
-    */
   }
   imageClicked($event) {
     $event.stopPropagation();
@@ -83,8 +87,8 @@ export class PhotoPickerComponent implements OnInit {
         images
       }
     });
-    modal.onDidDismiss().then((res: any) => {
-      if (res && res.action === "REMOVE") {
+    modal.onDidDismiss().then((res) => {
+      if (res && res.data === "REMOVE") {
         this.removeImage(undefined);
       }
     });
