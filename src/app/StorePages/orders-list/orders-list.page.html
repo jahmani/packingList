@@ -6,22 +6,26 @@
 -->
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="end">
+        <ion-button [routerLink]="['/StoreBase/EditOrderHeader','new']">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
     <ion-buttons slot="start">
-      <ion-button [routerLink]="['/StoreBase/EditOrderHeader','new']">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-      <ion-menu-toggle menuToggle>
-          <ion-button>
-            <ion-icon slot="icon-only" name="menu"></ion-icon>
-          </ion-button>
-        </ion-menu-toggle>    </ion-buttons>
-    <ion-title>OrdersList</ion-title>
+     <ion-menu-toggle menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>Orders List</ion-title>
 
   </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
   <ion-card *ngFor="let order of orders|async, let i=index">
-    <app-order-header-view  [order]="order" [routerLink]="['/StoreBase/OrderView',order.id]">
+    <app-order-header-view [order]="order" [routerLink]="['/StoreBase/OrderView',order.id]">
     </app-order-header-view>
   </ion-card>
 

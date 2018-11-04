@@ -12,7 +12,11 @@ export interface CatTreeNodeExtension {
   $isExpanded?: boolean;
   catigory?: Extended<TransactionCatigory>;
 }
-
+export interface OpenPhotoRules {
+  canSelect?: boolean;
+  canUpload?: boolean;
+  canremove?: boolean;
+}
 export interface AccountInfoExt {
   $balance?: number;
   $computedLastEditedOn?: string;

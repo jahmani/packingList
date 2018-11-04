@@ -6,7 +6,11 @@ import {
   ElementRef
 } from "@angular/core";
 import { Observable } from "rxjs";
-import { Extended, ImageFile } from "../../interfaces/data-models";
+import {
+  Extended,
+  ImageFile,
+  OpenPhotoRules
+} from "../../interfaces/data-models";
 import { NavParams, ModalController } from "@ionic/angular";
 import { ViewController } from "@ionic/core";
 import { ImageMeta } from "../../providers/Image/image.service";
@@ -21,7 +25,7 @@ import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component
 export class PhotoGalleryPage implements OnInit {
   storeImages: Observable<Extended<ImageFile>[]>;
   canSelect = false;
-  canGoBack = false;
+  canGoBack = true;
   galleryType = "slides";
   @ViewChild("fileInput")
   fileInput: ElementRef;
@@ -44,33 +48,42 @@ export class PhotoGalleryPage implements OnInit {
     // })))
   }
 
-  async openPhoto(index, images) {
+  async openPhoto(index, images, rules?: OpenPhotoRules) {
     const modal = await this.modalCtrl.create({
       component: PhotoViewComponent,
       componentProps: {
         photo_index: index,
-        canSelect: this.canSelect,
-        images
+        canGoBack: this.canGoBack,
+        images,
+        ...rules
       }
     });
     modal.present();
-    modal.onDidDismiss().then((extImageFile: Extended<ImageFile>) => {
-      this.selectPhoto(extImageFile);
+    modal.onDidDismiss().then(res => {
+      if (res && res.data) {
+        const extImageFile: Partial<Extended<ImageFile>> = {};
+        extImageFile.data = res.data;
+        if (res.role === "upload") {
+
+        } else {
+        this.selectPhoto(extImageFile);
+        }
+      }
     });
   }
 
-  selectPhoto(image: Extended<ImageFile>) {
+  selectPhoto(image: Partial<Extended<ImageFile>>) {
     if (image) {
       this.modalCtrl.dismiss(image);
     }
   }
   onClick(index, images): void {
-    this.openPhoto(index, images);
+    this.openPhoto(index, images, { canSelect: this.canSelect });
   }
-  addPhoto() {
+  openNativeFileInput() {
     this.fileInput.nativeElement.click();
   }
-  onPhotoAdded(event) {
+  onFileInpuChanged(event) {
     event.stopPropagation();
     this.preview(event);
   }
@@ -89,13 +102,16 @@ export class PhotoGalleryPage implements OnInit {
       fr.readAsDataURL(file);
     }
   }
-
   previewPhoto(src) {
     const extimg: Partial<Extended<Partial<ImageFile>>> = {};
     extimg.data = { url: src, thumbUrl: src };
-    this.openPhoto(0, [extimg]);
+    this.openPhoto(0, [extimg], { canUpload: true });
   }
-  close() {}
+
+  close() {
+    this.modalCtrl.dismiss();
+
+  }
   AddNewImage() {
     // this.navCtrl.p
     /*

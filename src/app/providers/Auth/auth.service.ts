@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import {AngularFireAuth } from "@angular/fire/auth";
-import { User } from 'firebase';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user: Observable<User>;
+  user: Observable<firebase.User>;
   constructor(private afAuth: AngularFireAuth,
     private afs: AngularFirestore) {
     //// Get auth data, then get firestore user document || null
@@ -62,7 +61,7 @@ export class AuthService {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
     const { uid, email, displayName, photoURL } = user;
 
-    const data: Partial<User> = { uid, email, displayName, photoURL };
+    const data: Partial<firebase.User> = { uid, email, displayName, photoURL };
     return userRef.set(data);
   }
   signOut() {

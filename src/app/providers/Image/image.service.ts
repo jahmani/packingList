@@ -52,7 +52,7 @@ export class ImageService {
       .child(randomId + ".thumb" + imgMeta.ext);
     const imageTask = ref.putString(imgMeta.imageString, "data_url");
     const thumbTask = thumbRef.putString(imgMeta.thumbString, "data_url");
-    const completed = Promise.all([imageTask, thumbTask]);
+
     imageTask.then(a => {
       console.log("Done imageTask");
       imgMeta.imageUri = a.downloadURL;
@@ -62,7 +62,6 @@ export class ImageService {
 
       imgMeta.thumbUri = a.downloadURL;
     });
-    completed.then(() => console.log("Done uploaDING"));
     return { imgMeta, imageTask, thumbTask };
   }
   generateThumb(

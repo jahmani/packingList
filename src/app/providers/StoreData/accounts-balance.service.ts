@@ -5,7 +5,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { Observable } from "rxjs";
-import { firestore } from "firebase";
+import { firestore } from "firebase/app";
 
 @Injectable({
   providedIn: "root"

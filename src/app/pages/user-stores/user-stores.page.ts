@@ -1,8 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Observable } from "rxjs";
 import { constructor, reject } from "q";
-import { NavController } from "@ionic/angular";
-import { auth } from "firebase";
 import { AuthService } from "../../providers/Auth/auth.service";
 import { UserStoresService } from "../../providers/AppData/user-stores.service";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";

@@ -1,7 +1,17 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button *ngIf="canSelect" (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="addPhoto()">
+      <ion-button (click)="openNativeFileInput()">
         <ion-icon name="attach" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -9,13 +19,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>		
-    <div class="image__grid">		
-      <div class="image__square" *ngFor="let image of storeImages|async as images; let i = index" 
-      (click)="onClick(i,images)">
-  
-        <img [src]="image.data.thumbUrl" />				
-      </div>			
+<ion-content>
+  <div class="image__grid">
+    <div class="image__square" *ngFor="let image of storeImages|async as images; let i = index" (click)="onClick(i,images)">
+
+      <img [src]="image.data.thumbUrl" />
     </div>
-    <input type="file" (change)="onPhotoAdded($event)" accept="image/*" id="file-input" #fileInput>
-  </ion-content>
+  </div>
+  <input type="file" (change)="onFileInpuChanged($event)" accept="image/*" id="file-input" #fileInput>
+</ion-content>

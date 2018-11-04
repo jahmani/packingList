@@ -3,7 +3,7 @@ import { FirestoreData } from "./firestore-data";
 import { StoreInfo, StoreUser } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
 import { map } from "rxjs/operators";
 
 @Injectable({

@@ -15,10 +15,8 @@ import {
   QueryDocumentSnapshot,
   DocumentChangeAction
 } from "@angular/fire/firestore";
-import { firestore } from "firebase";
-import * as firebase from "firebase";
+import * as firebase from "firebase/app";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
-import { instanceAvailability } from "@ionic-native/core";
 
 export class FirestoreData<T extends Editable> {
   get FormatedList(): Observable<any[]> {
