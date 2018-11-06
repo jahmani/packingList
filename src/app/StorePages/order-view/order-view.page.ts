@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { Extended, Order, PLLine } from "../../interfaces/data-models";
+import { Extended, Order, OrderRow } from "../../interfaces/data-models";
 import { Observable } from "rxjs";
 import { FormBuilder } from "@angular/forms";
 import { NavController, NavParams } from "@ionic/angular";
 import { map, distinctUntilChanged, take, tap } from "rxjs/operators";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
-import { OrderPackingLinesService } from "../../providers/StoreData/order-packing-lines.service";
+import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
@@ -18,12 +18,12 @@ export class OrderViewPage implements OnInit {
   submitAttempt: boolean;
   order: Extended<Order>;
   order$: Observable<Extended<Order>>;
-  orderPlLines$: Observable<Extended<PLLine>[]>;
+  orderPlLines$: Observable<Extended<OrderRow>[]>;
   view = "LIST";
   orderId: string;
   constructor(
     private ordersFsRep: OrdersDataService,
-    private pLLinesFsRepository: OrderPackingLinesService,
+    private pLLinesFsRepository: OrderRowsService,
     public rout: ActivatedRoute
   ) {
     const oId = this.rout.snapshot.paramMap.get("id");

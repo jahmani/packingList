@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Extended, PLLine } from '../../interfaces/data-models';
+import { Extended, OrderRow } from '../../interfaces/data-models';
 import { ModalController } from '@ionic/angular';
 import { ImagesDataService } from '../../providers/StoreData/images-data.service';
 import { PhotoViewComponent } from '../photo-view/photo-view.component';
@@ -11,7 +11,7 @@ import { PhotoViewComponent } from '../photo-view/photo-view.component';
 })
 export class OrderRowComponent implements OnInit {
   @Input()
-  plLine: Extended<PLLine>;
+  orderRow: Extended<OrderRow>;
   @Input()
   index: number;
   @Input()
@@ -19,9 +19,9 @@ export class OrderRowComponent implements OnInit {
   @Output()
   plLineClicked: EventEmitter<number> = new EventEmitter();
   @Output()
-  plLineEditClicked: EventEmitter<Extended<PLLine>> = new EventEmitter();
+  plLineEditClicked: EventEmitter<Extended<OrderRow>> = new EventEmitter();
   @Output()
-  plLineCopyClicked: EventEmitter<Extended<PLLine>> = new EventEmitter();
+  plLineCopyClicked: EventEmitter<Extended<OrderRow>> = new EventEmitter();
 
   constructor(
     private modalCtrl: ModalController,
@@ -34,16 +34,16 @@ export class OrderRowComponent implements OnInit {
   }
   onPlLineEditClicked($event) {
     $event.stopPropagation();
-    this.plLineEditClicked.emit(this.plLine);
+    this.plLineEditClicked.emit(this.orderRow);
   }
   onPlLineCopyClicked($event) {
     $event.stopPropagation();
-    this.plLineCopyClicked.emit(this.plLine);
+    this.plLineCopyClicked.emit(this.orderRow);
   }
   onImageClicked(event) {
     event.stopPropagation();
     this.imagesRep
-      .getByUrl(this.plLine.ext.Product.data.thumbUrl)
+      .getByUrl(this.orderRow.ext.Product.data.thumbUrl)
       .then(extImage => {
         this.openPhoto(0, [extImage]);
       });

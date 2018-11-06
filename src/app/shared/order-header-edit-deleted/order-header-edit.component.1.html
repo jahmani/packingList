@@ -11,26 +11,20 @@
 
     <form novalidate *ngIf="order$|async as p" ng-submit="onSubmit()" [formGroup]="form">
         <ion-list>
-
               <ion-item>
                 <app-account-picker autofocus formControlName="accountId"></app-account-picker>
               <ion-thumbnail slot="end">
                 <app-photo-picker formControlName="imageUrl"></app-photo-picker>
               </ion-thumbnail>
             </ion-item>
-        
-    
-          <ion-item>
+           <ion-item>
             <ion-label>Ammount</ion-label>
             <ion-input autofocus formControlName="ammount" type="number"></ion-input>
           </ion-item>
-    
-    
           <ion-item>
             <ion-label>CBM</ion-label>
             <ion-input autofocus formControlName="cbm" type="number"></ion-input>
           </ion-item>
-    
           <ion-item>
             <ion-label>Date</ion-label>
             <ion-datetime autofocus formControlName="date" type="text"></ion-datetime>

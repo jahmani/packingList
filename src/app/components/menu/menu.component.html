@@ -4,7 +4,7 @@
         </ion-toolbar>
       </ion-header>
 
-      <ion-list *ngIf="store" padding>
+      <ion-list *ngIf="store  && store.data" padding>
           <ion-item-divider color="light">{{store.data.name}}</ion-item-divider>
           <ion-item (click)="menu.close()" [routerLink]="link.path" 
            *ngFor="let link of storeLinks">

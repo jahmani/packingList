@@ -5,31 +5,31 @@
       <!--
           onerror="this.src='../assets/img/6.jpg'"
         -->
-      <img [src]="plLine.ext.Product.data.thumbUrl">
+      <img [src]="orderRow.ext.Product.data.thumbUrl">
     </ion-thumbnail>
     <ion-label>
       <ion-row >
         <ion-col size="4" text-center>
-          <span title="qty">{{plLine.data.qty}}</span>
+          <span title="qty">{{orderRow.data.qty}}</span>
         </ion-col>
         <ion-col size="4" text-center>
-          <span title="price">{{plLine.data.price}}</span>
+          <span title="price">{{orderRow.data.price}}</span>
         </ion-col>
         <ion-col size="4" text-center>
-          <span title="ammount: ">{{plLine.data.ammount}}</span>
+          <span title="ammount: ">{{orderRow.data.ammount}}</span>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="auto">
-          <span class="name-bold">{{plLine.ext.Product.data.name}}</span>
-          <ion-note *ngIf="plLine.ext.Product.data.style">- {{plLine.ext.Product.data.style}}</ion-note>
+          <span class="name-bold">{{orderRow.ext.Product.data.name}}</span>
+          <ion-note *ngIf="orderRow.ext.Product.data.style">- {{orderRow.ext.Product.data.style}}</ion-note>
         </ion-col>
       </ion-row>
     </ion-label>
   </ion-item>
   
   <ion-fab *ngIf="isActive" vertical="bottom" horizontal="start" color="secondery" slot="fixed">
-      <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderLine/', plLine.id]">
+      <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderRow/', orderRow.id]">
         <ion-icon name="create"></ion-icon>
       </ion-fab-button>
     </ion-fab>  

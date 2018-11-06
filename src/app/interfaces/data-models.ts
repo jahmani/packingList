@@ -173,7 +173,7 @@ export interface Order extends Editable, Delteable {
   currency: string;
   cbm: number;
 }
-export interface PLLine extends Editable, Delteable {
+export interface OrderRow extends Editable, Delteable {
   orderId: string;
   productId: string;
   shippingMark: string;

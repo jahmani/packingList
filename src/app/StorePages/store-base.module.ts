@@ -44,14 +44,14 @@ const routes: Routes = [
         loadChildren: "./order-view/order-view.module#OrderViewPageModule"
       },
       {
-        path: "EditOrderLine/:lineId",
+        path: "EditOrderRow/:lineId",
         loadChildren:
-          "./edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+          "./edit-order-row/edit-order-row.module#EditOrderRowPageModule"
       },
       {
-        path: "NewOrderLine/:orderId",
+        path: "NewOrderRow/:orderId",
         loadChildren:
-          "./edit-order-line/edit-order-line.module#EditOrderLinePageModule"
+          "./edit-order-row/edit-order-row.module#EditOrderRowPageModule"
       },
       {
         path: "EditProduct/:id",

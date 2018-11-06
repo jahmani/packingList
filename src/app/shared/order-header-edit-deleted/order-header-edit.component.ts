@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, OnChanges } from "@angular/core";
-import { Extended, Order, PLLine } from "../../interfaces/data-models";
+import { Extended, Order, OrderRow } from "../../interfaces/data-models";
 import { Observable, of } from "rxjs";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { NavController, NavParams } from "@ionic/angular";
 import { map, distinctUntilChanged, take, tap } from "rxjs/operators";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
-import { OrderPackingLinesService } from "../../providers/StoreData/order-packing-lines.service";
+import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { Location } from "@angular/common";
 
 @Component({
@@ -44,7 +44,7 @@ export class OrderHeaderEditComponent implements OnInit, OnChanges {
   presentEditPlLine(plLineId) {
     //  this.navCtrl.push("EditPlLinePage", { plLineId });
   }
-  presentCopyPlLine(plLine: Extended<PLLine>) {
+  presentCopyPlLine(plLine: Extended<OrderRow>) {
     const plLineData = plLine.data;
     //  this.navCtrl.push("EditPlLinePage", { plLineData });
   }

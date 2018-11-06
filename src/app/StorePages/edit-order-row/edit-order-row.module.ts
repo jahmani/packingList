@@ -5,13 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditOrderLinePage } from './edit-order-line.page';
+import { EditOrderRowPage } from './edit-order-row.page';
 import { SharedModule } from '../../shared/shared.module';
 
 const routes: Routes = [
   {
     path: '',
-    component: EditOrderLinePage
+    component: EditOrderRowPage
   }
 ];
 
@@ -23,6 +23,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [EditOrderLinePage]
+  declarations: [EditOrderRowPage]
 })
-export class EditOrderLinePageModule {}
+export class EditOrderRowPageModule {}

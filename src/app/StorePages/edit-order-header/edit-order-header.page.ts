@@ -4,7 +4,7 @@ import { Observable, of } from "rxjs";
 import { map, take, tap, switchMap } from "rxjs/operators";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
-import { Extended, Order, PLLine } from "../../interfaces/data-models";
+import { Extended, Order, OrderRow } from "../../interfaces/data-models";
 import { Location } from "@angular/common";
 
 @Component({
@@ -61,7 +61,7 @@ export class EditOrderHeaderPage implements OnInit {
     return this.form.get("ammount");
   }
 
-  presentCopyPlLine(plLine: Extended<PLLine>) {
+  presentCopyPlLine(plLine: Extended<OrderRow>) {
     const plLineData = plLine.data;
     //  this.navCtrl.push("EditPlLinePage", { plLineData });
   }

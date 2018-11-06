@@ -1,23 +1,21 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Extended, PLLine } from '../../interfaces/data-models';
+import { Extended, OrderRow } from '../../interfaces/data-models';
 
 @Component({
-  selector: 'app-packing-list',
-  templateUrl: './packing-list.component.1.html',
-  styleUrls: ['./packing-list.component.1.scss']
+  selector: 'app-order-rows-list',
+  templateUrl: './order-rows-list.component.html',
+  styleUrls: ['./order-rows-list.component.scss']
 })
-export class PackingListComponent implements OnInit {
+export class OrderRowsListComponent implements OnInit {
 
-  lines: Extended<PLLine>[];
+  orderRows: Extended<OrderRow>[];
   totals: { ctns: number; qty: number; ammount: number; productName: string; };
   activeLineIndex: number;
-  @Input("lines") set _lines (val: Extended<PLLine>[]) {
-    this.lines = val;
+  @Input("rows") set _rows (val: Extended<OrderRow>[]) {
+    this.orderRows = val;
     this.computeTotal();
     console.log("linnnnes: ", val);
   }
-  @Output() plLineWantEdit: EventEmitter<string> = new EventEmitter();
-  @Output() plLineWantCopy: EventEmitter<Extended<PLLine>> = new EventEmitter();
 
   plHeaders = [
     {title: "ctns", width: "16%"},
@@ -34,13 +32,13 @@ export class PackingListComponent implements OnInit {
     {title: "ammount", width: "26%"}
   ];
   constructor() {
-    console.log('Hello PackingListComponent Component');
+    console.log('Hello OrderRowsListComponent Component');
   }
 
-  onPlLineClicked(index: number) {
-    return this.toggleActiveLine(index);
+  onRowClicked(index: number) {
+    return this.toggleActiveRow(index);
   }
-  toggleActiveLine(index: number) {
+  toggleActiveRow(index: number) {
     if (this.activeLineIndex === index) {
       this.activeLineIndex = undefined;
     } else {
@@ -48,17 +46,12 @@ export class PackingListComponent implements OnInit {
     }
 
   }
-  onPlLineEditClicked(plLine: Extended<PLLine>) {
-    this.plLineWantEdit.emit(plLine.id);
-  }
-  onPlLineCopyClicked(plLine: Extended<PLLine>) {
-    this.plLineWantCopy.emit(plLine);
-  }
+
   computeTotal() {
     const ctns = 0;
     const qty = 0;
     const ammount = 0;
-    const totalsLine = this.lines.reduce((prev, curr, i, arr) => {
+    const totalsLine = this.orderRows.reduce((prev, curr, i, arr) => {
       prev.ctns += Number(curr.data.ctns) || 0;
       prev.qty += Number(curr.data.qty) || 0;
       prev.ammount += Number(curr.data.ammount) || 0;

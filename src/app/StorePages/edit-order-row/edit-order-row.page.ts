@@ -1,30 +1,30 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators, FormGroup, FormArray } from "@angular/forms";
-import { OrderPackingLinesService } from "../../providers/StoreData/order-packing-lines.service";
+import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
-import { PLLine, Extended, Product, PackingLine } from "../../interfaces/data-models";
+import { OrderRow, Extended, Product, PackingLine } from "../../interfaces/data-models";
 import { Observable, Subscription, of } from "rxjs";
 import { take } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
 
 @Component({
-  selector: "app-edit-order-line",
-  templateUrl: "./edit-order-line.page.html",
-  styleUrls: ["./edit-order-line.page.scss"]
+  selector: "app-edit-order-row",
+  templateUrl: "./edit-order-row.page.html",
+  styleUrls: ["./edit-order-row.page.scss"]
 })
-export class EditOrderLinePage implements OnInit {
+export class EditOrderRowPage implements OnInit {
   product: Extended<Product>;
   submitAttempt: boolean;
-  pLLine: Extended<PLLine>;
-  pLLine$: Observable<Extended<PLLine>>;
+  pLLine: Extended<OrderRow>;
+  pLLine$: Observable<Extended<OrderRow>>;
   form: FormGroup;
   pLineId: string;
   subscribtions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private pLLinesFsRep: OrderPackingLinesService,
+    private pLLinesFsRep: OrderRowsService,
     private productsFsRep: ProductsDataService,
     private rout: ActivatedRoute,
     private location: Location
@@ -44,8 +44,8 @@ export class EditOrderLinePage implements OnInit {
       this.pLLine$ = this.pLLinesFsRep.get(this.pLineId);
     } else {
       const orderId = this.rout.snapshot.paramMap.get("orderId");
-      const plLineData = { orderId } as PLLine;
-      this.pLLine$ = of({ data: plLineData, id: null } as Extended<PLLine>);
+      const plLineData = { orderId } as OrderRow;
+      this.pLLine$ = of({ data: plLineData, id: null } as Extended<OrderRow>);
     }
     this.pLLine$.pipe(take(1)).subscribe(extPLLine => {
       this.pLLine = extPLLine;
@@ -140,7 +140,7 @@ export class EditOrderLinePage implements OnInit {
   onCancel() {
     return this.dismiss(null);
   }
-  onSubmit({ value, valid }: { value: PLLine; valid: boolean }) {
+  onSubmit({ value, valid }: { value: OrderRow; valid: boolean }) {
     console.log(value, valid);
     this.submitAttempt = true;
     if (valid) {
@@ -153,8 +153,8 @@ export class EditOrderLinePage implements OnInit {
       this.pLLinesFsRep.remove(this.pLLine).then(() => this.dismiss());
     }
   }
-  onSave(pLLine: PLLine) {
-    const extPLLine = { data: pLLine } as Extended<PLLine>;
+  onSave(pLLine: OrderRow) {
+    const extPLLine = { data: pLLine } as Extended<OrderRow>;
     if (this.pLLine.id) {
       extPLLine.id = this.pLLine.id;
       this.pLLinesFsRep.saveOld(extPLLine);

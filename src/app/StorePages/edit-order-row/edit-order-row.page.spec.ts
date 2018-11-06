@@ -1,22 +1,22 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditOrderLinePage } from './edit-order-line.page';
+import { EditOrderRowPage } from './edit-order-row.page';
 
-describe('EditOrderLinePage', () => {
-  let component: EditOrderLinePage;
-  let fixture: ComponentFixture<EditOrderLinePage>;
+describe('EditOrderRowPage', () => {
+  let component: EditOrderRowPage;
+  let fixture: ComponentFixture<EditOrderRowPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EditOrderLinePage ],
+      declarations: [ EditOrderRowPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditOrderLinePage);
+    fixture = TestBed.createComponent(EditOrderRowPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

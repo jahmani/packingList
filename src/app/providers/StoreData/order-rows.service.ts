@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { StoreDataService } from "./store-data.service";
-import { PLLine, Extended, ExtType } from "../../interfaces/data-models";
+import { OrderRow, Extended, ExtType } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
@@ -13,7 +13,7 @@ import { ProductsDataService } from "./products-data.service";
 @Injectable({
   providedIn: "root"
 })
-export class OrderPackingLinesService extends StoreDataService<PLLine> {
+export class OrderRowsService extends StoreDataService<OrderRow> {
   private formatedList;
 
   constructor(
@@ -28,7 +28,7 @@ export class OrderPackingLinesService extends StoreDataService<PLLine> {
   forOrder(orderKey: string) {
     const OrderPLLinesColl$ = this.path$.pipe(
       map(path => {
-        return this.afs.collection<PLLine>(path, ref =>
+        return this.afs.collection<OrderRow>(path, ref =>
           ref.where("orderId", "==", orderKey)
         );
       })
@@ -50,12 +50,12 @@ export class OrderPackingLinesService extends StoreDataService<PLLine> {
     // return transactionsMap
     return this.formateList(orderPLLinesList);
   }
-  get FormatedList(): Observable<Extended<PLLine>[]> {
+  get FormatedList(): Observable<Extended<OrderRow>[]> {
     return this.formateList(this.List());
   }
   formateList(
-    list: Observable<Extended<PLLine>[]>
-  ): Observable<Extended<PLLine>[]> {
+    list: Observable<Extended<OrderRow>[]>
+  ): Observable<Extended<OrderRow>[]> {
     return combineLatest(list, this.productsRep.dataMap).pipe(
       map(([orderPLLines, productsMap]) => {
         orderPLLines.forEach(orderPLLine => {
