@@ -29,7 +29,7 @@
     </ion-item>
     <ion-item-sliding *ngFor="let account of accounts |async">
       <!--[routerLink]="['/StoreBase/AccountTransactionsList', account.id]" -->
-      <ion-item [routerLink]="['/StoreBase/AccountTransactionsList', account.id]" text-wrap>
+      <ion-item (click)="onClick(account)" text-wrap>
         <ion-icon name="person" slot="start"></ion-icon>
         <ion-label>
           <span>{{account.data.name}}</span>

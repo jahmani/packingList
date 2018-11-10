@@ -20,7 +20,7 @@ import { RouterModule } from "@angular/router";
     PhotoPickerComponent,
     OrderRowsListComponent,
     OrderRowComponent,
-    ProductPickerComponent
+    ProductPickerComponent,
   ],
   entryComponents: [PhotoViewComponent],
   exports: [

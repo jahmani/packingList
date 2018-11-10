@@ -1,5 +1,8 @@
 import { Injectable } from "@angular/core";
-import { AngularFireStorage } from "@angular/fire/storage";
+import {
+  AngularFireStorage,
+  AngularFireStorageReference
+} from "@angular/fire/storage";
 import { ImageFile } from "../../interfaces/data-models";
 
 export interface ImageMeta {
@@ -46,11 +49,16 @@ export class ImageService {
       .substring(2);
     randomId = id ? id : randomId;
     imgMeta.imageId = randomId;
-    const ref = this.afStorage.ref(folder).child(randomId + imgMeta.ext);
+    const metadata = {
+      contentType: "image/jpeg"
+    };
+    const ref: AngularFireStorageReference = this.afStorage
+      .ref(folder)
+      .child(randomId + imgMeta.ext);
     const thumbRef = this.afStorage
       .ref(folder)
       .child(randomId + ".thumb" + imgMeta.ext);
-    const imageTask = ref.putString(imgMeta.imageString, "data_url");
+    const imageTask = ref.putString(imgMeta.imageString, "data_url", metadata);
     const thumbTask = thumbRef.putString(imgMeta.thumbString, "data_url");
 
     imageTask.then(a => {
@@ -192,4 +200,60 @@ export class ImageService {
     const head = "data:image/jpeg;base64,";
     return ((data_url.length - head.length) * 3) / 4 / (1024 * 1024);
   }
+/*
+  fixMIME(src) {
+    const img = this;
+
+    // First of all, try to guess the MIME type based on the file extension.
+    let mime;
+    switch (src.toLowerCase().slice(-4)) {
+      case ".bmp":
+        mime = "bmp";
+        break;
+      case ".gif":
+        mime = "gif";
+        break;
+      case ".jpg":
+      case "jpeg":
+        mime = "jpeg";
+        break;
+      case ".png":
+      case "apng":
+        mime = "png";
+        break;
+      case ".svg":
+      case "svgz":
+        mime = "svg+xml";
+        break;
+      case ".tif":
+      case "tiff":
+        mime = "tiff";
+        break;
+      default:
+        console.log("Unknown file extension: " + src);
+        return;
+    }
+    console.log("Couldn't load " + src + "; retrying as image/" + mime);
+
+    // Attempt to download the image data via an XMLHttpRequest.
+    const xhr = new XMLHttpRequest();
+    let result;
+    xhr.onload = function() {
+      if (this.status !== 200) {
+        return console.log("FAILED: " + src);
+      }
+      // Blob > ArrayBuffer: http://stackoverflow.com/a/15981017/4200092
+      const reader = new FileReader();
+      reader.onload = function() {
+        // TypedArray > Base64 text: http://stackoverflow.com/a/12713326/4200092
+        const data = String.fromCharCode.apply(null, new Uint8Array(result));
+        src = "data:image/" + mime + ";base64," + btoa(data);
+      };
+      reader.readAsArrayBuffer(this.response);
+    };
+    xhr.open("get", src, true);
+    xhr.responseType = "blob";
+    xhr.send();
+  }
+  */
 }
