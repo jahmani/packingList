@@ -19,8 +19,8 @@
           <span title="ammount: ">{{orderRow.data.ammount}}</span>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col size="auto">
+      <ion-row  text-wrap>
+        <ion-col size="auto" >
           <span class="name-bold">{{orderRow.ext.Product.data.name}}</span>
           <ion-note *ngIf="orderRow.ext.Product.data.style">- {{orderRow.ext.Product.data.style}}</ion-note>
         </ion-col>

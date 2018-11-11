@@ -7,6 +7,7 @@ export const StorePathConfig = {
     AccountsInfo : "AccountsInfo",
     Images : "Images",
     Orders: "orders",
+    PackinglistInfo: "PackinglistInfo",
     OrderPLLines: "orderPLLines",
     ProductsInfo : "ProductsInfo",
     Transactions: "transactions",

@@ -27,6 +27,7 @@
   </ng-container>
   <app-order-rows-list *ngIf="(orderPlLines$|async) as lines; else noLines" [rows]="lines" >
   </app-order-rows-list>
+  <app-packing-list [orderRows]="orderPlLines$|async"> </app-packing-list>
   <ion-fab vertical="bottom" horizontal="start" slot="fixed">
     <ion-fab-button mini [routerLink]="['/StoreBase/NewOrderRow/', or.id]">
       <ion-icon name="add"></ion-icon>

@@ -9,7 +9,7 @@ import { Extended, OrderRow } from '../../interfaces/data-models';
 export class OrderRowsListComponent implements OnInit {
 
   orderRows: Extended<OrderRow>[];
-  totals: { ctns: number; qty: number; ammount: number; productName: string; };
+  totals: { qty: number; ammount: number; productName: string; };
   activeLineIndex: number;
   @Input("rows") set _rows (val: Extended<OrderRow>[]) {
     this.orderRows = val;
@@ -48,17 +48,14 @@ export class OrderRowsListComponent implements OnInit {
   }
 
   computeTotal() {
-    const ctns = 0;
     const qty = 0;
     const ammount = 0;
     const totalsLine = this.orderRows.reduce((prev, curr, i, arr) => {
-      prev.ctns += Number(curr.data.ctns) || 0;
       prev.qty += Number(curr.data.qty) || 0;
       prev.ammount += Number(curr.data.ammount) || 0;
       return prev;
-    }, {ctns: 0, qty: 0, ammount: 0, productName: "Totals"});
+    }, {qty: 0, ammount: 0, productName: "Totals"});
     this.totals = totalsLine;
-    this.plSummery[0].title = totalsLine.ctns.toString();
     this.plSummery[2].title = totalsLine.qty.toString();
     this.plSummery[4].title = totalsLine.ammount.toString();
 

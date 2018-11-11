@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Edit Packing List
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form novalidate *ngIf="packinglist$|async as pl" ng-submit="onSubmit()" [formGroup]="form">
+    <ion-list>
+      <ion-item>
+        <ion-label>Name</ion-label>
+        <ion-input  class="text-end" formControlName="name" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>deliveryAdress</ion-label>
+        <ion-input class="text-end" autofocus formControlName="deliveryAdress" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Date</ion-label>
+        <ion-datetime autofocus formControlName="date" ></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>deliveryDate</ion-label>
+        <ion-datetime autofocus formControlName="deliveryDate" ></ion-datetime>
+      </ion-item>
+    </ion-list>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button type="button"  expand="full" (click)="onCancel()" color="light">cancel</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button   expand="full"
+           (click)="onSubmit(form)" color="primary"> save</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  
+</ion-content>

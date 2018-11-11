@@ -20,7 +20,6 @@ import { ProductsListPage } from "./StorePages/products-list/products-list.page"
 import { ProductsListPageModule } from "./StorePages/products-list/products-list.module";
 import { PhotoGalleryPageModule } from "./StorePages/photo-gallery/photo-gallery.module";
 import { ServiceWorkerModule } from "@angular/service-worker";
-import { FixImgMIMEDirective } from './shared/fix-img-mime.directive';
 
 @NgModule({
 

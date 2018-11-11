@@ -172,21 +172,35 @@ export interface Order extends Editable, Delteable {
   ammount: number;
   currency: string;
   cbm: number;
+
+  packingListId: string;
+}
+
+export interface PackinglistInfo extends Editable, Delteable {
+  name: string;
+  date: string;
+  deliveryDate: string;
+  deliveryAdress: string;
+  notice: string;
+  ammount: number;
+  ctns: number;
+  cbm: number;
 }
 export interface OrderRow extends Editable, Delteable {
   orderId: string;
   productId: string;
   shippingMark: string;
   notice: string;
+  qty: number;
   price: number;
   ammount: number;
-  packing: number;
-  ctns: number;
-  qty: number;
-  siblingPLLineId: string;
   packingLines: PackingLine[];
+  packing: number;
+
+  d_ctns: number;
+  d_siblingPLLineId: string;
 }
-export interface PackingLine extends Editable, Delteable {
+export interface PackingLine  {
   shippingMark: string;
   ctnNo: string;
   notice: string;
