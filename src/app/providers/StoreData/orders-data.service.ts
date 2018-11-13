@@ -32,6 +32,15 @@ export class OrdersDataService extends StoreDataService<Order> {
     // return transactionsMap
     return ordersMap;
   }
+  forPackingList(plId: string) {
+    const OrdersColl = this.afs.collection<Order>(this.collection.ref.path, ref =>
+      ref.where("packingListId", "==", plId)
+    );
+    // const transactionsList = super.snapList(transactionsColl);
+    const ordersMap = super.snapList(OrdersColl.snapshotChanges());
+    // return transactionsMap
+    return ordersMap;
+  }
   getExtended(key): Observable<Extended<Order>> {
     return super.get(key).pipe(
       mergeMap(order => {

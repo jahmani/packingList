@@ -1,10 +1,12 @@
 import { Component, OnInit, Optional } from "@angular/core";
-import { Observable } from "rxjs";
+import { Observable, combineLatest } from "rxjs";
 import { Extended, Product } from "../../interfaces/data-models";
 import { NavParams, AlertController, ModalController } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
+import { FormControl } from "@angular/forms";
+import { debounceTime, map, startWith, tap } from "rxjs/operators";
 
 @Component({
   selector: "app-products-list",
@@ -14,6 +16,8 @@ import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component
 export class ProductsListPage implements OnInit {
   canSelect: any;
   products: Observable<Extended<Product>[]>;
+  searchControl: FormControl;
+  filteredProducts: Observable<Extended<Product>[]>;
 
   constructor(
     public router: Router,
@@ -21,17 +25,51 @@ export class ProductsListPage implements OnInit {
     @Optional() private navParams: NavParams,
     private alertController: AlertController,
     private modalController: ModalController,
-    private productsRep: ProductsDataService,
+    private productsRep: ProductsDataService
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
     const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
-    if (productsFsRepository) { this.productsRep = productsFsRepository; }
+    if (productsFsRepository) {
+      this.productsRep = productsFsRepository;
+    }
     this.products = this.productsRep.FormatedList;
+    this.searchControl = new FormControl();
   }
 
   ionViewDidLoad() {
-    console.log("ionViewDidLoad ProductsPage");
+    // searchControl.valueChanges will not emit values untill the user make input
+    // combineLatest will not emit values untill both ovseravables emit values
+    console.log("ionViewDidLoad : ProductsListPage");
+    const initializedValueChanges = this.searchControl.valueChanges.pipe(
+      debounceTime(700),
+      map(v => (v + "").trim()),
+      startWith(""),
+    //  tap(console.log)
+    );
+    // initializedValueChanges.subscribe(console.log);
+
+    this.filteredProducts = combineLatest(
+      initializedValueChanges,
+      this.products
+    ).pipe(
+      map(([searcTerm, extProducts]) => {
+        if (!searcTerm || !searcTerm.length) {
+          return extProducts;
+        }
+        return extProducts.filter(extAccount => {
+          return (
+            extAccount.data.name
+              .toUpperCase()
+              .includes(searcTerm.toUpperCase()) ||
+            extAccount.data.style
+              .toUpperCase()
+              .includes(searcTerm.toUpperCase())
+          );
+        });
+      })
+    );
   }
+
   async delete(extProduct: Extended<Product>) {
     const modal = await this.alertController.create({
       message: `Are you sure deleting product: ${extProduct.data.name}`,
@@ -59,28 +97,20 @@ export class ProductsListPage implements OnInit {
     }
   }
   cancel(product?: Extended<Product>) {
-      this.modalController.dismiss();
+    this.modalController.dismiss();
   }
 
-  copyAndEdit(product?: Extended<Product>) {
-    const copyProd = { data: { ...product.data } } as Extended<Product>;
-    this.presentEditProductModal(copyProd);
-  }
-  presentEditProductModal(product?: Extended<Product>) {
-   /* this.navCtrl.push("EditProductPage", {
-      productId: product && product.id,
-      productData: product && product.data,
-      productsRep: this.productsRep
-    });
-    */
-  }
+
   async showProductImage(productSnapshot: Extended<Product>) {
     if (productSnapshot.ext.imageFile) {
-      const modal = await this.modalController.create({component : PhotoViewComponent , componentProps: {
-        canDelete: false,
-        canSelect: false,
-        images: [productSnapshot.data.thumbUrl]
-      }});
+      const modal = await this.modalController.create({
+        component: PhotoViewComponent,
+        componentProps: {
+          canDelete: false,
+          canSelect: false,
+          images: [productSnapshot.data.thumbUrl]
+        }
+      });
       return modal.present();
     }
   }
@@ -104,15 +134,12 @@ export class ProductsListPage implements OnInit {
     alert.present();
   }
 
-  presentNewProductModal() {
-    const date = new Date().toISOString();
-    //    date = UTCToLocal(date)
 
-    return this.presentEditProductModal();
-  }
   ngOnInit() {
     if (this.navParams) {
       this.canSelect = this.navParams.get("canSelect");
     }
+    this.ionViewDidLoad();
+
   }
 }

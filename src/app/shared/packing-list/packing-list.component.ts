@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Extended, OrderRow } from '../../interfaces/data-models';
 
 @Component({
@@ -6,8 +6,11 @@ import { Extended, OrderRow } from '../../interfaces/data-models';
   templateUrl: './packing-list.component.html',
   styleUrls: ['./packing-list.component.scss']
 })
-export class PackingListComponent implements OnInit {
+export class PackingListComponent implements OnInit , OnChanges {
   @Input() orderRows: Extended<OrderRow>[];
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log("Changes: ", changes);
+  }
   constructor() { }
 
   ngOnInit() {

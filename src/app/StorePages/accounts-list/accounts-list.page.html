@@ -27,7 +27,7 @@
         <span *ngIf="_totalBalanceObj.isDirty"> !</span>
       </h2>
     </ion-item>
-    <ion-item-sliding *ngFor="let account of accounts |async">
+    <ion-item-sliding *ngFor="let account of filteredAccounts |async">
       <!--[routerLink]="['/StoreBase/AccountTransactionsList', account.id]" -->
       <ion-item (click)="onClick(account)" text-wrap>
         <ion-icon name="person" slot="start"></ion-icon>

@@ -63,14 +63,22 @@ const routes: Routes = [
         path: "EditPackingListInfo/:id",
         loadChildren:
           "./edit-packinglist-info/edit-packinglist-info.module#EditPackinglistInfoPageModule"
+      },
+      {
+        path: "Packinglists",
+        loadChildren:
+          "./packinglists/packinglists.module#PackinglistsPageModule"
+      },
+      {
+        path: "Packinglist/:id",
+        loadChildren:
+          "./packinglist/packinglist.module#PackinglistPageModule"
       }
     ]
   }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(routes)
-  ],
+  imports: [RouterModule.forChild(routes)]
 })
 export class StoreBaseRoutingModule {}

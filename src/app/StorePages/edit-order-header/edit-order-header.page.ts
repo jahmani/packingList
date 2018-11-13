@@ -4,8 +4,14 @@ import { Observable, of } from "rxjs";
 import { map, take, tap, switchMap } from "rxjs/operators";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
-import { Extended, Order, OrderRow } from "../../interfaces/data-models";
+import {
+  Extended,
+  Order,
+  OrderRow,
+  PackinglistInfo
+} from "../../interfaces/data-models";
 import { Location } from "@angular/common";
+import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
 
 @Component({
   selector: "app-edit-order-header",
@@ -13,17 +19,21 @@ import { Location } from "@angular/common";
   styleUrls: ["./edit-order-header.page.scss"]
 })
 export class EditOrderHeaderPage implements OnInit {
+  packinglists: Observable<Extended<PackinglistInfo>[]>;
+
   orderId$: Observable<string>;
   submitAttempt: boolean;
   orderId: string;
   order$: Observable<Extended<Order>>;
   form: FormGroup;
+  customOptions: { title: string; subTitle: string };
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private ordersFsRep: OrdersDataService,
     private location: Location,
-    private router: Router
+    private router: Router,
+    private plInfoDataService: PackinglistInfoDataService
   ) {
     //    this.orderId = this.navParams.get("orderId");
     this.form = this.fb.group({
@@ -33,7 +43,8 @@ export class EditOrderHeaderPage implements OnInit {
       imageUrl: "",
       accountId: "",
       ammount: "",
-      cbm: ""
+      cbm: "",
+      packingListId: ""
     });
 
     this.orderId$ = this.route.paramMap.pipe(
@@ -41,7 +52,11 @@ export class EditOrderHeaderPage implements OnInit {
         return value.get("id");
       })
     );
-
+    this.packinglists = this.plInfoDataService.List();
+    this.customOptions = {
+      title: "Pizza Toppings",
+      subTitle: "Select your toppings"
+    };
     this.order$ = this.orderId$.pipe(
       switchMap(orderId => {
         if (orderId === "new") {
@@ -70,7 +85,9 @@ export class EditOrderHeaderPage implements OnInit {
     if (this.orderId || !data) {
       return this.location.back();
     } else {
-      this.router.navigate(["/StoreBase/OrderView", data.id], { replaceUrl: true });
+      this.router.navigate(["/StoreBase/OrderView", data.id], {
+        replaceUrl: true
+      });
     }
   }
   onCancel() {

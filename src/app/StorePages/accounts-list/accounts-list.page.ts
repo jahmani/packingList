@@ -6,10 +6,7 @@ import {
   AccountBalance
 } from "../../interfaces/data-models";
 import { FormControl } from "@angular/forms";
-import {
-  NavParams,
-  ModalController,
-} from "@ionic/angular";
+import { NavParams, ModalController } from "@ionic/angular";
 import { debounceTime, startWith, map, tap } from "rxjs/operators";
 import { AccountsDataService } from "../../providers/StoreData/accounts-data.service";
 import { UserStoresService } from "../../providers/AppData/user-stores.service";
@@ -45,29 +42,28 @@ export class AccountsListPage implements OnInit {
   ionViewDidLoad() {
     // searchControl.valueChanges will not emit values untill the user make input
     // combineLatest will not emit values untill both ovseravables emit values
-    //
+
     const initializedValueChanges = this.searchControl.valueChanges
-      .pipe(debounceTime(700))
-      .pipe(startWith(null));
-    /*
-    merged.subscribe(searcTerm => {
-      console.log("merge Eimit", searcTerm)
-    })
-    */
+      .pipe(debounceTime(700),
+      map((v) => (v + "").trim()),
+      startWith(""),
+    tap(console.log));
+
     this.filteredAccounts = combineLatest(
       initializedValueChanges,
-      this.accounts,
-      (searcTerm: string, extAccounts) => {
+      this.accounts
+    ).pipe(
+      map(([searcTerm, extAccounts]) => {
         if (!searcTerm || !searcTerm.length) {
           return extAccounts;
         }
         return extAccounts.filter(extAccount => {
           return (
-            extAccount.data.name.includes(searcTerm) ||
-            extAccount.data.city.includes(searcTerm)
+            extAccount.data.name.toUpperCase().includes(searcTerm.toUpperCase()) ||
+            extAccount.data.city.toUpperCase().includes(searcTerm.toUpperCase())
           );
         });
-      }
+      })
     );
 
     this.totalBalanceObj = this.filteredAccounts.pipe(
@@ -148,7 +144,8 @@ export class AccountsListPage implements OnInit {
 
   ngOnInit() {
     if (this.navParams) {
-    this.canSelect = this.navParams.get("canSelect");
+      this.canSelect = this.navParams.get("canSelect");
     }
+    this.ionViewDidLoad();
   }
 }

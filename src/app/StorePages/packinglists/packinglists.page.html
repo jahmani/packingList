@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+        <ion-button [routerLink]="['/StoreBase/EditPackingListInfo','new']">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+
+    <ion-buttons slot="start">
+     <ion-menu-toggle menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>Packing List</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+<ion-content no-padding>
+  <ion-card *ngFor="let pl of packinglists|async, let i=index">
+    <ion-card-header [routerLink]="['/StoreBase/Packinglist',pl.id]">
+      {{pl.data.name}}
+    </ion-card-header>
+    <ion-card-content>
+      {{pl.data.date}} in {{pl.data.deliveryAdress}}
+    </ion-card-content>
+  </ion-card>
+</ion-content>

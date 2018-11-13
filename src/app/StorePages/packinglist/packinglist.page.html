@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar> <ion-title>Packinglist</ion-title> </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-segment #displayMode value="rows">
+    <ion-segment-button value="orders"> Orders </ion-segment-button>
+    <ion-segment-button value="rows"> Rows </ion-segment-button>
+    <ion-segment-button value="lines"> PAcking Lines </ion-segment-button>
+  </ion-segment>
+  <ng-container [ngSwitch]="displayMode.value">
+      <app-packing-list *ngSwitchCase="'lines'" [orderRows]="plOrdersRows | async"> </app-packing-list>
+      <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async"> </app-order-rows-list>
+      <app-packing-list *ngSwitchCase="'orders'" [orderRows]="plOrdersRows | async"> </app-packing-list>
+    </ng-container>
+</ion-content>

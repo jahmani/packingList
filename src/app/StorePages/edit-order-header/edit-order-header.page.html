@@ -35,6 +35,12 @@
         <ion-label>deliveryDate</ion-label>
         <ion-datetime autofocus formControlName="deliveryDate" ></ion-datetime>
       </ion-item>
+      <ion-item>
+        <ion-label>packingListId</ion-label>
+        <ion-select [interfaceOptions]="customOptions"  formControlName="packingListId"  >
+          <ion-select-option *ngFor="let pl of packinglists|async" [value]="pl.id">{{pl.data.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
     </ion-list>
     <ion-grid>
       <ion-row>

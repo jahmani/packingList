@@ -22,10 +22,11 @@
 </ion-header>
 
 
-<ion-content *ngIf="products|async as products">
+<ion-content >
 
   <ion-list>
-    <ion-item-sliding (click)="onProductClicked(product)" *ngFor="let product of products">
+    <ion-item-sliding (click)="onProductClicked(product)" 
+    *ngFor="let product of filteredProducts|async">
       <ion-item>
         <ion-thumbnail slot="end">
           <img [src]="product.data.thumbUrl">
@@ -57,7 +58,7 @@
           <ion-icon name="create"></ion-icon>
           Edit
         </ion-item-option>
-        <ion-item-option color="primary" (click)="copyAndEdit(product)">
+        <ion-item-option color="primary" >
           <ion-icon name="copy"></ion-icon>
           Copy & Edit
         </ion-item-option>
@@ -70,3 +71,13 @@
 
   </ion-list>
 </ion-content>
+<ion-footer>
+    <ion-toolbar>
+    <ion-buttons start>
+      <ion-button [routerLink]="['/StoreBase/EditProduct', 'new']" icon-only color="royal">
+        <ion-icon name="add"></ion-icon>
+      </ion-button>
+      <ion-searchbar aria-label="search" [showCancelButton]="true" [formControl]="searchControl"></ion-searchbar>
+    </ion-buttons>
+  </ion-toolbar>
+  </ion-footer>
