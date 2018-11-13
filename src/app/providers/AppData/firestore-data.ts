@@ -59,12 +59,12 @@ export class FirestoreData<T extends Editable> {
 
   private initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
     this.dataList = this.snapList(snapshotChanges).pipe(
-      share()
+    //  share()
     //  publishReplay(1),
     //  refCount()
     );
     this.dataMap = this.snapshotMap(snapshotChanges).pipe(
-      share()
+    //  share()
     //  publishReplay(1),
     //  refCount()
     );
@@ -76,7 +76,9 @@ export class FirestoreData<T extends Editable> {
     console.log(`path : ${path} `);
 
     this.collection = this.afs.collection(path);
-    const snapshotChanges = this.collection.snapshotChanges().pipe(share());
+    const snapshotChanges = this.collection.snapshotChanges().pipe(
+    //  share()
+      );
     this.initData(snapshotChanges);
   }
   snapList(
@@ -84,11 +86,12 @@ export class FirestoreData<T extends Editable> {
   ): Observable<Extended<T>[]> {
     return snapshotChanges.pipe(
       map(actions => {
-        return actions
+        const res =  actions
           .map(a => this.extractSnapshotData(a.payload.doc))
           .sort((a, b) => {
             return compareTimeStamp(a.data.lastEditedOn, b.data.lastEditedOn);
           });
+          return res;
       })
     );
   }

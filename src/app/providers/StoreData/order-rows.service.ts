@@ -26,7 +26,7 @@ export class OrderRowsService extends StoreDataService<OrderRow> {
     console.log("Hello OrderPLLinesPLLinesFsRepository Provider");
   }
   forOrder(orderKey: string) {
-    const OrderPLLinesColl$ = this.path$.pipe(
+    const OrderRowsColl$ = this.path$.pipe(
       map(path => {
         return this.afs.collection<OrderRow>(path, ref =>
           ref.where("orderId", "==", orderKey)
@@ -34,21 +34,12 @@ export class OrderRowsService extends StoreDataService<OrderRow> {
       })
     );
 
-    const orderPLLinesList = OrderPLLinesColl$.pipe(
-      switchMap(orderPLLinesColl => {
-        return super.snapList(orderPLLinesColl.snapshotChanges());
+    const orderRowssList = OrderRowsColl$.pipe(
+      switchMap(orderRowssColl => {
+        return super.snapList(orderRowssColl.snapshotChanges());
       })
     );
-    /*
-    const OrderPLLinesColl = this.afs.collection<PLLine>(
-      this.collection.ref.path,
-      ref => ref.where("orderId", "==", orderKey)
-    );
-    // const transactionsList = super.snapList(transactionsColl);
-    const orderPLLinesMap = super.snapList(OrderPLLinesColl.snapshotChanges());
-    */
-    // return transactionsMap
-    return this.formateList(orderPLLinesList);
+    return this.formateList(orderRowssList);
   }
   get FormatedList(): Observable<Extended<OrderRow>[]> {
     return this.formateList(this.List());
