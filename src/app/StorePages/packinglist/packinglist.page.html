@@ -1,5 +1,14 @@
 <ion-header>
-  <ion-toolbar> <ion-title>Packinglist</ion-title> </ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+     <ion-menu-toggle menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+    </ion-buttons>
+    <ion-title>Packing List</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
@@ -11,6 +20,8 @@
   <ng-container [ngSwitch]="displayMode.value">
       <app-packing-list *ngSwitchCase="'lines'" [orderRows]="plOrdersRows | async"> </app-packing-list>
       <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async"> </app-order-rows-list>
-      <app-packing-list *ngSwitchCase="'orders'" [orderRows]="plOrdersRows | async"> </app-packing-list>
+      <div *ngSwitchCase="'orders'">
+        <app-order-header-view  *ngFor="let order of plOrders | async" [order]="order"></app-order-header-view>
+      </div>
     </ng-container>
 </ion-content>

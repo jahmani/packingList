@@ -11,7 +11,7 @@ import { OrdersDataService } from "../../providers/StoreData/orders-data.service
 import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ActivatedRoute } from "@angular/router";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
-import { map, switchMap, mergeMap, mergeAll, zip } from "rxjs/operators";
+import { map, switchMap, mergeMap, mergeAll, zip, share } from "rxjs/operators";
 
 @Component({
   selector: "app-packinglist",
@@ -58,7 +58,7 @@ export class PackinglistPage implements OnInit {
           })
         );
         return latest;
-      })
+      }), share()
     );
   }
 

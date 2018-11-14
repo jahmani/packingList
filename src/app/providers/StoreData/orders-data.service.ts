@@ -24,8 +24,9 @@ export class OrdersDataService extends StoreDataService<Order> {
     console.log("Hello TransactionsFsRepository Provider");
   }
   forAccount(accountKey: string) {
-    const OrdersColl = this.afs.collection<Order>(this.collection.ref.path, ref =>
-      ref.where("accountId", "==", accountKey)
+    const OrdersColl = this.afs.collection<Order>(
+      this.collection.ref.path,
+      ref => ref.where("accountId", "==", accountKey)
     );
     // const transactionsList = super.snapList(transactionsColl);
     const ordersMap = super.snapshotMap(OrdersColl.snapshotChanges());
@@ -33,13 +34,14 @@ export class OrdersDataService extends StoreDataService<Order> {
     return ordersMap;
   }
   forPackingList(plId: string) {
-    const OrdersColl = this.afs.collection<Order>(this.collection.ref.path, ref =>
-      ref.where("packingListId", "==", plId)
+    const OrdersColl = this.afs.collection<Order>(
+      this.collection.ref.path,
+      ref => ref.where("packingListId", "==", plId)
     );
     // const transactionsList = super.snapList(transactionsColl);
     const ordersMap = super.snapList(OrdersColl.snapshotChanges());
     // return transactionsMap
-    return ordersMap;
+    return this.formateList(ordersMap);
   }
   getExtended(key): Observable<Extended<Order>> {
     return super.get(key).pipe(
@@ -55,7 +57,11 @@ export class OrdersDataService extends StoreDataService<Order> {
     );
   }
   get FormatedList(): Observable<any[]> {
-    return this.List().pipe(
+    return this.formateList(this.List());
+  }
+
+  formateList(list: Observable<Extended<Order>[]>): Observable<any[]> {
+    return list.pipe(
       /*  */
 
       combineLatest(this.accountsRep.dataMap, (orders, accountsMap) => {

@@ -13,7 +13,7 @@ import {
 } from "../../interfaces/data-models";
 import { NavParams, ModalController } from "@ionic/angular";
 import { ViewController } from "@ionic/core";
-import { ImageMeta } from "../../providers/Image/image.service";
+import { ImageMeta, ImageService } from "../../providers/Image/image.service";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
 
@@ -29,11 +29,13 @@ export class PhotoGalleryPage implements OnInit {
   galleryType = "slides";
   @ViewChild("fileInput")
   fileInput: ElementRef;
+  testImage;
 
   constructor(
     @Optional() public navParams: NavParams,
     private modalCtrl: ModalController,
-    @Optional() private imagesFsRepository: ImagesDataService
+    @Optional() private imagesFsRepository: ImagesDataService,
+  //  private imagesService: ImageService
   ) {
     // this.canSelect = navParams.get("canSelect");
     // this.canGoBack = navParams.get("canGoBack");
@@ -47,7 +49,15 @@ export class PhotoGalleryPage implements OnInit {
     //  return extImages.map(extImage=>extImage.data)
     // })))
   }
-
+  /*
+  private loadPhotoAsBlob(src) {
+    const blob = this.imagesService.xhrLoad(src).then(blb => {
+      console.log("Loaded Blob");
+      return blb;
+    });
+    return blob;
+  }
+  */
   async openPhoto(index, images, rules?: OpenPhotoRules) {
     const modal = await this.modalCtrl.create({
       component: PhotoViewComponent,
@@ -64,9 +74,8 @@ export class PhotoGalleryPage implements OnInit {
         const extImageFile: Partial<Extended<ImageFile>> = {};
         extImageFile.data = res.data;
         if (res.role === "upload") {
-
         } else {
-        this.selectPhoto(extImageFile);
+          this.selectPhoto(extImageFile);
         }
       }
     });
@@ -110,7 +119,6 @@ export class PhotoGalleryPage implements OnInit {
 
   close() {
     this.modalCtrl.dismiss();
-
   }
   AddNewImage() {
     // this.navCtrl.p

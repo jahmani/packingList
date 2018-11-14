@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { UserStore, Extended } from "../../interfaces/data-models";
+import { Observable, combineLatest } from "rxjs";
+import { UserStore, Extended, StoreInfo } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { map, mergeMap } from "rxjs/operators";
+import { map, mergeMap, startWith } from "rxjs/operators";
 import { FirestoreData } from "./firestore-data";
 import { StoreInfoService } from "./store-info.service";
 import { AuthService } from "../Auth/auth.service";
@@ -26,7 +26,9 @@ export class UserStoresService {
             afs,
             conatctPaths("users", user.uid, "stores")
           );
-        } else { return null; }
+        } else {
+          return null;
+        }
       })
     );
   }
@@ -36,26 +38,40 @@ export class UserStoresService {
   get FormatedList(): Observable<Extended<UserStore>[]> {
     return this.List().pipe(
       mergeMap(stores => {
-        return Promise.all(stores && this.getStores(stores));
-      })
+        //  return Promise.all(this.getStores(stores));
+        return combineLatest(this.getStores(stores));
+      }),
+      map(extUserStoreArray =>
+        extUserStoreArray.filter(extUserStore => extUserStore.ext.store)
+      )
     );
   }
   getStores(extUserStores: Extended<UserStore>[]) {
+    const emptyStoreInfo: Partial<StoreInfo> = { name: "empty", code: "empty" };
     return extUserStores.map(extUserStore => {
-      return this.storeInfoFsRepository.getOnce(extUserStore.id).then(store => {
-        extUserStore.ext.store = store.data;
-        return extUserStore;
-      });
+      return this.storeInfoFsRepository.get(extUserStore.id).pipe(
+      //  startWith({ data: emptyStoreInfo  }),
+        map(store => {
+          extUserStore.ext.store = store.data as StoreInfo;
+          return extUserStore;
+        })
+      );
     });
   }
 
   getSingleOrDefault(): Observable<Extended<UserStore>> {
-    return this.FormatedList.pipe(map(extUserStores => {
-      if (extUserStores.length === 1) { return extUserStores[0]; }
-      extUserStores.forEach(extUserStore => {
-        if (extUserStore.data.isDefault) { return extUserStore; }
-      });
-      return null;
-    }));
+    return this.FormatedList.pipe(
+      map(extUserStores => {
+        if (extUserStores.length === 1) {
+          return extUserStores[0];
+        }
+        extUserStores.forEach(extUserStore => {
+          if (extUserStore.data.isDefault) {
+            return extUserStore;
+          }
+        });
+        return null;
+      })
+    );
   }
 }

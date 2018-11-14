@@ -200,7 +200,48 @@ export class ImageService {
     const head = "data:image/jpeg;base64,";
     return ((data_url.length - head.length) * 3) / 4 / (1024 * 1024);
   }
-/*
+
+  /*
+  public xhrLoad(src: string) {
+    const xhr = new XMLHttpRequest();
+
+    // Use JSFiddle logo as a sample image to avoid complicating
+    // this example with cross-domain issues.
+  //  xhr.open("GET", "http://fiddle.jshell.net/img/logo.png", true);
+    xhr.open("GET", src, true);
+
+    // Ask for the result as an ArrayBuffer.
+    xhr.responseType = "arraybuffer";
+    const promise = new Promise<string>((resolve, reject) => {
+      xhr.onerror = function(e) {
+        reject(e);
+      };
+      xhr.onload = function(e) {
+        // Obtain a blob: URL for the image data.
+        const arrayBufferView = new Uint8Array(this.response);
+        const  blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+        const urlCreator = window.URL; // || window.webkitURL;
+        const imageUrl = urlCreator.createObjectURL(blob);
+        resolve(imageUrl);
+       // const img = document.querySelector("#photo");
+       // img.src = imageUrl;
+      };
+
+      xhr.send();
+    });
+    return promise;
+
+  }
+  */
+  /*  private loadImage(url: string): Observable<any> {
+    return this.httpClient
+      // load the image as a blob
+      .get(url, {responseType: 'blob'})
+      // create an object url of that blob that we can use in the src attribute
+      .map(e => URL.createObjectURL(e))
+  }
+
+
   fixMIME(src) {
     const img = this;
 
