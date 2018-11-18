@@ -1,4 +1,4 @@
-import { Component, OnInit, forwardRef } from "@angular/core";
+import { Component, OnInit, forwardRef, Output, EventEmitter, Input } from "@angular/core";
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from "@angular/forms";
 import { OrderRow2, Extended } from "../../interfaces/data-models";
 import { ModalController } from "@ionic/angular";
@@ -19,6 +19,7 @@ import { EditOrderRowPage } from "../../StorePages/edit-order-row/edit-order-row
 export class OrderRowEditorComponent implements OnInit, ControlValueAccessor {
   orderRow: Extended<OrderRow2>;
   srcChangeFunction: any;
+  @Output() remove = new EventEmitter();
 
   writeValue(obj: Extended<OrderRow2>): void {
     this.orderRow = obj;
@@ -29,8 +30,8 @@ export class OrderRowEditorComponent implements OnInit, ControlValueAccessor {
   registerOnTouched(fn: any): void {}
 
   constructor(private modalCtrl: ModalController) {}
-  removeRow() {
-
+  removeRow($event) {
+    this.remove.emit($event);
   }
   async showEditOrderRowModal() {
     const modal = await this.modalCtrl.create({

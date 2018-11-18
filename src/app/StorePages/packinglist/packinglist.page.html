@@ -21,7 +21,9 @@
       <app-packing-list *ngSwitchCase="'lines'" [orderRows]="plOrdersRows | async"> </app-packing-list>
       <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async"> </app-order-rows-list>
       <div *ngSwitchCase="'orders'">
-        <app-order-header-view  *ngFor="let order of plOrders | async" [order]="order"></app-order-header-view>
+        <ion-item *ngFor="let order of plOrders | async" >
+        <app-order-header-view  [order]="order"></app-order-header-view>
+      </ion-item>
       </div>
     </ng-container>
 </ion-content>

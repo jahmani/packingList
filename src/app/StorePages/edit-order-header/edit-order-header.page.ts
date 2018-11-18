@@ -1,6 +1,6 @@
 import { Component, OnInit, OnChanges } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, of } from "rxjs";
+import { Observable, of, Subscription } from "rxjs";
 import { map, take, tap, switchMap } from "rxjs/operators";
 import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
@@ -27,7 +27,8 @@ export class EditOrderHeaderPage implements OnInit {
   orderId: string;
   order$: Observable<Extended<Order>>;
   form: FormGroup;
-  customOptions: { title: string; subTitle: string };
+  sub: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -43,7 +44,7 @@ export class EditOrderHeaderPage implements OnInit {
       notice: "",
       imageUrl: "",
       accountId: "",
-      ammount: "",
+      ammount: {value: "", disabled: true},
       cbm: "",
       packingListId: "",
       rows: this.fb.array([])
@@ -55,10 +56,7 @@ export class EditOrderHeaderPage implements OnInit {
       })
     );
     this.packinglists = this.plInfoDataService.List();
-    this.customOptions = {
-      title: "Pizza Toppings",
-      subTitle: "Select your toppings"
-    };
+
     this.order$ = this.orderId$.pipe(
       switchMap(orderId => {
         if (orderId === "new") {
@@ -71,28 +69,33 @@ export class EditOrderHeaderPage implements OnInit {
         } else {
           return this.ordersFsRep.getExtended(orderId);
         }
-      }), take(1),
+      }),
+      take(1),
       tap(order => {
         this.orderId = order.id;
         this.form.patchValue({ ...order.data, rows: [] });
         this.patchOrderRows(order.ext.extRows);
       })
     );
-    this.orderRowsCtrl.valueChanges.subscribe((rows: Extended<OrderRow2>[]) => {
-      const total = rows.reduce<{ ammount: number }>(
-        (prev, curr) => {
-          prev.ammount += curr.data.ammount;
-          return prev;
-        },
-        { ammount: 0 }
-      );
-      this.ammountCtrl.setValue(total.ammount);
-    });
+    this.sub = this.orderRowsCtrl.valueChanges.subscribe(
+      (rows: Extended<OrderRow2>[]) => {
+        const total = rows.reduce<{ ammount: number }>(
+          (prev, curr) => {
+            prev.ammount += curr.data.ammount;
+            return prev;
+          },
+          { ammount: 0 }
+        );
+        this.ammountCtrl.setValue(total.ammount);
+      }
+    );
   }
   get orderRowsCtrl() {
     return this.form.get("rows") as FormArray;
   }
-
+  removeOrderRow(index: number) {
+    this.orderRowsCtrl.removeAt(index);
+  }
   patchOrderRows(orderRows: Extended<OrderRow2>[]) {
     if (!orderRows) {
       return;
@@ -121,6 +124,9 @@ export class EditOrderHeaderPage implements OnInit {
       this.router.navigate(["/StoreBase/OrderView", data.id], {
         replaceUrl: true
       });
+    }
+    if (this.sub) {
+      this.sub.unsubscribe();
     }
   }
   onCancel() {

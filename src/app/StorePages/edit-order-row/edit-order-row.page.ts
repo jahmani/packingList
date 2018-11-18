@@ -1,9 +1,14 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators, FormGroup, FormArray } from "@angular/forms";
-import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
-import { OrderRow, Extended, Product, PackingLine, OrderRow2 } from "../../interfaces/data-models";
-import { Observable, Subscription, of } from "rxjs";
+import {
+  OrderRow,
+  Extended,
+  Product,
+  PackingLine,
+  OrderRow2
+} from "../../interfaces/data-models";
+import { Observable, Subscription, of, merge } from "rxjs";
 import { take } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
@@ -23,13 +28,15 @@ export class EditOrderRowPage implements OnInit {
   form: FormGroup;
   pLineId: string;
   subscribtions: Subscription[] = [];
+  sub: Subscription;
+
 
   constructor(
     private fb: FormBuilder,
-  //  private pLLinesFsRep: OrderRowsService,
+    //  private pLLinesFsRep: OrderRowsService,
     private productsFsRep: ProductsDataService,
-  //  private rout: ActivatedRoute,
-  //  private location: Location
+    //  private rout: ActivatedRoute,
+    //  private location: Location
     private modalController: ModalController,
     private navParams: NavParams
   ) {
@@ -41,11 +48,17 @@ export class EditOrderRowPage implements OnInit {
       price: ["", Validators.required],
       ammount: ["", Validators.required],
       packingLines: this.fb.array([]),
-      notice: "",
+      notice: ""
     });
+    this.sub = merge(this.qtyControl.valueChanges, this.priceControl.valueChanges).subscribe(
+      (qty) => {
+        const ammount = this.qtyControl.value * this.priceControl.value;
+        this.ammountControl.setValue(ammount);
+      }
+    );
+
     this.form.patchValue(this.orderRow.data);
     this.patchLines(this.orderRow.data.packingLines);
-
 
     /*/  if (this.pLineId) {
       this.pLLine$ = this.pLLinesFsRep.get(this.pLineId);
@@ -68,7 +81,6 @@ export class EditOrderRowPage implements OnInit {
     );
   */
 
-
     const sub = this.productIdControl.valueChanges.subscribe(productId => {
       if (productId) {
         this.productsFsRep.getOnce(productId).then(product => {
@@ -87,12 +99,14 @@ export class EditOrderRowPage implements OnInit {
     });
   }
   patchLines(pls: PackingLine[]) {
-    if (!pls) {return; }
-    pls.forEach((pl => {
+    if (!pls) {
+      return;
+    }
+    pls.forEach(pl => {
       const fg = this.createPackingLine();
       fg.patchValue(pl);
       this.packingLines.push(fg);
-    }));
+    });
   }
   addPackingLine() {
     this.packingLines.push(this.createPackingLine());
@@ -155,10 +169,10 @@ export class EditOrderRowPage implements OnInit {
     // throw "please take care , invalid form"
   }
   onDelete() {
-     return this.dismiss(null, "delete");
+    return this.dismiss(null, "delete");
   }
   onSave(pLLine: OrderRow2) {
-    const extPLLine = { data: pLLine, ext : {} } as Extended<OrderRow2>;
+    const extPLLine = { data: pLLine, ext: {} } as Extended<OrderRow2>;
     if (this.orderRow) {
       extPLLine.id = this.orderRow.id;
       if (this.orderRow.data.productId === pLLine.productId) {

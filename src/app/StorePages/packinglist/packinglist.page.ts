@@ -51,22 +51,6 @@ export class PackinglistPage implements OnInit {
         return temp;
       }), shareReplay(1)
     );
-    /*
-      map(extOrders => {
-          extOrders.map(extOrder => {
-            const rows = this.pLLinesFsRepository.forOrder(extOrder.id);
-            return rows;
-          })
-        ).pipe(
-          map(res => {
-            const arr: Extended<OrderRow>[] = [];
-            return arr.concat(...res);
-          })
-        );
-        return latest;
-      }), share()
-    );
-    */
   }
 
   ngOnInit() {}
