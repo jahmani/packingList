@@ -19,9 +19,6 @@
     </ion-item>
 
 </div>
-
-
-
 <app-order-row *ngFor="let orderRow of orderRows, let i=index" (plLineClicked)="onRowClicked(i)" 
     [orderRow]="orderRow" [index]="i" [isActive]="i==activeLineIndex"></app-order-row>
 <div *ngIf="totals" class="header-item">

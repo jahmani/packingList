@@ -4,14 +4,15 @@ import {
   Extended,
   Order,
   OrderRow,
-  PackingLine
+  PackingLine,
+  OrderRow2
 } from "../../interfaces/data-models";
 import { Observable, combineLatest } from "rxjs";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
-import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
+// import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ActivatedRoute } from "@angular/router";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
-import { map, switchMap, mergeMap, mergeAll, zip, share } from "rxjs/operators";
+import { map, switchMap, mergeMap, mergeAll, zip, share, shareReplay } from "rxjs/operators";
 
 @Component({
   selector: "app-packinglist",
@@ -22,14 +23,14 @@ export class PackinglistPage implements OnInit {
   plId: Observable<string>;
   plInfo: Observable<Extended<PackinglistInfo>>;
   plOrders: Observable<Extended<Order>[]>;
-  plOrdersRows: Observable<Extended<OrderRow>[]>;
+  plOrdersRows: Observable<Extended<OrderRow2>[]>;
   plOrdersLines: Observable<Extended<PackingLine>[]>;
   display: "orders" | "lines" | "rows" = "orders";
 
   constructor(
     private ordersFsRep: OrdersDataService,
     private packinglistInfoDataService: PackinglistInfoDataService,
-    private pLLinesFsRepository: OrderRowsService,
+    //  private pLLinesFsRepository: OrderRowsService,
     public rout: ActivatedRoute
   ) {
     this.plId = this.rout.paramMap.pipe(map(paramMap => paramMap.get("id")));
@@ -42,11 +43,16 @@ export class PackinglistPage implements OnInit {
     this.plOrders = this.plId.pipe(
       switchMap(plId => {
         return this.ordersFsRep.forPackingList(plId);
-      })
+      }), shareReplay(1)
     );
     this.plOrdersRows = this.plOrders.pipe(
-      switchMap(extOrders => {
-        const latest = combineLatest(
+      map(extOrders => {
+        const temp =  [].concat(...extOrders.map(extOrder => extOrder.ext.extRows));
+        return temp;
+      }), shareReplay(1)
+    );
+    /*
+      map(extOrders => {
           extOrders.map(extOrder => {
             const rows = this.pLLinesFsRepository.forOrder(extOrder.id);
             return rows;
@@ -60,6 +66,7 @@ export class PackinglistPage implements OnInit {
         return latest;
       }), share()
     );
+    */
   }
 
   ngOnInit() {}

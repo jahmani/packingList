@@ -39,6 +39,7 @@ export interface InviteExt {
 }
 export interface OrderExt {
   account?: Extended<AccountInfo>;
+  extRows?: Extended<OrderRow2>[];
 }
 
 export interface OrderPLLineExt {
@@ -172,7 +173,7 @@ export interface Order extends Editable, Delteable {
   ammount: number;
   currency: string;
   cbm: number;
-
+  rows:  OrderRow2[];
   packingListId: string;
 }
 
@@ -186,7 +187,21 @@ export interface PackinglistInfo extends Editable, Delteable {
   ctns: number;
   cbm: number;
 }
+export interface OrderRow2 {
+  orderId: string;
+  productId: string;
+  notice: string;
+  qty: number;
+  price: number;
+  ammount: number;
+  packingLines: PackingLine[];
+  sequence: number;
+
+  defaultShippingMark: string;
+  defaultCtnNumber: string;
+}
 export interface OrderRow extends Editable, Delteable {
+  [x: string]: any;
   orderId: string;
   productId: string;
   shippingMark: string;
@@ -200,7 +215,7 @@ export interface OrderRow extends Editable, Delteable {
   d_ctns: number;
   d_siblingPLLineId: string;
 }
-export interface PackingLine  {
+export interface PackingLine {
   shippingMark: string;
   ctnNo: string;
   notice: string;
@@ -230,12 +245,12 @@ export enum TransactionType {
   Debt = 1
 }
 export type InviteState =
-  | 'ACCEPTED'
-  | 'REVOKED'
-  | 'REJECTED'
-  | 'CANCELED'
-  | 'PENDING'
-  | 'LEAVED';
+  | "ACCEPTED"
+  | "REVOKED"
+  | "REJECTED"
+  | "CANCELED"
+  | "PENDING"
+  | "LEAVED";
 export interface Invite extends Editable {
   userId: string;
   storeId: string;
@@ -245,7 +260,7 @@ export interface StoreDoc extends Editable {
   storeInfo: StoreInfo;
 }
 
-export interface StoreInfo  extends Editable {
+export interface StoreInfo extends Editable {
   name: string;
   code: string;
 }

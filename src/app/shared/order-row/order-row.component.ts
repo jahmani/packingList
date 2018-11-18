@@ -6,8 +6,8 @@ import { PhotoViewComponent } from '../photo-view/photo-view.component';
 
 @Component({
   selector: 'app-order-row',
-  templateUrl: './order-row.component.1.html',
-  styleUrls: ['./order-row.component.1.scss'],
+  templateUrl: './order-row.component.html',
+  styleUrls: ['./order-row.component.scss'],
 })
 export class OrderRowComponent implements OnInit {
   @Input()
@@ -18,10 +18,6 @@ export class OrderRowComponent implements OnInit {
   isActive: Boolean;
   @Output()
   plLineClicked: EventEmitter<number> = new EventEmitter();
-  @Output()
-  plLineEditClicked: EventEmitter<Extended<OrderRow>> = new EventEmitter();
-  @Output()
-  plLineCopyClicked: EventEmitter<Extended<OrderRow>> = new EventEmitter();
 
   constructor(
     private modalCtrl: ModalController,
@@ -31,14 +27,6 @@ export class OrderRowComponent implements OnInit {
   }
   onPlLineClicked() {
     this.plLineClicked.emit(this.index);
-  }
-  onPlLineEditClicked($event) {
-    $event.stopPropagation();
-    this.plLineEditClicked.emit(this.orderRow);
-  }
-  onPlLineCopyClicked($event) {
-    $event.stopPropagation();
-    this.plLineCopyClicked.emit(this.orderRow);
   }
   onImageClicked(event) {
     event.stopPropagation();

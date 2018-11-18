@@ -2,13 +2,14 @@ import { Component, OnInit, OnChanges } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { map, take, tap, switchMap } from "rxjs/operators";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
 import {
   Extended,
   Order,
   OrderRow,
-  PackinglistInfo
+  PackinglistInfo,
+  OrderRow2
 } from "../../interfaces/data-models";
 import { Location } from "@angular/common";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
@@ -44,7 +45,8 @@ export class EditOrderHeaderPage implements OnInit {
       accountId: "",
       ammount: "",
       cbm: "",
-      packingListId: ""
+      packingListId: "",
+      rows: this.fb.array([])
     });
 
     this.orderId$ = this.route.paramMap.pipe(
@@ -61,17 +63,48 @@ export class EditOrderHeaderPage implements OnInit {
       switchMap(orderId => {
         if (orderId === "new") {
           const newOrder: Order = {} as Order;
-          return of({ data: newOrder, id: null } as Extended<Order>);
+          return of({
+            data: newOrder,
+            id: null,
+            ext: { extRows: [] }
+          } as Extended<Order>);
         } else {
           return this.ordersFsRep.getExtended(orderId);
         }
-      }),
+      }), take(1),
       tap(order => {
         this.orderId = order.id;
-        this.form.patchValue(order.data);
+        this.form.patchValue({ ...order.data, rows: [] });
+        this.patchOrderRows(order.ext.extRows);
       })
     );
+    this.orderRowsCtrl.valueChanges.subscribe((rows: Extended<OrderRow2>[]) => {
+      const total = rows.reduce<{ ammount: number }>(
+        (prev, curr) => {
+          prev.ammount += curr.data.ammount;
+          return prev;
+        },
+        { ammount: 0 }
+      );
+      this.ammountCtrl.setValue(total.ammount);
+    });
   }
+  get orderRowsCtrl() {
+    return this.form.get("rows") as FormArray;
+  }
+
+  patchOrderRows(orderRows: Extended<OrderRow2>[]) {
+    if (!orderRows) {
+      return;
+    }
+    this.orderRowsCtrl.setValue([]);
+    orderRows.forEach(orderRow => {
+      const fc = this.fb.control(orderRow);
+      this.orderRowsCtrl.push(fc);
+      fc.patchValue(orderRow);
+    });
+  }
+
   get ammountCtrl() {
     return this.form.get("ammount");
   }
@@ -104,6 +137,10 @@ export class EditOrderHeaderPage implements OnInit {
 
   onSave(order: Order) {
     const extOrder = { data: order } as Extended<Order>;
+
+    order.rows = order.rows.map(curr => {
+      return ((curr as any) as Extended<OrderRow2>).data;
+    }, {});
     if (this.orderId) {
       extOrder.id = this.orderId;
       this.ordersFsRep.saveOld(extOrder);

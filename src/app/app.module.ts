@@ -20,6 +20,7 @@ import { ProductsListPage } from "./StorePages/products-list/products-list.page"
 import { ProductsListPageModule } from "./StorePages/products-list/products-list.module";
 import { PhotoGalleryPageModule } from "./StorePages/photo-gallery/photo-gallery.module";
 import { ServiceWorkerModule } from "@angular/service-worker";
+import { EditOrderRowPageModule } from "./StorePages/edit-order-row/edit-order-row.module";
 
 @NgModule({
 
@@ -35,6 +36,7 @@ import { ServiceWorkerModule } from "@angular/service-worker";
     AngularFireAuthModule,
     AngularFireStorageModule,
     AccountsListPageModule,
+    EditOrderRowPageModule,
     ProductsListPageModule,
     PhotoGalleryPageModule,
     ServiceWorkerModule.register("/ngsw-worker.js", {

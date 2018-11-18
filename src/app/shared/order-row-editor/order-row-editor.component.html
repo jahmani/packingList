@@ -1,0 +1,33 @@
+<!--
+  <pre>
+    Edit : {{orderRow}}
+  </pre>
+-->
+<div class="order-row-editor-wraper">
+  <app-order-row
+    *ngIf="orderRow && orderRow.data"
+    [orderRow]="orderRow"
+  ></app-order-row>
+  <ion-fab
+  vertical="top"
+  edge
+  horizontal="start"
+  color="secondery"
+  slot="fixed"
+>
+  <ion-row no-padding>
+    <ion-col>
+      <ion-fab-button mini (click)="showEditOrderRowModal()">
+        <ion-icon name="create"></ion-icon>
+      </ion-fab-button>
+    </ion-col>
+    <ion-col>
+      <ion-fab-button
+        mini
+        color="secondary"
+        (click)="removeRow()"
+      >
+        <ion-icon name="trash"></ion-icon> </ion-fab-button></ion-col
+  ></ion-row>
+</ion-fab>
+</div>

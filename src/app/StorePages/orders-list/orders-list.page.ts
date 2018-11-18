@@ -6,6 +6,7 @@ import { OrdersDataService } from "../../providers/StoreData/orders-data.service
 import { Router, ActivatedRoute } from "@angular/router";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
 import { tap } from "rxjs/operators";
+ import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 
 @Component({
   selector: "app-orders-list",
@@ -17,6 +18,7 @@ export class OrdersListPage implements OnInit {
 
   constructor(
     private ordersRep: OrdersDataService,
+    private ordersRowsRep: OrderRowsService,
     public route: ActivatedRoute,
     private alertController: AlertController,
     private modalController: ModalController,
@@ -33,7 +35,9 @@ export class OrdersListPage implements OnInit {
     }))
     */
   }
-
+  copyRows() {
+    return this.ordersRowsRep.copyOrderRows();
+  }
   ionViewDidLoad() {
     console.log("ionViewDidLoad OrdersListPage");
   }

@@ -1,53 +1,32 @@
-<div class="pline-row-wrapper" (click)="onPlLineClicked()" [ngClass]="index%2==1?'odd-row':'even-row'" [class.active]="isActive"
-  no-padding>
-  <ion-item>
-
-    <ion-thumbnail (click)="onImageClicked($event)">
-      <!--
-          onerror="this.src='../assets/img/6.jpg'"
-        -->
-      <img [src]="plLine.ext.Product.data.thumbUrl">
+  <ion-item
+    no-padding
+    (click)="onPlLineClicked()"
+    [ngClass]="index % 2 == 1 ? 'odd-row' : 'even-row'"
+    [class.active]="isActive"
+  >
+    <ion-thumbnail slot="start" (click)="onImageClicked($event)">
+      <!-- onerror="this.src='../assets/img/6.jpg'" -->
+      <img [src]="orderRow.ext.Product.data.thumbUrl" />
     </ion-thumbnail>
-    <ion-row>
-      <ion-col>
-        <div class="pline-body-row">
-          <div class="pline-row-center pline-row-group">
-            <div class="pline-body-cell qty-cell" style=" height: auto;">
-              <div class="pline-body-cell-label">
-                <span title="qty">{{plLine.data.qty}}</span>
-              </div>
-            </div>
-            <div class="pline-body-cell price-cell" style=" height: auto;">
-              <div class="pline-body-cell-label">
-                <span title="price">{{plLine.data.price}}</span>
-              </div>
-            </div>
-            <div class="pline-body-cell ammount-cell">
-              <div class="pline-body-cell-label">
-                <span title="ammount">{{plLine.data.ammount}}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="pline-row-detail">
-          <ion-item lines="none">
-            <ion-label>
-              <p>{{plLine.data.shippingMark}}</p>
-              <span class="name-bold">{{plLine.ext.Product.data.name}}</span>
-              <ion-note *ngIf="plLine.ext.Product.data.style">- {{plLine.ext.Product.data.style}}</ion-note>
-            </ion-label>
-          </ion-item>
-        </div>
-
-      </ion-col>
-
-    </ion-row>
+    <ion-label>
+      <ion-row>
+        <ion-col size="4" text-center>
+          <span title="qty">{{ orderRow.data.qty }}</span>
+        </ion-col>
+        <ion-col size="4" text-center>
+          <span title="price">{{ orderRow.data.price }}</span>
+        </ion-col>
+        <ion-col size="4" text-center>
+          <span title="ammount: ">{{ orderRow.data.ammount }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row text-wrap>
+        <ion-col size="auto">
+          <span class="name-bold">{{ orderRow.ext.Product.data.name }}</span>
+          <ion-note *ngIf="orderRow.ext.Product.data.style"
+            >- {{ orderRow.ext.Product.data.style }}</ion-note
+          >
+        </ion-col>
+      </ion-row>
+    </ion-label>
   </ion-item>
-
-  <ion-fab *ngIf="isActive" vertical="top" horizontal="start" color="secondery" slot="fixed">
-    <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderRow/', plLine.id]">
-      <ion-icon name="create"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-</div>

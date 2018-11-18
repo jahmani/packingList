@@ -6,7 +6,7 @@
 
 
 <ion-content padding>
-  <form novalidate *ngIf="pLLine$|async as pl" ng-submit="onSubmit()" [formGroup]="form">
+  <form novalidate *ngIf="orderRow" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
       <app-product-picker formControlName="productId"></app-product-picker>
       <ion-item *ngIf="(productIdControl.touched || submitAttempt) && productIdControl.hasError('required')">

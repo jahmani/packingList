@@ -43,25 +43,6 @@ export class AccountPickerComponent implements OnInit {
     this.srcChangeFunction(this.accountId);
   }
   async selectAccountInfo($event) {
-    const self = this;
-    const callBack = (extAccountInfo: Extended<AccountInfo>) => {
-      return new Promise(resolve => {
-        if (extAccountInfo) {
-          self.account = extAccountInfo;
-          self.accountId = extAccountInfo.id;
-          self.srcChangeFunction(extAccountInfo.id);
-        }
-        resolve();
-      });
-    };
-
-    /*
-    this.navCtrl.push("AccountsListPage", {
-      callBack,
-      canSelect: true,
-      canGoBack: true
-    });
-    */
     const modal = await this.modalCtrl.create({
       component: AccountsListPage,
       componentProps: {

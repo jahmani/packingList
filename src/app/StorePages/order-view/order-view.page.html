@@ -1,39 +1,50 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/StoreBase/OrdersList"></ion-back-button>
+      <!--
       <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
       </ion-menu-toggle>
+      -->
     </ion-buttons>
     <ion-title>
-      <ng-container *ngIf="order$|async as or; else waiting">
-        Edit Order
+      <ng-container *ngIf="(order$ | async) as or; else: waiting">
+        View Order
       </ng-container>
       <ng-template #waiting>Waiting...</ng-template>
     </ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content no-padding *ngIf="order$|async as or">
+<ion-content no-padding *ngIf="(order$ | async) as or">
   <ng-container>
-    <app-order-header-view [order]="or" (click)="showEditButton = !showEditButton"></app-order-header-view>
-    <ion-fab *ngIf="showEditButton" vertical="top" horizontal="start" edge slot="fixed">
-      <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderHeader',or.id]">
+    <app-order-header-view [order]="or"></app-order-header-view>
+    <ion-fab
+      *ngIf="showEditButton"
+      vertical="top"
+      horizontal="start"
+      edge
+      slot="fixed"
+    >
+      <ion-fab-button mini [routerLink]="['/StoreBase/EditOrderHeader', or.id]">
         <ion-icon name="create"></ion-icon>
       </ion-fab-button>
     </ion-fab>
   </ng-container>
-  <app-order-rows-list *ngIf="(orderPlLines$|async) as lines; else noLines" [rows]="lines" >
+  <app-order-rows-list
+    *ngIf="(orderPlLines$ | async) as lines; else: noLines"
+    [rows]="lines"
+  >
   </app-order-rows-list>
-  <app-packing-list [orderRows]="orderPlLines$|async"> </app-packing-list>
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button mini [routerLink]="['/StoreBase/NewOrderRow/', or.id]">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-  <ng-template #noLines>
-    no linnnnnnnnes
-  </ng-template>
+  <app-packing-list [orderRows]="orderPlLines$ | async"> </app-packing-list>
+  <!--
+    <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+      <ion-fab-button mini [routerLink]="['/StoreBase/NewOrderRow/', or.id]">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  -->
+  <ng-template #noLines> loading... </ng-template>
 </ion-content>

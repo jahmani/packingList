@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { StoreDataService } from "./store-data.service";
-import { OrderRow, Extended, ExtType } from "../../interfaces/data-models";
+import { OrderRow, Extended, ExtType, OrderRow2 } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { Observable, combineLatest } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
+import { map, switchMap, first, tap } from "rxjs/operators";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { OrdersDataService } from "./orders-data.service";
 import { ProductsDataService } from "./products-data.service";
@@ -25,6 +25,7 @@ export class OrderRowsService extends StoreDataService<OrderRow> {
     super(afs, activeStoreService, StorePathConfig.OrderPLLines);
     console.log("Hello OrderPLLinesPLLinesFsRepository Provider");
   }
+
   forOrder(orderKey: string) {
     const OrderRowsColl$ = this.path$.pipe(
       map(path => {
@@ -44,6 +45,33 @@ export class OrderRowsService extends StoreDataService<OrderRow> {
   get FormatedList(): Observable<Extended<OrderRow>[]> {
     return this.formateList(this.List());
   }
+
+  copyOrderRows() {
+    this.ordersRep.List().pipe(first() ,
+      tap(extOrders => {
+        extOrders.forEach(extOrder => {
+          this.forOrder(extOrder.id).pipe( first() ,
+            tap(rows => {
+              let sequence = 0;
+              const rowsMap = rows.map((curr) => {
+                delete (curr.data).lastEditedOn;
+                delete (curr.data).lastEditedByUserId;
+                delete (curr.data).firstCreatedOn;
+                delete (curr.data).ctns;
+                delete (curr.data).packing;
+                const res = { ...curr.data, sequence: sequence++ } as any;
+                return res;
+              });
+              extOrder.data.rows = rowsMap;
+              this.ordersRep.saveOld(extOrder);
+            })
+          ).subscribe(console.log);
+        });
+      })
+    ).subscribe(console.log);
+  }
+
+
   formateList(
     list: Observable<Extended<OrderRow>[]>
   ): Observable<Extended<OrderRow>[]> {

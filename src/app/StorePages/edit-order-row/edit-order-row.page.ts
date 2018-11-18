@@ -2,11 +2,12 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators, FormGroup, FormArray } from "@angular/forms";
 import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
-import { OrderRow, Extended, Product, PackingLine } from "../../interfaces/data-models";
+import { OrderRow, Extended, Product, PackingLine, OrderRow2 } from "../../interfaces/data-models";
 import { Observable, Subscription, of } from "rxjs";
 import { take } from "rxjs/operators";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
+import { ModalController, NavParams } from "@ionic/angular";
 
 @Component({
   selector: "app-edit-order-row",
@@ -17,6 +18,7 @@ export class EditOrderRowPage implements OnInit {
   product: Extended<Product>;
   submitAttempt: boolean;
   pLLine: Extended<OrderRow>;
+  orderRow: Extended<OrderRow2>;
   pLLine$: Observable<Extended<OrderRow>>;
   form: FormGroup;
   pLineId: string;
@@ -24,12 +26,14 @@ export class EditOrderRowPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private pLLinesFsRep: OrderRowsService,
+  //  private pLLinesFsRep: OrderRowsService,
     private productsFsRep: ProductsDataService,
-    private rout: ActivatedRoute,
-    private location: Location
+  //  private rout: ActivatedRoute,
+  //  private location: Location
+    private modalController: ModalController,
+    private navParams: NavParams
   ) {
-    this.pLineId = this.rout.snapshot.paramMap.get("lineId");
+    this.orderRow = this.navParams.get("orderRow");
     this.form = this.fb.group({
       orderId: ["", Validators.required],
       productId: ["", Validators.required],
@@ -39,8 +43,11 @@ export class EditOrderRowPage implements OnInit {
       packingLines: this.fb.array([]),
       notice: "",
     });
+    this.form.patchValue(this.orderRow.data);
+    this.patchLines(this.orderRow.data.packingLines);
 
-    if (this.pLineId) {
+
+    /*/  if (this.pLineId) {
       this.pLLine$ = this.pLLinesFsRep.get(this.pLineId);
     } else {
       const orderId = this.rout.snapshot.paramMap.get("orderId");
@@ -59,7 +66,7 @@ export class EditOrderRowPage implements OnInit {
     this.subscribtions.push(
       this.priceControl.valueChanges.subscribe(() => this.recalculateAmmount())
     );
-
+  */
 
 
     const sub = this.productIdControl.valueChanges.subscribe(productId => {
@@ -86,7 +93,6 @@ export class EditOrderRowPage implements OnInit {
       fg.patchValue(pl);
       this.packingLines.push(fg);
     }));
-
   }
   addPackingLine() {
     this.packingLines.push(this.createPackingLine());
@@ -133,14 +139,14 @@ export class EditOrderRowPage implements OnInit {
     this.subscribtions.forEach(sub => sub.unsubscribe());
   }
 
-  dismiss(data?) {
-    this.location.back();
+  dismiss(data: Extended<OrderRow2>, role: string) {
+    this.modalController.dismiss(data, role);
   }
 
   onCancel() {
-    return this.dismiss(null);
+    return this.dismiss(null, "cancel");
   }
-  onSubmit({ value, valid }: { value: OrderRow; valid: boolean }) {
+  onSubmit({ value, valid }: { value: OrderRow2; valid: boolean }) {
     console.log(value, valid);
     this.submitAttempt = true;
     if (valid) {
@@ -149,20 +155,18 @@ export class EditOrderRowPage implements OnInit {
     // throw "please take care , invalid form"
   }
   onDelete() {
-    if (this.pLineId) {
-      this.pLLinesFsRep.remove(this.pLLine).then(() => this.dismiss());
-    }
+     return this.dismiss(null, "delete");
   }
-  onSave(pLLine: OrderRow) {
-    const extPLLine = { data: pLLine } as Extended<OrderRow>;
-    if (this.pLLine.id) {
-      extPLLine.id = this.pLLine.id;
-      this.pLLinesFsRep.saveOld(extPLLine);
-    } else {
-      this.pLLinesFsRep.saveNew(extPLLine);
+  onSave(pLLine: OrderRow2) {
+    const extPLLine = { data: pLLine, ext : {} } as Extended<OrderRow2>;
+    if (this.orderRow) {
+      extPLLine.id = this.orderRow.id;
+      if (this.orderRow.data.productId === pLLine.productId) {
+        extPLLine.ext.Product = this.orderRow.ext.Product;
+      }
     }
 
-    this.dismiss(extPLLine);
+    this.dismiss(extPLLine, "save");
   }
   ngOnInit() {}
 }
