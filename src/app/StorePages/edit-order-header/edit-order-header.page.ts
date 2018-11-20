@@ -152,7 +152,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
 
   dismiss(data: Extended<Order>, isDelte = false) {
     if (data.data.packingListId && isDelte) {
-      this.router.navigate(["/StoreBase/Packinglist", data.id]);
+      this.router.navigate(["/StoreBase/Packinglist", data.data.packingListId]);
     } else {
       this.location.back();
     }
