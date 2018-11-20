@@ -7,6 +7,7 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
 import { FormControl } from "@angular/forms";
 import { debounceTime, map, startWith, tap } from "rxjs/operators";
+import { EditProductPage } from "../edit-product/edit-product.page";
 
 @Component({
   selector: "app-products-list",
@@ -114,6 +115,18 @@ export class ProductsListPage implements OnInit {
       return modal.present();
     }
   }
+  async showEditProduct(id) {
+    const modal = await this.modalController.create({
+      component: EditProductPage,
+      componentProps: {
+        id
+      }, cssClass: "edit-modal"
+    });
+    return modal.present();
+}
+async showNewProduct() {
+  return this.showEditProduct("new");
+}
 
   async onDelete(productSnapshot: Extended<Product>) {
     const alert = await this.alertController.create({

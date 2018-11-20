@@ -18,12 +18,12 @@
   </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
-  <ion-card *ngFor="let pl of packinglists|async, let i=index">
-    <ion-card-header [routerLink]="['/StoreBase/Packinglist',pl.id]">
+  <ion-item *ngFor="let pl of packinglists|async, let i=index"  [routerLink]="['/StoreBase/Packinglist',pl.id]">
+    <h1>
       {{pl.data.name}}
-    </ion-card-header>
-    <ion-card-content>
-      {{pl.data.date}} in {{pl.data.deliveryAdress}}
-    </ion-card-content>
-  </ion-card>
+    </h1>
+    <ion-note>
+      lloading in {{pl.data.date}} in {{pl.data.deliveryAdress}}
+    </ion-note>
+  </ion-item>
 </ion-content>

@@ -1,7 +1,7 @@
-import { Component, OnInit, OnChanges } from "@angular/core";
+import { Component, OnInit, OnChanges, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, Subscription } from "rxjs";
-import { map, take, tap, switchMap } from "rxjs/operators";
+import { map, take, tap, switchMap, first } from "rxjs/operators";
 import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
 import {
@@ -13,21 +13,24 @@ import {
 } from "../../interfaces/data-models";
 import { Location } from "@angular/common";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
+import { Datetime } from "@ionic/angular";
 
 @Component({
   selector: "app-edit-order-header",
   templateUrl: "./edit-order-header.page.html",
   styleUrls: ["./edit-order-header.page.scss"]
 })
-export class EditOrderHeaderPage implements OnInit {
+export class EditOrderHeaderPage implements OnInit, OnDestroy {
   packinglists: Observable<Extended<PackinglistInfo>[]>;
 
-  orderId$: Observable<string>;
+  // orderId$: Observable<string>;
   submitAttempt: boolean;
   orderId: string;
   order$: Observable<Extended<Order>>;
   form: FormGroup;
   sub: Subscription;
+  newRowCtrol: FormControl;
+  order: Extended<Order>;
 
   constructor(
     private route: ActivatedRoute,
@@ -37,30 +40,38 @@ export class EditOrderHeaderPage implements OnInit {
     private router: Router,
     private plInfoDataService: PackinglistInfoDataService
   ) {
-    //    this.orderId = this.navParams.get("orderId");
     this.form = this.fb.group({
       date: "",
       deliveryDate: "",
       notice: "",
       imageUrl: "",
       accountId: "",
-      ammount: {value: "", disabled: true},
+      ammount: "",
       cbm: "",
       packingListId: "",
       rows: this.fb.array([])
     });
-
+    /*
     this.orderId$ = this.route.paramMap.pipe(
       map(value => {
         return value.get("id");
       })
     );
+    */
     this.packinglists = this.plInfoDataService.List();
 
-    this.order$ = this.orderId$.pipe(
-      switchMap(orderId => {
+    this.order$ = this.route.paramMap.pipe(
+      switchMap(paramMap => {
+        const orderId = paramMap.get("id");
+        const packingListId = paramMap.get("plId");
+        const accountId = paramMap.get("accountId");
         if (orderId === "new") {
-          const newOrder: Order = {} as Order;
+          const newOrder: Order = {
+            date: new Date().toISOString(),
+            deliveryDate: new Date().toISOString(),
+            packingListId,
+            accountId
+          } as Order;
           return of({
             data: newOrder,
             id: null,
@@ -73,8 +84,10 @@ export class EditOrderHeaderPage implements OnInit {
       take(1),
       tap(order => {
         this.orderId = order.id;
+        this.order = order;
         this.form.patchValue({ ...order.data, rows: [] });
         this.patchOrderRows(order.ext.extRows);
+        this.newOrderRow();
       })
     );
     this.sub = this.orderRowsCtrl.valueChanges.subscribe(
@@ -108,6 +121,26 @@ export class EditOrderHeaderPage implements OnInit {
     });
   }
 
+  newOrderRow() {
+    const newOrderRow: Extended<OrderRow2> = {
+      data: { sequence: 0 },
+      ext: { state: "EMPTY" }
+    } as Extended<OrderRow2>;
+    const fc = this.fb.control(newOrderRow);
+    fc.patchValue(newOrderRow);
+    this.newRowCtrol = fc;
+    this.newRowCtrol.valueChanges
+      .pipe(first())
+      .subscribe((value: Extended<OrderRow2>) => {
+        if (value.ext.state === "NEW") {
+          value.ext.state = "ADDED";
+          this.newRowCtrol.patchValue(value);
+          this.orderRowsCtrl.push(this.newRowCtrol);
+        }
+        this.newOrderRow();
+      });
+  }
+
   get ammountCtrl() {
     return this.form.get("ammount");
   }
@@ -117,10 +150,14 @@ export class EditOrderHeaderPage implements OnInit {
     //  this.navCtrl.push("EditPlLinePage", { plLineData });
   }
 
-  dismiss(data: Extended<Order>) {
-    if (this.orderId || !data) {
-      return this.location.back();
+  dismiss(data: Extended<Order>, isDelte = false) {
+    if (data.data.packingListId && isDelte) {
+      this.router.navigate(["/StoreBase/Packinglist", data.id]);
     } else {
+      this.location.back();
+    }
+    /*
+    if (data.id) {
       this.router.navigate(["/StoreBase/OrderView", data.id], {
         replaceUrl: true
       });
@@ -128,9 +165,10 @@ export class EditOrderHeaderPage implements OnInit {
     if (this.sub) {
       this.sub.unsubscribe();
     }
+    */
   }
   onCancel() {
-    return this.dismiss(null);
+    return this.dismiss(this.order);
   }
   onSubmit({ value, valid }: { value: Order; valid: boolean }) {
     console.log(value, valid);
@@ -157,7 +195,18 @@ export class EditOrderHeaderPage implements OnInit {
     }
     this.dismiss(extOrder);
   }
+  delete() {
+    if (this.order.id) {
+      this.ordersFsRep.remove(this.order);
+    }
+    this.dismiss(this.order, true);
+  }
   ngOnInit(): void {
     // throw new Error("Method not implemented.");
+  }
+  ngOnDestroy(): void {
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

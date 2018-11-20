@@ -9,10 +9,9 @@ import { FormControl } from "@angular/forms";
 import { NavParams, ModalController } from "@ionic/angular";
 import { debounceTime, startWith, map, tap } from "rxjs/operators";
 import { AccountsDataService } from "../../providers/StoreData/accounts-data.service";
-import { UserStoresService } from "../../providers/AppData/user-stores.service";
-import { ActiveStoreService } from "../../providers/AppData/active-store.service";
-import { ProductsDataService } from "../../providers/StoreData/products-data.service";
+// import { UserStoresService } from "../../providers/AppData/user-stores.service";
 import { Router } from "@angular/router";
+import { EditAccountPage } from "../edit-account/edit-account.page";
 
 @Component({
   selector: "app-accounts-list",
@@ -92,6 +91,18 @@ export class AccountsListPage implements OnInit {
   cancel() {
     this.modalController.dismiss();
   }
+  async presentEditAccountModal(id) {
+    const modal = await this.modalController.create({
+      component: EditAccountPage,
+      componentProps: {
+        id
+      }, cssClass: "edit-modal"
+    });
+    return modal.present();
+}
+async presentNewAccountModal() {
+  return this.presentEditAccountModal("new");
+}
 
   showAccountTransactions(accSnapshot: Extended<AccountInfo>) {
     this.router.navigateByUrl(`/StoreBase/EditAccount/${accSnapshot.id}`);
@@ -114,12 +125,6 @@ export class AccountsListPage implements OnInit {
     }
   }
 
-  presentEditAccountModal(accSnapshot: Extended<AccountInfo>) {
-    //  this.navCtrl.push("EditAccountPage", { accSnapshot });
-  }
-  presentNewAccountModal() {
-    return this.presentEditAccountModal({ id: null, data: {} as AccountInfo });
-  }
 
   onDelete(accSnapshot: Extended<AccountInfo>) {
     /*

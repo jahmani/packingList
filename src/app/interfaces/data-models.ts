@@ -42,8 +42,9 @@ export interface OrderExt {
   extRows?: Extended<OrderRow2>[];
 }
 
-export interface OrderPLLineExt {
+export interface OrderRowExt {
   Product?: Extended<Product>;
+  state?: "EMPTY"|"NEW"|"EDITED"|"ADDED"|"DELETED"|"NONE";
 }
 
 export type ExtType = CatTreeNodeExtension &
@@ -52,7 +53,7 @@ export type ExtType = CatTreeNodeExtension &
   UserStoreExt &
   TransactionExt &
   OrderExt &
-  OrderPLLineExt & {};
+  OrderRowExt & {};
 export interface Meta {
   fromCache: boolean;
   hasPendingWrites: boolean;
@@ -188,7 +189,7 @@ export interface PackinglistInfo extends Editable, Delteable {
   cbm: number;
 }
 export interface OrderRow2 {
-  orderId: string;
+  // orderId: string;
   productId: string;
   notice: string;
   qty: number;
@@ -263,6 +264,7 @@ export interface StoreDoc extends Editable {
 export interface StoreInfo extends Editable {
   name: string;
   code: string;
+  users: string[];
 }
 
 export enum ItemChangeState {

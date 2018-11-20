@@ -6,7 +6,8 @@ import {
   Extended,
   Product,
   PackingLine,
-  OrderRow2
+  OrderRow2,
+  OrderRowExt
 } from "../../interfaces/data-models";
 import { Observable, Subscription, of, merge } from "rxjs";
 import { take } from "rxjs/operators";
@@ -30,7 +31,6 @@ export class EditOrderRowPage implements OnInit {
   subscribtions: Subscription[] = [];
   sub: Subscription;
 
-
   constructor(
     private fb: FormBuilder,
     //  private pLLinesFsRep: OrderRowsService,
@@ -42,7 +42,6 @@ export class EditOrderRowPage implements OnInit {
   ) {
     this.orderRow = this.navParams.get("orderRow");
     this.form = this.fb.group({
-      orderId: ["", Validators.required],
       productId: ["", Validators.required],
       qty: ["", Validators.required],
       price: ["", Validators.required],
@@ -50,12 +49,13 @@ export class EditOrderRowPage implements OnInit {
       packingLines: this.fb.array([]),
       notice: ""
     });
-    this.sub = merge(this.qtyControl.valueChanges, this.priceControl.valueChanges).subscribe(
-      (qty) => {
-        const ammount = this.qtyControl.value * this.priceControl.value;
-        this.ammountControl.setValue(ammount);
-      }
-    );
+    this.sub = merge(
+      this.qtyControl.valueChanges,
+      this.priceControl.valueChanges
+    ).subscribe(qty => {
+      const ammount = Number(this.qtyControl.value) * Number(this.priceControl.value);
+      this.ammountControl.setValue(ammount);
+    });
 
     this.form.patchValue(this.orderRow.data);
     this.patchLines(this.orderRow.data.packingLines);
@@ -85,6 +85,7 @@ export class EditOrderRowPage implements OnInit {
       if (productId) {
         this.productsFsRep.getOnce(productId).then(product => {
           this.product = product;
+          this.orderRow.ext = { ...this.orderRow.ext, Product: product };
         });
       }
     });
@@ -172,12 +173,23 @@ export class EditOrderRowPage implements OnInit {
     return this.dismiss(null, "delete");
   }
   onSave(pLLine: OrderRow2) {
-    const extPLLine = { data: pLLine, ext: {} } as Extended<OrderRow2>;
-    if (this.orderRow) {
-      extPLLine.id = this.orderRow.id;
-      if (this.orderRow.data.productId === pLLine.productId) {
-        extPLLine.ext.Product = this.orderRow.ext.Product;
-      }
+    const extPLLine = { data: pLLine, ext: this.orderRow.ext } as Extended<
+      OrderRow2
+    >;
+    const oldState = this.orderRow.ext.state || "NONE";
+    switch (oldState) {
+      case "EMPTY":
+        extPLLine.ext.state = "NEW";
+        break;
+      case "NONE":
+        extPLLine.ext.state = "EDITED";
+        break;
+      case "ADDED":
+    case "EDITED":
+        extPLLine.ext.state = oldState;
+        break;
+      default:
+        throw new Error(`Inavlid orderRow state: '${oldState}'`);
     }
 
     this.dismiss(extPLLine, "save");

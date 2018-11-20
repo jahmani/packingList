@@ -3,11 +3,8 @@
     <ion-buttons slot="start">
       <ion-menu-toggle>
         <ion-button>
-          <ion-icon name="menu" slot="icon-only">
-
-          </ion-icon>
+          <ion-icon name="menu" slot="icon-only"> </ion-icon>
         </ion-button>
-
       </ion-menu-toggle>
 
       <ion-back-button></ion-back-button>
@@ -18,27 +15,33 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item  *ngFor="let userStore of userStores|async" (click)="onStoreSelected(userStore)">
+    <ion-item
+      *ngFor="let userStore of (userStores | async)"
+      (click)="onStoreSelected(userStore)"
+    >
       <ion-icon name="person" slot="start"></ion-icon>
       <ion-label text-wrap>
-        {{userStore.ext.store?.name }}
-        <ion-note>{{userStore.id}}</ion-note>
+        {{ userStore.data.name }}
+        <ion-note>{{ userStore.id }}</ion-note>
       </ion-label>
       <ion-icon slot="end" name="open"></ion-icon>
     </ion-item>
   </ion-list>
   Pending...
   <ion-list>
-
     <ion-item-sliding>
-      <ion-item *ngFor="let userStore of userPendingStores|async" text-wrap>
+      <ion-item *ngFor="let userStore of (userPendingStores | async)" text-wrap>
         <ion-icon name="person" slot="start"></ion-icon>
         <ion-label>
-          {{userStore.ext.store?.name }}
-          <ion-note>{{userStore.id}} </ion-note>
+          {{ userStore.ext.store?.name }}
+          <ion-note>{{ userStore.id }} </ion-note>
         </ion-label>
 
-        <ion-button icon-only item-end (click)="accept(userStore.data.inviteId)">
+        <ion-button
+          icon-only
+          item-end
+          (click)="accept(userStore.data.inviteId)"
+        >
           <ion-icon name="checkmark"></ion-icon>
         </ion-button>
         <ion-button slot="end" (click)="reject(userStore.data.inviteId)">
@@ -48,6 +51,7 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-button full (click)="createNewStore()"> new Store</ion-button>
-
+  <ion-button full [routerLink]="['/EditStoreInfo', { id: 'new' }]">
+    new Store</ion-button
+  >
 </ion-content>

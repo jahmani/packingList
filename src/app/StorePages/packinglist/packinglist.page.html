@@ -1,7 +1,12 @@
 <ion-header>
   <ion-toolbar>
+      <ion-buttons slot="end">
+          <ion-button [routerLink]="['/StoreBase/EditOrderHeader',{id:'new', plId:plId|async}]">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+      </ion-buttons>
     <ion-buttons slot="start">
-     <ion-menu-toggle menuToggle>
+      <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
@@ -12,18 +17,41 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-item *ngIf="(plInfo | async) as pl">
+    <ion-label>
+    <ion-row style="background-color: #f3fbfd;">
+      <ion-col>
+        <h2>{{ pl.data.name }}</h2>
+        <ion-note>loading in {{ pl.data.date }} in {{ pl.data.deliveryAdress }}</ion-note>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="(plOrders | async)">
+      <ion-col size="6">Ammount: {{ totals.ammount }}</ion-col>
+      <ion-col size="6">ctns: {{ totals.ctns }}</ion-col>
+      <ion-col size="6">CBM: {{ totals.cbm }}</ion-col>
+      <ion-col size="6">Quantity: {{ totals.pieces }}</ion-col>
+    </ion-row>
+  </ion-label>
+  </ion-item>
+
   <ion-segment #displayMode value="rows">
     <ion-segment-button value="orders"> Orders </ion-segment-button>
     <ion-segment-button value="rows"> Rows </ion-segment-button>
     <ion-segment-button value="lines"> PAcking Lines </ion-segment-button>
   </ion-segment>
   <ng-container [ngSwitch]="displayMode.value">
-      <app-packing-list *ngSwitchCase="'lines'" [orderRows]="plOrdersRows | async"> </app-packing-list>
-      <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async"> </app-order-rows-list>
-      <div *ngSwitchCase="'orders'">
-        <ion-item *ngFor="let order of plOrders | async" >
-        <app-order-header-view  [order]="order"></app-order-header-view>
+    <app-packing-list
+      *ngSwitchCase="'lines'"
+      [orderRows]="plOrdersRows | async"
+    >
+    </app-packing-list>
+    <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async">
+    </app-order-rows-list>
+    <div *ngSwitchCase="'orders'">
+      <ion-item *ngFor="let order of (plOrders | async)" [routerLink]="['/StoreBase/OrderView',order.id]">
+        <app-order-header-view [order]="order"></app-order-header-view>
       </ion-item>
-      </div>
-    </ng-container>
+    </div>
+  </ng-container>
 </ion-content>

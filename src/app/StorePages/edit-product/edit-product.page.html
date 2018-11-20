@@ -1,21 +1,44 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onCancel()"> cancel </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button type="submit" (click)="onSubmit(form)" color="primary">
+        save
+      </ion-button>
+    </ion-buttons>
     <ion-title>EditProduct</ion-title>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content padding>
-  <form novalidate *ngIf="product$|async as p" ng-submit="onSubmit()" [formGroup]="form">
+  <form
+    novalidate
+    *ngIf="(product$ | async) as p"
+    ng-submit="onSubmit()"
+    [formGroup]="form"
+  >
     <ion-list>
       <ion-item>
         <ion-label>name: </ion-label>
-        <ion-input formControlName="name" type="text" placeholder="Product Name"></ion-input>
+        <ion-input
+          formControlName="name"
+          type="text"
+          placeholder="Product Name"
+        ></ion-input>
       </ion-item>
 
-      <ion-item color="danger" *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
-        <p *ngIf="nameCtrl.hasError('required')" class="err">* ammount is rquired</p>
-        <p *ngIf="nameCtrl.hasError('max')" class="err">*too much big ammount!</p>
+      <ion-item
+        color="danger"
+        *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)"
+      >
+        <p *ngIf="nameCtrl.hasError('required')" class="err">
+          * ammount is rquired
+        </p>
+        <p *ngIf="nameCtrl.hasError('max')" class="err">
+          *too much big ammount!
+        </p>
       </ion-item>
 
       <ion-item>
@@ -33,21 +56,11 @@
         <ion-input autofocus formControlName="notice" type="text"></ion-input>
       </ion-item>
       <ion-item>
-          <app-photo-picker slot="end" formControlName="thumbUrl"></app-photo-picker>
+        <app-photo-picker
+          slot="end"
+          formControlName="thumbUrl"
+        ></app-photo-picker>
       </ion-item>
     </ion-list>
   </form>
 </ion-content>
-
-<ion-footer>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-button type="button" expand="full" (click)="onCancel()" color="light">cancel</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button type="submit" expand="full" (click)="onSubmit(form)" color="primary"> save</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-footer>

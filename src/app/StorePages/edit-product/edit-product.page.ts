@@ -1,12 +1,10 @@
-import { Component, OnInit, Optional } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Extended, Product } from "../../interfaces/data-models";
 import { Observable, of } from "rxjs";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { NavController, NavParams } from "@ionic/angular";
-import { take, map, switchMap, tap } from "rxjs/operators";
+import { NavParams, ModalController } from "@ionic/angular";
+import { tap } from "rxjs/operators";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
-import { ActivatedRoute } from "@angular/router";
-import { Location } from "@angular/common";
 
 @Component({
   selector: "app-edit-product",
@@ -22,17 +20,12 @@ export class EditProductPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private productsFsRep: ProductsDataService,
-    @Optional() public navParams: NavParams,
-    private rout: ActivatedRoute,
-    private location: Location
+    private navParams: NavParams,
+    private modalControler: ModalController
   ) {
     // this.productId = this.navParams.get("productId");
     // this.productId = this.rout.snapshot.paramMap.get("productId");
-    this.productId$ = this.rout.paramMap.pipe(
-      map(value => {
-        return value.get("id");
-      })
-    );
+    this.productId = this.navParams.get("id");
 
     this.form = this.fb.group({
       name: [
@@ -48,16 +41,15 @@ export class EditProductPage implements OnInit {
       notice: "",
       thumbUrl: ""
     });
-    this.product$ = this.productId$.pipe(
-      switchMap(pId => {
-        if (pId === "new") {
-          const newProduct: Product = {} as Product;
-          return of({ data: newProduct, id: null } as Extended<Product>);
-        } else {
-          return this.productsFsRep.get(pId);
-        }
-      }),
-      tap( prod => {
+    if (this.productId === "new") {
+      const newProduct: Product = {} as Product;
+      this.product$ = of({ data: newProduct, id: null } as Extended<Product>);
+    } else {
+      this.product$ = this.productsFsRep.get(this.productId);
+    }
+
+    this.product$.pipe(
+      tap(prod => {
         this.productId = prod.id;
         this.form.patchValue(prod.data);
       })
@@ -68,9 +60,8 @@ export class EditProductPage implements OnInit {
     return this.form.get("name");
   }
 
-
   dismiss(data) {
-    this.location.back();
+    this.modalControler.dismiss(data);
   }
   onCancel() {
     return this.dismiss(null);
@@ -86,7 +77,7 @@ export class EditProductPage implements OnInit {
 
   onSave(product: Product) {
     const extProduct = { data: product } as Extended<Product>;
-    if (this.productId) {
+    if (this.productId !== "new") {
       extProduct.id = this.productId;
       this.productsFsRep.saveOld(extProduct);
     } else {

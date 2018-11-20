@@ -5,8 +5,9 @@ import { ActiveStoreService } from "../../providers/AppData/active-store.service
 import { StoreInfoService } from "../../providers/AppData/store-info.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
-import { switchMap, tap } from "rxjs/operators";
+import { switchMap, tap, map, mergeMap } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { AuthService } from "../../providers/Auth/auth.service";
 
 @Component({
   selector: "app-edit-store-info",
@@ -24,30 +25,50 @@ export class EditStoreInfoPage {
     private fb: FormBuilder,
     private storesFsRepository: StoreInfoService,
     private activeStoreService: ActiveStoreService,
+    private authService: AuthService,
     public router: Router,
     private location: Location,
-    public rout: ActivatedRoute,
-
+    public rout: ActivatedRoute
   ) {
     this.form = this.fb.group({
       name: [
         "",
         Validators.compose([Validators.required, Validators.minLength(3)])
       ],
-      currency: ["", Validators.compose([Validators.required])]
+      currency: ["", Validators.compose([Validators.required])],
+      code: "",
+      users: ""
     });
 
-    const paramStoreId = this.rout.snapshot.paramMap.get("id");
-    if (!paramStoreId) {
-      const activeStoreId = this.activeStoreService.activeStoreKey;
-
-      router.navigate(["/EditStoreInfo", activeStoreId],{replaceUrl:true});
-    }
-    this.storeId = paramStoreId ;
-    this.storeDoc$ = this.storesFsRepository.get(this.storeId).pipe(tap(str => {
-      this.storeDoc = str;
-      this.form.patchValue(this.storeDoc.data);
-    }));
+    this.storeDoc$ = this.rout.paramMap.pipe(
+      mergeMap(paramMap => {
+        const paramStoreId = paramMap.get("id");
+        if (!paramStoreId) {
+          const activeStoreId = this.activeStoreService.activeStoreKey;
+          const storeDoc = this.storesFsRepository.get(activeStoreId);
+          return storeDoc;
+        } else if (paramStoreId === "new") {
+          return this.authService.user.pipe(
+            map(user => {
+              const uid = user.uid;
+              const newStoreInfo: StoreInfo = {
+                name: "NewStore",
+                code: "new",
+                users: [uid]
+              } as StoreInfo;
+              const extNewStore: Extended<StoreInfo> = {
+                data: newStoreInfo
+              } as Extended<StoreInfo>;
+              return extNewStore;
+            })
+          );
+        }
+      }),
+      tap(str => {
+        this.storeDoc = str;
+        this.form.patchValue(this.storeDoc.data);
+      })
+    );
   }
 
   get nameCtrl() {
@@ -56,21 +77,25 @@ export class EditStoreInfoPage {
   get currencyCtrl() {
     return this.form.get("currency");
   }
-
-
+  dismiss() {
+    this.location.back();
+  }
+  onCancel() {
+    this.dismiss();
+  }
   onSubmit({ value, valid }: { value: StoreInfo; valid: boolean }) {
     if (valid) {
       const updatedStoreDoc = {
         ...this.storeDoc,
         data: { ...value }
       };
-      return this.storesFsRepository.saveOld(updatedStoreDoc).then(() => {
-        this.location.back();
-      });
+      if (this.storeDoc.id) {
+        this.storesFsRepository.saveOld(updatedStoreDoc);
+      } else {
+        this.storesFsRepository.saveNew(updatedStoreDoc);
+      }
+      return this.dismiss();
     }
-  }
-  onCancel() {
-    this.location.back();
   }
 
 }

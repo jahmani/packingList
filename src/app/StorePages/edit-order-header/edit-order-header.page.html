@@ -37,73 +37,108 @@
         <ion-label>Ammount</ion-label>
         <ion-input
           class="text-end"
+          readonly
           formControlName="ammount"
           type="number"
         ></ion-input>
       </ion-item>
-
-      <ion-item>
-        <ion-label>CBM</ion-label>
-        <ion-input
-          class="text-end"
-          autofocus
-          formControlName="cbm"
-          type="number"
-        ></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>Date</ion-label>
-        <ion-datetime autofocus formControlName="date"></ion-datetime>
-      </ion-item>
-      <ion-item>
-        <ion-label>deliveryDate</ion-label>
-        <ion-input
-          type="date"
-          autofocus
-          formControlName="deliveryDate"
-        ></ion-input
-        >>
-      </ion-item>
-      <ion-item>
-        <ion-label>packingListId</ion-label>
-        <ion-select
-          interface="action-sheet"
-          formControlName="packingListId"
-        >
-          <ion-select-option
-            *ngFor="let pl of (packinglists | async)"
-            [value]="pl.id"
-            >{{ pl.data.name }}</ion-select-option
-          >
-        </ion-select>
-      </ion-item>
+      <ion-row no-padding>
+        <ion-col>
+          <ion-item>
+            <ion-label>CBM</ion-label>
+            <ion-input
+              class="text-end"
+              autofocus
+              formControlName="cbm"
+              type="number"
+            ></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>packing List</ion-label>
+            <ion-select
+              interface="action-sheet"
+              formControlName="packingListId"
+            >
+              <ion-select-option
+                *ngFor="let pl of (packinglists | async)"
+                [value]="pl.id"
+                >{{ pl.data.name }}</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Date</ion-label>
+            <ion-datetime autofocus formControlName="date"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>delivery</ion-label>
+            <ion-datetime
+              formControlName="deliveryDate"
+            ></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
     </ion-list>
+
     <ion-list class="order-rows-list" formArrayName="rows">
+      <div class="header-item">
+        <ion-item no-padding>
+          <ion-thumbnail
+            style="height: auto "
+            class="thumbnail-placeholderr"
+            slot="start"
+          >
+            <app-order-row-editor [formControl]="newRowCtrol">
+            </app-order-row-editor>
+          </ion-thumbnail>
+          <ion-label>
+            <ion-row>
+              <ion-col size="4" text-center>
+                <span title="quantity">quantity</span>
+              </ion-col>
+              <ion-col size="4" text-center>
+                <span title="price">Price </span>
+              </ion-col>
+              <ion-col size="4" text-center>
+                <span title="AMMOUNT">ammount</span>
+              </ion-col>
+            </ion-row>
+          </ion-label>
+        </ion-item>
+      </div>
+
       <app-order-row-editor
         *ngFor="let orderRowCtrl of orderRowsCtrl.controls; let i = index"
         [formControlName]="i"
         (remove)="removeOrderRow(i)"
-      >
-      </app-order-row-editor>
+      ></app-order-row-editor>
     </ion-list>
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-button
-            type="button"
-            expand="full"
-            (click)="onCancel()"
-            color="light"
-            >cancel</ion-button
-          >
-        </ion-col>
-        <ion-col>
-          <ion-button expand="full" (click)="onSubmit(form)" color="primary">
-            save</ion-button
-          >
-        </ion-col>
-      </ion-row>
-    </ion-grid>
   </form>
 </ion-content>
+<ion-footer no-padding>
+  <ion-row no-padding>
+    <ion-col>
+      <ion-button type="button" expand="full" (click)="onCancel()" color="light"
+        >cancel</ion-button
+      >
+    </ion-col>
+    <ion-col>
+      <ion-button type="button" expand="full" (click)="delete()" color="light"
+        >delete</ion-button
+      >
+    </ion-col>
+    <ion-col>
+      <ion-button expand="full" (click)="onSubmit(form)" color="primary">
+        save</ion-button
+      >
+    </ion-col>
+  </ion-row>
+</ion-footer>

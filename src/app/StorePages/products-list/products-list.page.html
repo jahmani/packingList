@@ -3,7 +3,7 @@
   <ion-toolbar>
     <ion-title>ProductsList</ion-title>
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/StoreBase/EditProduct', 'new']">
+      <ion-button (click)="showNewProduct()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -54,7 +54,7 @@
 
       </ion-item>
       <ion-item-options slot="start">
-        <ion-item-option color="primary" [routerLink]="['/StoreBase/EditProduct', product.id]">
+        <ion-item-option color="primary" (click)="showEditProduct(product.id)">
           <ion-icon name="create"></ion-icon>
           Edit
         </ion-item-option>

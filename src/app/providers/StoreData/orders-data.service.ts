@@ -80,7 +80,7 @@ export class OrdersDataService extends StoreDataService<Order> {
       return extRow;
     });
   }
-  formateList(list: Observable<Extended<Order>[]>): Observable<any[]> {
+  formateList(list: Observable<Extended<Order>[]>) {
     return list.pipe(
       /*  */
 

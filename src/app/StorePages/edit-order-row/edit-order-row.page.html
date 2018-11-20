@@ -1,15 +1,31 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onSubmit(form)">
+        done
+        <ion-icon name="checkmark" (click)="onCancel()" slot="start"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCancel()">
+        cancel
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Edit Order Row</ion-title>
   </ion-toolbar>
 </ion-header>
-
 
 <ion-content padding>
   <form novalidate *ngIf="orderRow" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
       <app-product-picker formControlName="productId"></app-product-picker>
-      <ion-item *ngIf="(productIdControl.touched || submitAttempt) && productIdControl.hasError('required')">
+      <ion-item
+        *ngIf="
+          (productIdControl.touched || submitAttempt) &&
+          productIdControl.hasError('required')
+        "
+      >
         <p class="err">* product is rquired</p>
       </ion-item>
       <ion-item>
@@ -22,36 +38,38 @@
       </ion-item>
       <ion-item>
         <ion-label>ammount</ion-label>
-        <ion-input autofocus type="number" formControlName="ammount" type="text"> </ion-input>
+        <ion-input
+          autofocus
+          type="number"
+          readonly
+          formControlName="ammount"
+          type="number"
+        >
+        </ion-input>
       </ion-item>
     </ion-list>
     <ion-list class="order-rows-list" formArrayName="packingLines">
       <ion-row class="packing-title" justify-content-center>
         <span>PackingLines</span>
-
       </ion-row>
       <ion-row class="packing-header" align-items-end>
         <ion-col size="2">
           <ion-button expand="full" (click)="addPackingLine()">
-            <ion-icon name="add" ></ion-icon>
+            <ion-icon name="add"></ion-icon>
           </ion-button>
         </ion-col>
-        <ion-col class="text-center">
-          <span>ctns</span>
-        </ion-col>
-        <ion-col class="text-center">
-          <span>packing</span>
-        </ion-col>
-        <ion-col class="text-center">
-          <span>Ctn. No.</span>
-        </ion-col>
-        <ion-col class="text-center">
-          <span>Shipping Mark</span>
-        </ion-col>
+        <ion-col class="text-center"> <span>ctns</span> </ion-col>
+        <ion-col class="text-center"> <span>packing</span> </ion-col>
+        <ion-col class="text-center"> <span>Ctn. No.</span> </ion-col>
+        <ion-col class="text-center"> <span>Shipping Mark</span> </ion-col>
       </ion-row>
-      <ion-row align-items-center *ngFor="let packingLine of packingLines.controls; let i=index" [formGroupName]="i">
+      <ion-row
+        align-items-center
+        *ngFor="let packingLine of packingLines.controls; let i = index"
+        [formGroupName]="i"
+      >
         <ion-col size="1">
-          <span>{{i+1}}</span>
+          <span>{{ i + 1 }}</span>
         </ion-col>
         <ion-col size="1">
           <ion-icon (click)="deletePackingLine(i)" name="trash"></ion-icon>
@@ -59,45 +77,62 @@
 
         <ion-col>
           <ion-item no-padding>
-            <ion-input class="input-small-padding" type="number" formControlName="ctns"></ion-input>
+            <ion-input
+              class="input-small-padding"
+              type="number"
+              formControlName="ctns"
+            ></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item no-padding>
-            <ion-input class="input-small-padding" type="number" formControlName="packing"></ion-input>
+            <ion-input
+              class="input-small-padding"
+              type="number"
+              formControlName="packing"
+            ></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item no-padding>
-            <ion-input class="input-small-padding" type="text" formControlName="ctnNo"></ion-input>
+            <ion-input
+              class="input-small-padding"
+              type="text"
+              formControlName="ctnNo"
+            ></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item text-wrap no-padding>
-            <ion-input class="input-small-padding" type="text" formControlName="shippingMark"></ion-input>
+            <ion-input
+              class="input-small-padding"
+              type="text"
+              formControlName="shippingMark"
+            ></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
     </ion-list>
     <ion-item *ngIf="submitAttempt">
-      <p *ngIf="!form.valid" class="err">* {{form.errors|json}}</p>
+      <p *ngIf="!form.valid" class="err">* {{ form.errors | json }}</p>
     </ion-item>
   </form>
 </ion-content>
+<!--
+  <ion-footer>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button size="full"  color="light">cancel</ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button size="full" (click)="onSubmit(form)" color="primary"> save</ion-button>
+        </ion-col>
 
-<ion-footer>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-button size="full" (click)="onCancel()" color="light">cancel</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button size="full" (click)="onSubmit(form)" color="primary"> save</ion-button>
-      </ion-col>
-
-      <ion-col>
-        <ion-button size="full" (click)="onDelete()" color="primary"> delete</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-footer>
+        <ion-col>
+          <ion-button size="full" (click)="onDelete()" color="primary"> delete</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-footer>
+-->

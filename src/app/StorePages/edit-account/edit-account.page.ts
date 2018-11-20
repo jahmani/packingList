@@ -1,9 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { Extended, AccountInfo } from "../../interfaces/data-models";
 import { AccountsDataService } from "../../providers/StoreData/accounts-data.service";
-import { Location } from "@angular/common";
-import { ActivatedRoute } from "@angular/router";
-import { map, switchMap, tap } from "rxjs/operators";
+import { tap } from "rxjs/operators";
+import { NavParams, ModalController } from "@ionic/angular";
 import { Observable } from "rxjs/internal/Observable";
 import { of } from "rxjs";
 import {
@@ -26,22 +25,20 @@ export class EditAccountPage implements OnInit {
   accountId: string;
   accountName: string;
   constructor(
-    public location: Location,
     private afsr: AccountsDataService,
-    public rout: ActivatedRoute,
+    private navParams: NavParams,
+    private modalControler: ModalController,
     private fb: FormBuilder
   ) {
-    this.account$ = this.rout.paramMap.pipe(
-      switchMap(data => {
-        this.accountId = data.get("id");
-        if (this.accountId !== "new") {
-          return this.afsr.get(this.accountId);
-        } else {
-          this.accountId = null;
-          return of({ id: null, data: {} as AccountInfo });
-        }
-      })
-    );
+    this.accountId = this.navParams.get("id");
+    if (this.accountId) {
+    if (this.accountId !== "new") {
+      this.account$ = this.afsr.get(this.accountId);
+    } else {
+      this.accountId = null;
+      this.account$ = of({ id: null, data: {} as AccountInfo });
+    }
+    }
     this.form = this.fb.group({
       name: [
         "",
@@ -79,7 +76,7 @@ export class EditAccountPage implements OnInit {
   }
   dismiss(data) {
     // let data = { account: this.account };
-    this.location.back();
+    this.modalControler.dismiss(data);
   }
   onCancel() {
     return this.dismiss(null);

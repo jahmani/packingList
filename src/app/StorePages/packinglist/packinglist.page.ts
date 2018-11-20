@@ -12,8 +12,22 @@ import { OrdersDataService } from "../../providers/StoreData/orders-data.service
 // import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 import { ActivatedRoute } from "@angular/router";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
-import { map, switchMap, mergeMap, mergeAll, zip, share, shareReplay } from "rxjs/operators";
-
+import {
+  map,
+  switchMap,
+  mergeMap,
+  mergeAll,
+  zip,
+  share,
+  shareReplay,
+  tap
+} from "rxjs/operators";
+interface Totals {
+  ammount: number;
+  pieces: number;
+  ctns: number;
+  cbm: number;
+}
 @Component({
   selector: "app-packinglist",
   templateUrl: "./packinglist.page.html",
@@ -26,6 +40,7 @@ export class PackinglistPage implements OnInit {
   plOrdersRows: Observable<Extended<OrderRow2>[]>;
   plOrdersLines: Observable<Extended<PackingLine>[]>;
   display: "orders" | "lines" | "rows" = "orders";
+  totals: { ammount: number; pieces: number; ctns: number; cbm: number; };
 
   constructor(
     private ordersFsRep: OrdersDataService,
@@ -39,17 +54,46 @@ export class PackinglistPage implements OnInit {
         return this.packinglistInfoDataService.get(id);
       })
     );
-
+    this.totals = { ammount: 0, pieces: 0, ctns: 0, cbm: 0 };
     this.plOrders = this.plId.pipe(
       switchMap(plId => {
         return this.ordersFsRep.forPackingList(plId);
-      }), shareReplay(1)
+      }),
+      tap(extOrders => {
+        let subTotal = { cbm: 0 };
+        subTotal = extOrders.reduce<{ cbm: number }>((accum, curr) => {
+          accum.cbm += Number(curr.data.cbm);
+          return accum;
+        }, subTotal);
+        this.totals = { ...this.totals, ...subTotal };
+      }),
+      shareReplay(1)
     );
     this.plOrdersRows = this.plOrders.pipe(
       map(extOrders => {
-        const temp =  [].concat(...extOrders.map(extOrder => extOrder.ext.extRows));
+        const temp = [].concat(
+          ...extOrders.map(extOrder => extOrder.ext.extRows)
+        ) as Extended<OrderRow2>[];
+
         return temp;
-      }), shareReplay(1)
+      }),
+      tap(extOrders => {
+        let subTotal = { ammount: 0, pieces: 0, ctns: 0 };
+        subTotal = extOrders.reduce<Partial<Totals>>((accum, curr) => {
+          accum.ammount += Number(curr.data.ammount);
+          let lines = curr.data.packingLines;
+          if (!lines) { lines = []; }
+          accum.ctns += lines.reduce<number>(
+            (accm, crr) => (accm += Number(crr.ctns)),
+            0
+          );
+          accum.pieces += Number(curr.data.qty);
+          return accum;
+        }, subTotal) as any;
+        this.totals = { ...this.totals, ...subTotal };
+      }),
+
+      shareReplay(1)
     );
   }
 

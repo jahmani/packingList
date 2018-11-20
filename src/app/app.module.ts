@@ -21,6 +21,8 @@ import { ProductsListPageModule } from "./StorePages/products-list/products-list
 import { PhotoGalleryPageModule } from "./StorePages/photo-gallery/photo-gallery.module";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import { EditOrderRowPageModule } from "./StorePages/edit-order-row/edit-order-row.module";
+import { EditProductPageModule } from "./StorePages/edit-product/edit-product.module";
+import { EditAccountPageModule } from "./StorePages/edit-account/edit-account.module";
 
 @NgModule({
 
@@ -39,6 +41,8 @@ import { EditOrderRowPageModule } from "./StorePages/edit-order-row/edit-order-r
     EditOrderRowPageModule,
     ProductsListPageModule,
     PhotoGalleryPageModule,
+    EditProductPageModule,
+    EditAccountPageModule,
     ServiceWorkerModule.register("/ngsw-worker.js", {
       enabled: environment.production
     })

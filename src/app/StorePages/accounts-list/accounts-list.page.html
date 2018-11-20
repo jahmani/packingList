@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
       <ion-buttons slot="end">
-          <ion-button [routerLink]="['/StoreBase/EditAccount', 'new']" color="royal">
+          <ion-button (click)="presentNewAccountModal()" color="royal">
             <ion-icon slot="icon-only" name="person-add"></ion-icon>
           </ion-button>
         </ion-buttons>    
@@ -42,7 +42,7 @@
         </h2>
       </ion-item>
       <ion-item-options slot="start">
-        <ion-item-option [routerLink]="['/StoreBase/EditAccount', account.id]" expandable>
+        <ion-item-option (click)="presentEditAccountModal(account.id)" expandable>
           <ion-icon name="create"></ion-icon>
           Edit
         </ion-item-option>
@@ -56,7 +56,7 @@
 <ion-footer>
   <ion-toolbar>
   <ion-buttons start>
-    <ion-button [routerLink]="['/StoreBase/EditAccount', 'new']" icon-only color="royal">
+    <ion-button (click)="presentNewAccountModal()" icon-only color="royal">
       <ion-icon name="person-add"></ion-icon>
     </ion-button>
     <ion-searchbar aria-label="search" [showCancelButton]="true" [formControl]="searchControl"></ion-searchbar>
