@@ -172,6 +172,7 @@ export interface Order extends Editable, Delteable {
   imageUrl: string;
   notice: string;
   ammount: number;
+  deposit: number;
   currency: string;
   cbm: number;
   rows:  OrderRow2[];

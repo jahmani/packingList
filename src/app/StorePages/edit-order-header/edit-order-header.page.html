@@ -32,6 +32,8 @@
           <app-photo-picker formControlName="imageUrl"></app-photo-picker>
         </ion-thumbnail>
       </ion-item>
+      <ion-row no-padding>
+        <ion-col>
 
       <ion-item>
         <ion-label>Ammount</ion-label>
@@ -41,7 +43,15 @@
           formControlName="ammount"
           type="number"
         ></ion-input>
+      </ion-item>  </ion-col> <ion-col> <ion-item>
+        <ion-label>Deposit</ion-label>
+        <ion-input
+          class="text-end"
+          formControlName="deposit"
+          type="number"
+        ></ion-input>
       </ion-item>
+    </ion-col>  </ion-row>
       <ion-row no-padding>
         <ion-col>
           <ion-item>

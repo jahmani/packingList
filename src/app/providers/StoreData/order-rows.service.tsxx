@@ -7,7 +7,7 @@ import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { Observable, combineLatest } from "rxjs";
 import { map, switchMap, first, tap } from "rxjs/operators";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
-import { OrdersDataService } from "./orders-data.service";
+ import { OrdersDataService } from "./orders-data.service";
 import { ProductsDataService } from "./products-data.service";
 
 @Injectable({

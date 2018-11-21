@@ -47,6 +47,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
       imageUrl: "",
       accountId: "",
       ammount: "",
+      deposit: "",
       cbm: "",
       packingListId: "",
       rows: this.fb.array([])
@@ -150,8 +151,8 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     //  this.navCtrl.push("EditPlLinePage", { plLineData });
   }
 
-  dismiss(data: Extended<Order>, isDelte = false) {
-    if (data.data.packingListId && isDelte) {
+  dismiss(data: Extended<Order>, isDelete = false) {
+    if (data.data.packingListId && isDelete) {
       this.router.navigate(["/StoreBase/Packinglist", data.data.packingListId]);
     } else {
       this.location.back();

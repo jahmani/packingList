@@ -17,17 +17,18 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item *ngIf="(plInfo | async) as pl">
+  <ion-item  no-padding  *ngIf="(plInfo | async) as pl">
     <ion-label>
-    <ion-row style="background-color: #f3fbfd;">
+    <ion-row [routerLink]="['/StoreBase/EditPackingListInfo', pl.id]"  style="background-color: #f3fbfd;">
       <ion-col>
         <h2>{{ pl.data.name }}</h2>
-        <ion-note>loading in {{ pl.data.date }} in {{ pl.data.deliveryAdress }}</ion-note>
+        <ion-note>loading in {{ pl.data.date | date: "dd-MM-yy" }} in {{ pl.data.deliveryAdress }}</ion-note>
       </ion-col>
     </ion-row>
 
     <ion-row *ngIf="(plOrders | async)">
       <ion-col size="6">Ammount: {{ totals.ammount }}</ion-col>
+      <ion-col size="6">Deposits: {{ totals.deposit }}</ion-col>
       <ion-col size="6">ctns: {{ totals.ctns }}</ion-col>
       <ion-col size="6">CBM: {{ totals.cbm }}</ion-col>
       <ion-col size="6">Quantity: {{ totals.pieces }}</ion-col>

@@ -23,7 +23,7 @@
       {{pl.data.name}}
     </h1>
     <ion-note>
-      lloading in {{pl.data.date}} in {{pl.data.deliveryAdress}}
+      lloading in {{pl.data.date | date: "dd-MM-yy" }} in {{pl.data.deliveryAdress}}
     </ion-note>
   </ion-item>
 </ion-content>

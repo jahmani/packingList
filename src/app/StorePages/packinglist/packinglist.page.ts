@@ -25,6 +25,7 @@ import {
 interface Totals {
   ammount: number;
   pieces: number;
+  deposit: number;
   ctns: number;
   cbm: number;
 }
@@ -40,7 +41,7 @@ export class PackinglistPage implements OnInit {
   plOrdersRows: Observable<Extended<OrderRow2>[]>;
   plOrdersLines: Observable<Extended<PackingLine>[]>;
   display: "orders" | "lines" | "rows" = "orders";
-  totals: { ammount: number; pieces: number; ctns: number; cbm: number; };
+  totals: Totals;
 
   constructor(
     private ordersFsRep: OrdersDataService,
@@ -54,15 +55,16 @@ export class PackinglistPage implements OnInit {
         return this.packinglistInfoDataService.get(id);
       })
     );
-    this.totals = { ammount: 0, pieces: 0, ctns: 0, cbm: 0 };
+    this.totals = { ammount: 0, pieces: 0, ctns: 0, cbm: 0, deposit: 0 };
     this.plOrders = this.plId.pipe(
       switchMap(plId => {
         return this.ordersFsRep.forPackingList(plId);
       }),
       tap(extOrders => {
-        let subTotal = { cbm: 0 };
-        subTotal = extOrders.reduce<{ cbm: number }>((accum, curr) => {
+        let subTotal = { cbm: 0, deposit: 0 };
+        subTotal = extOrders.reduce<{ cbm: number, deposit: number }>((accum, curr) => {
           accum.cbm += Number(curr.data.cbm);
+          accum.deposit += Number(curr.data.deposit);
           return accum;
         }, subTotal);
         this.totals = { ...this.totals, ...subTotal };
