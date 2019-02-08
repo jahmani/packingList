@@ -48,7 +48,7 @@ export class EditProductPage implements OnInit {
       this.product$ = this.productsFsRep.get(this.productId);
     }
 
-    this.product$.pipe(
+    this.product$ = this.product$.pipe(
       tap(prod => {
         this.productId = prod.id;
         this.form.patchValue(prod.data);
@@ -77,7 +77,7 @@ export class EditProductPage implements OnInit {
 
   onSave(product: Product) {
     const extProduct = { data: product } as Extended<Product>;
-    if (this.productId !== "new") {
+    if (this.productId && this.productId !== "new") {
       extProduct.id = this.productId;
       this.productsFsRep.saveOld(extProduct);
     } else {

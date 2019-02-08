@@ -1,23 +1,12 @@
 import { Injectable } from "@angular/core";
 import {
   AngularFireStorage,
-  AngularFireStorageReference
+  AngularFireStorageReference,
+  AngularFireUploadTask
 } from "@angular/fire/storage";
-import { ImageFile } from "../../interfaces/data-models";
+import { ImageFile, ImageSaveInfo } from "../../interfaces/data-models";
 
-export interface ImageMeta {
-  imageString: string;
-  thumbString: string;
-  imageUri: string;
-  thumbUri: string;
-  imageId: string;
-  width: number;
-  height: number;
-  type: string;
-  ext: string;
-  size: number;
-  thumbSize: number;
-}
+
 
 @Injectable({
   providedIn: "root"
@@ -26,51 +15,61 @@ export class ImageService {
   constructor(private afStorage: AngularFireStorage) {}
 
   async remove(image: ImageFile) {
-    const imageRef = this.afStorage.storage.refFromURL(image.url);
-    const thumbRef = this.afStorage.storage.refFromURL(image.thumbUrl);
-    return Promise.all([imageRef.delete(), thumbRef.delete()]);
+    let imagePromise, thumbPromise;
+    if (image.url) {
+      imagePromise = this.afStorage.storage.refFromURL(image.url).delete();
+    }
+    if (image.thumbUrl) {
+      thumbPromise = this.afStorage.storage.refFromURL(image.thumbUrl).delete();
+    }
+    return Promise.all([imagePromise, thumbPromise]);
   }
-  async upload(imgMeta: Partial<ImageMeta>, id, folder) {
-    if (!imgMeta.size) {
-      imgMeta.size = this.getImageSize(imgMeta.imageString);
-    }
-    if (!imgMeta.thumbString) {
-      imgMeta.thumbString = await this.generateThumb(
-        imgMeta.imageString,
-        500,
-        500,
-        1,
-        imgMeta.type
-      );
-      imgMeta.thumbSize = this.getImageSize(imgMeta.thumbString);
-    }
-    let randomId = Math.random()
-      .toString(36)
-      .substring(2);
-    randomId = id ? id : randomId;
-    imgMeta.imageId = randomId;
+
+  async getImageSaveInfo(imageString, id, folder) {
+    let imgMeta: ImageSaveInfo = { imageString } as ImageSaveInfo;
+    imgMeta.size = this.getImageSize(imgMeta.imageString);
+    imgMeta = { ...imgMeta, ...this.geRrealImgDimension(imageString) };
+    imgMeta.thumbString = await this.generateThumb(
+      imgMeta.imageString,
+      500,
+      500,
+      1,
+      imgMeta.type
+    );
+    imgMeta.thumbSize = this.getImageSize(imgMeta.thumbString);
+
+    imgMeta.imageId = id;
+    imgMeta.imageRef = this.afStorage.ref(folder).child(id + imgMeta.ext);
+    imgMeta.thumbRef = this.afStorage
+      .ref(folder)
+      .child(id + ".thumb" + imgMeta.ext);
+    return imgMeta;
+  }
+
+  async upload(imgSaveInfo: ImageSaveInfo, id, folder) {
     const metadata = {
       contentType: "image/jpeg"
     };
-    const ref: AngularFireStorageReference = this.afStorage
-      .ref(folder)
-      .child(randomId + imgMeta.ext);
-    const thumbRef = this.afStorage
-      .ref(folder)
-      .child(randomId + ".thumb" + imgMeta.ext);
-    const imageTask = ref.putString(imgMeta.imageString, "data_url", metadata);
-    const thumbTask = thumbRef.putString(imgMeta.thumbString, "data_url");
 
-    imageTask.then(a => {
-      console.log("Done imageTask");
-      imgMeta.imageUri = a.downloadURL;
-    });
-    thumbTask.then(a => {
-      console.log("Done thumbTask");
+    const imageTask = imgSaveInfo.imageRef.putString(
+      imgSaveInfo.imageString,
+      "data_url",
+      metadata
+    );
+    const thumbTask = imgSaveInfo.thumbRef.putString(
+      imgSaveInfo.thumbString,
+      "data_url"
+    );
 
-      imgMeta.thumbUri = a.downloadURL;
-    });
-    return { imgMeta, imageTask, thumbTask };
+    return { imageTask, thumbTask };
+  }
+  private geRrealImgDimension(imgSrc) {
+    const i = new Image();
+    i.src = imgSrc;
+    return {
+      width: i.naturalWidth,
+      height: i.naturalHeight
+    };
   }
   generateThumb(
     img,

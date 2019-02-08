@@ -9,7 +9,6 @@ import { Slides, NavController, NavParams, ModalController } from "@ionic/angula
   styleUrls: ["./photo-view.component.scss"]
 })
 export class PhotoViewComponent implements OnInit {
-  private imagesFsRepository: ImagesDataService;
   images: Extended<ImageFile>[];
   sliderOptions: {initialSlide: number} = {initialSlide: 0};
   canDelete: boolean;
@@ -20,7 +19,8 @@ export class PhotoViewComponent implements OnInit {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private imagesFsRepository: ImagesDataService
   ) {
     const startIndex = this.navParams.get("photo_index");
     if (startIndex) {
@@ -31,7 +31,7 @@ export class PhotoViewComponent implements OnInit {
     this.canRemove = this.navParams.get("canRemove");
     this.canSelect = this.navParams.get("canSelect");
     this.canUpload = this.navParams.get("canUpload");
-    this.imagesFsRepository = this.navParams.get("imagesFsRepository");
+   // this.imagesFsRepository = this.navParams.get("imagesFsRepository");
   }
   ionViewDidEnter() {
     //   this.slider._rtl = true

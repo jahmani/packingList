@@ -1,3 +1,5 @@
+import { AngularFireStorageReference, AngularFireUploadTask } from "@angular/fire/storage";
+
 export class DataModels {}
 /*
   Generated class for the DataModels provider.
@@ -5,7 +7,25 @@ export class DataModels {}
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular 2 DI.
 */
-
+export interface ImageSaveInfo {
+  imageString: string;
+  thumbString: string;
+  imageRef: AngularFireStorageReference;
+  thumbRef: AngularFireStorageReference;
+  imageUri: string;
+  thumbUri: string;
+  imageId: string;
+  width: number;
+  height: number;
+  type: string;
+  ext: string;
+  size: number;
+  thumbSize: number;
+  uploadRes: {
+    imageTask: AngularFireUploadTask;
+    thumbTask: AngularFireUploadTask;
+  };
+}
 export interface CatTreeNodeExtension {
   $parent?: Extended<TreeNode>;
   $sons?: Extended<TreeNode>[];
@@ -16,6 +36,7 @@ export interface OpenPhotoRules {
   canSelect?: boolean;
   canUpload?: boolean;
   canremove?: boolean;
+  canDelete?: boolean;
 }
 export interface AccountInfoExt {
   $balance?: number;
@@ -41,6 +62,10 @@ export interface OrderExt {
   account?: Extended<AccountInfo>;
   extRows?: Extended<OrderRow2>[];
 }
+export interface ImageExt {
+  loaded?: boolean;
+  imgSaveInfo?: ImageSaveInfo;
+}
 
 export interface OrderRowExt {
   Product?: Extended<Product>;
@@ -52,7 +77,7 @@ export type ExtType = CatTreeNodeExtension &
   StoreUserExt &
   UserStoreExt &
   TransactionExt &
-  OrderExt &
+  OrderExt & ImageExt &
   OrderRowExt & {};
 export interface Meta {
   fromCache: boolean;
@@ -154,6 +179,7 @@ export interface ImageFile extends Editable, Delteable {
   width: number;
   height: number;
   tags: string[];
+  isUploaded: boolean;
 }
 export interface Transaction extends Editable, Delteable {
   accountId: string;

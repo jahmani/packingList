@@ -22,8 +22,17 @@
 <ion-content>
   <div class="image__grid">
 
-    <div class="image__square" *ngFor="let image of storeImages|async as images; let i = index" (click)="onClick(i,images)">
-      <img [src]="image.data.thumbUrl" />
+    <div class="image__square" *ngFor="let image of storeImages|async as images; let i = index; trackBy:trackByFn" (click)="onClick(i,images)">
+        <img [src]="image.data.thumbUrl" *ngIf="image.data.thumbUrl; else noThumb"/>
+      <ng-template #noThumb>
+        <ng-container  *ngIf="image.ext.imgSaveInfo; else noImage">
+            <ion-spinner name="lines" class="fixed"></ion-spinner>
+            <img [src]="image.ext.imgSaveInfo.imageString"/>
+        </ng-container>
+        <ng-template #noImage>
+          <img src="" >
+        </ng-template>
+      </ng-template>
     </div>
   </div>
   

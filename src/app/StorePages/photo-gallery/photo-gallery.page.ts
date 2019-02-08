@@ -9,11 +9,12 @@ import { Observable } from "rxjs";
 import {
   Extended,
   ImageFile,
-  OpenPhotoRules
+  OpenPhotoRules,
+  ImageSaveInfo
 } from "../../interfaces/data-models";
 import { NavParams, ModalController } from "@ionic/angular";
 import { ViewController } from "@ionic/core";
-import { ImageMeta, ImageService } from "../../providers/Image/image.service";
+import { ImageService } from "../../providers/Image/image.service";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
 
@@ -35,7 +36,7 @@ export class PhotoGalleryPage implements OnInit {
     @Optional() public navParams: NavParams,
     private modalCtrl: ModalController,
     @Optional() private imagesFsRepository: ImagesDataService,
-  //  private imagesService: ImageService
+    private imagesService: ImageService
   ) {
     // this.canSelect = navParams.get("canSelect");
     // this.canGoBack = navParams.get("canGoBack");
@@ -44,7 +45,7 @@ export class PhotoGalleryPage implements OnInit {
       this.imagesFsRepository = navParams.get("imagesFsRepository");
     }
 
-    this.storeImages = this.imagesFsRepository.List();
+    this.storeImages = this.imagesFsRepository.extendedList;
     // .pipe(map((extImages=>{
     //  return extImages.map(extImage=>extImage.data)
     // })))
@@ -58,6 +59,9 @@ export class PhotoGalleryPage implements OnInit {
     return blob;
   }
   */
+ trackByFn(index, extImage: Extended<ImageFile>) {
+  return extImage.id; // or item.id
+}
   async openPhoto(index, images, rules?: OpenPhotoRules) {
     const modal = await this.modalCtrl.create({
       component: PhotoViewComponent,
@@ -72,8 +76,10 @@ export class PhotoGalleryPage implements OnInit {
     modal.onDidDismiss().then(res => {
       if (res && res.data) {
         const extImageFile: Partial<Extended<ImageFile>> = {};
-        extImageFile.data = res.data;
+        extImageFile.data = res.data.data;
         if (res.role === "upload") {
+          const imgMeta: Partial<ImageSaveInfo> =  {imageString: extImageFile.data.url};
+          this.imagesFsRepository.saveNewImage(extImageFile.data.url);
         } else {
           this.selectPhoto(extImageFile);
         }
@@ -87,7 +93,7 @@ export class PhotoGalleryPage implements OnInit {
     }
   }
   onClick(index, images): void {
-    this.openPhoto(index, images, { canSelect: this.canSelect });
+    this.openPhoto(index, images, { canSelect: this.canSelect , canDelete: true });
   }
   openNativeFileInput() {
     this.fileInput.nativeElement.click();
@@ -105,15 +111,15 @@ export class PhotoGalleryPage implements OnInit {
       const fr = new FileReader();
       fr.onload = function() {
         src = fr.result;
-        console.log("fileeeeeeeeeeeeeeeeeef", src);
+        // console.log("fileeeeeeeeeeeeeeeeeef", src);
         self.previewPhoto(src);
       };
       fr.readAsDataURL(file);
     }
   }
   previewPhoto(src) {
-    const extimg: Partial<Extended<Partial<ImageFile>>> = {};
-    extimg.data = { url: src, thumbUrl: src };
+    const extimg = {ext: {}} as Extended<ImageFile>;
+    extimg.data = { url: src, thumbUrl: src } as ImageFile;
     this.openPhoto(0, [extimg], { canUpload: true });
   }
 

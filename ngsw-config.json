@@ -24,10 +24,9 @@
   "dataGroups": [
     {
       "name": "store-images",
-      "urls": ["https://firebasestorage.googleapis.com/v0/b/cridetmanagement.appspot.com/o/*.jpg*"],
+      "urls": ["/https://firebasestorage.googleapis.com/v0/b/cridetmanagement.appspot.com/o/*.jpg*"],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 200,
         "maxAge": "5d",
         "timeout": "5s"
       }

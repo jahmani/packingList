@@ -61,7 +61,7 @@ export class PhotoPickerComponent implements OnInit {
     modal.present();
     modal.onDidDismiss().then((res) => {
       if (res && res.data) {
-        const extImageFile: Extended<ImageFile> = res.data.data;
+        const extImageFile: Extended<ImageFile> = res.data;
         this.imgFile = extImageFile;
         this.imgFileId = extImageFile.id;
         this.srcChangeFunction(extImageFile.data.thumbUrl);
