@@ -106,8 +106,10 @@
             class="thumbnail-placeholderr"
             slot="start"
           >
-            <app-order-row-editor [formControl]="newRowCtrol">
-            </app-order-row-editor>
+          <ion-fab-button (click)="showNewOrderRow()">
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+
           </ion-thumbnail>
           <ion-label>
             <ion-row>
@@ -129,7 +131,11 @@
         *ngFor="let orderRowCtrl of orderRowsCtrl.controls; let i = index"
         [formControlName]="i"
         (remove)="removeOrderRow(i)"
+        (copy) = "showCopyOrderRow($event)"
       ></app-order-row-editor>
+                
+      <app-order-row-editor style="display: none;"  [formControl]="newRowCtrol" #newRowComponent>
+      </app-order-row-editor>
     </ion-list>
   </form>
 </ion-content>

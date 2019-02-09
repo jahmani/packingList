@@ -20,6 +20,7 @@ export class OrderRowEditorComponent implements OnInit, ControlValueAccessor {
   orderRow: Extended<OrderRow2>;
   srcChangeFunction: any;
   @Output() remove = new EventEmitter();
+  @Output() copy = new EventEmitter();
 
   writeValue(obj: Extended<OrderRow2>): void {
     this.orderRow = obj;
@@ -33,11 +34,16 @@ export class OrderRowEditorComponent implements OnInit, ControlValueAccessor {
   removeRow($event) {
     this.remove.emit($event);
   }
-  async showEditOrderRowModal() {
+  copyOrderRow() {
+    this.copy.emit(this.orderRow);
+  }
+  async showEditOrderRowModal(paramOrderRow?: Extended<OrderRow2>) {
+    const orderRow = paramOrderRow || this.orderRow;
+
     const modal = await this.modalCtrl.create({
       component: EditOrderRowPage,
       componentProps: {
-        orderRow: this.orderRow
+        orderRow: orderRow
       }
     });
     modal.onDidDismiss().then(res => {

@@ -1,7 +1,7 @@
 import { Component, OnInit, Optional } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
 import { Extended, Product } from "../../interfaces/data-models";
-import { NavParams, AlertController, ModalController } from "@ionic/angular";
+import { NavParams, AlertController, ModalController, IonItemSliding } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
@@ -45,7 +45,7 @@ export class ProductsListPage implements OnInit {
       debounceTime(700),
       map(v => (v + "").trim()),
       startWith(""),
-    //  tap(console.log)
+      //  tap(console.log)
     );
     // initializedValueChanges.subscribe(console.log);
 
@@ -115,18 +115,31 @@ export class ProductsListPage implements OnInit {
       return modal.present();
     }
   }
-  async showEditProduct(id) {
+  async showEditProduct2(id, slidingItem?: IonItemSliding) {
+    if (slidingItem) {
+      await slidingItem.close();
+    }
+    this.presentEditProduct(id);
+  }
+  async presentEditProduct(id, copy?) {
     const modal = await this.modalController.create({
       component: EditProductPage,
       componentProps: {
-        id
+        id,
+        copy
       }, cssClass: "edit-modal"
     });
     return modal.present();
-}
-async showNewProduct() {
-  return this.showEditProduct("new");
-}
+  }
+  async showNewProduct() {
+    return this.presentEditProduct("new");
+  }
+  async showCopyProduct(product: Extended<Product>, slidingItem?: IonItemSliding) {
+    if (slidingItem) {
+      await slidingItem.close();
+    }
+    return this.presentEditProduct("new", product.data);
+  }
 
   async onDelete(productSnapshot: Extended<Product>) {
     const alert = await this.alertController.create({

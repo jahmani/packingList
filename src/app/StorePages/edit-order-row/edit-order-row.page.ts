@@ -185,7 +185,8 @@ export class EditOrderRowPage implements OnInit {
         extPLLine.ext.state = "EDITED";
         break;
       case "ADDED":
-    case "EDITED":
+      case "NEW":
+      case "EDITED":
         extPLLine.ext.state = oldState;
         break;
       default:
@@ -194,5 +195,5 @@ export class EditOrderRowPage implements OnInit {
 
     this.dismiss(extPLLine, "save");
   }
-  ngOnInit() {}
+  ngOnInit() { }
 }

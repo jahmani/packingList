@@ -9,8 +9,8 @@
 >
   <app-order-row [orderRow]="orderRow"></app-order-row>
   <ion-fab
-    vertical="top"
-    edge
+    vertical="bottom"
+    
     horizontal="start"
     color="secondery"
     slot="fixed"
@@ -19,6 +19,11 @@
       <ion-col>
         <ion-fab-button mini (click)="showEditOrderRowModal()">
           <ion-icon name="create"></ion-icon>
+        </ion-fab-button>
+      </ion-col>
+      <ion-col>
+        <ion-fab-button mini (click)="copyOrderRow()">
+          <ion-icon name="copy"></ion-icon>
         </ion-fab-button>
       </ion-col>
       <ion-col>

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
-import { Menu } from "@ionic/angular";
 import { Extended, User, StoreInfo } from "../../interfaces/data-models";
 import { AuthService } from "../../providers/Auth/auth.service";
+import { IonMenu } from "@ionic/angular";
 
 @Component({
   selector: "app-menu",
@@ -23,11 +23,11 @@ export class MenuComponent implements OnInit {
   ];
   userLinks = [
     { path: "/UserStores", title: "User Stores" },
-    { path: "/logout", title: "LogOut", logOut: true },
+  //  { path: "/logout", title: "LogOut", logOut: true },
   ];
 
 
-  @Input() menu: Menu;
+  @Input() menu: IonMenu;
   @Input() user: Extended<User>;
   @Input() store: Extended<StoreInfo>;
   @Output() logOut: EventEmitter<boolean>;

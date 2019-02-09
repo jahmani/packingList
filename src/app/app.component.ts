@@ -5,7 +5,7 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AuthService } from "./providers/Auth/auth.service";
 import { ActiveStoreService } from "./providers/AppData/active-store.service";
-import { Observable } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Extended, User, StoreInfo } from "./interfaces/data-models";
 import { UsersService } from "./providers/AppData/users.service";
 import { map } from "rxjs/internal/operators/map";
@@ -33,7 +33,7 @@ export class AppComponent {
 
     this.user$ = this.authService.user.pipe(
       switchMap(u => {
-        return this.usersService.get(u.uid);
+        return u ? this.usersService.get(u.uid) : of(null);
       })
     );
     this.activeStore$ = this.activeStoreService.activeStoreKey$.pipe(

@@ -25,7 +25,7 @@
 <ion-content >
 
   <ion-list>
-    <ion-item-sliding (click)="onProductClicked(product)" 
+    <ion-item-sliding (click)="onProductClicked(product)"   #slidingItem
     *ngFor="let product of filteredProducts|async">
       <ion-item>
         <ion-thumbnail slot="end">
@@ -58,7 +58,7 @@
           <ion-icon name="create"></ion-icon>
           Edit
         </ion-item-option>
-        <ion-item-option color="primary" >
+        <ion-item-option (click)="showCopyProduct(product)" color="primary" >
           <ion-icon name="copy"></ion-icon>
           Copy & Edit
         </ion-item-option>

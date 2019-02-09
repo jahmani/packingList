@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "cridetmanagement"
+    "default": "cridetmanagement",
+    "dev": "cridetmanagement"
   }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 import { Extended, ImageFile } from "../../interfaces/data-models";
-import { Slides, NavController, NavParams, ModalController } from "@ionic/angular";
+import { NavController, NavParams, ModalController, IonSlides } from "@ionic/angular";
 
 @Component({
   selector: "app-photo-view",
@@ -14,7 +14,7 @@ export class PhotoViewComponent implements OnInit {
   canDelete: boolean;
   canRemove: boolean;
   canSelect: boolean;
-  @ViewChild(Slides) slider: Slides;
+  @ViewChild(IonSlides) slider: IonSlides;
   canUpload: boolean;
   constructor(
     public navCtrl: NavController,

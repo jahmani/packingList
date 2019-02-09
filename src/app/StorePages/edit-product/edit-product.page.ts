@@ -26,6 +26,7 @@ export class EditProductPage implements OnInit {
     // this.productId = this.navParams.get("productId");
     // this.productId = this.rout.snapshot.paramMap.get("productId");
     this.productId = this.navParams.get("id");
+    const copy = this.navParams.get("copy");
 
     this.form = this.fb.group({
       name: [
@@ -42,7 +43,7 @@ export class EditProductPage implements OnInit {
       thumbUrl: ""
     });
     if (this.productId === "new") {
-      const newProduct: Product = {} as Product;
+      const newProduct: Product = {...copy} as Product;
       this.product$ = of({ data: newProduct, id: null } as Extended<Product>);
     } else {
       this.product$ = this.productsFsRep.get(this.productId);

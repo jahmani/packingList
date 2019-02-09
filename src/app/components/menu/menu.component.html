@@ -1,10 +1,10 @@
     <ion-header>
         <ion-toolbar>
-          <ion-title>Menu Wworkk</ion-title>
+          <ion-title>Menu</ion-title>
         </ion-toolbar>
       </ion-header>
 
-      <ion-list *ngIf="store  && store.data" padding>
+      <ion-list *ngIf="user && store  && store.data" padding>
           <ion-item-divider color="light">{{store.data.name}}</ion-item-divider>
           <ion-item (click)="menu.close()" [routerLink]="link.path" 
            *ngFor="let link of storeLinks">
@@ -19,6 +19,11 @@
              *ngFor="let link of userLinks">
               <ion-label>
                 {{link.title}}
+              </ion-label>
+            </ion-item>
+            <ion-item (click)="menu.close()" (click)="onLogOut()">
+              <ion-label>
+                logout
               </ion-label>
             </ion-item>
           </ion-list>

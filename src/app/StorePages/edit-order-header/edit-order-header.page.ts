@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnChanges, OnDestroy, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, Subscription } from "rxjs";
 import { map, take, tap, switchMap, first } from "rxjs/operators";
@@ -13,7 +13,9 @@ import {
 } from "../../interfaces/data-models";
 import { Location } from "@angular/common";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
-import { Datetime } from "@ionic/angular";
+import { EditOrderRowPage } from "../edit-order-row/edit-order-row.page";
+import { ModalController } from "@ionic/angular";
+import { OrderRowEditorComponent } from "../../shared/order-row-editor/order-row-editor.component";
 
 @Component({
   selector: "app-edit-order-header",
@@ -31,6 +33,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   sub: Subscription;
   newRowCtrol: FormControl;
   order: Extended<Order>;
+  @ViewChild('newRowComponent') newRowComponent: OrderRowEditorComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +41,8 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     private ordersFsRep: OrdersDataService,
     private location: Location,
     private router: Router,
-    private plInfoDataService: PackinglistInfoDataService
+    private plInfoDataService: PackinglistInfoDataService,
+    private modalCtrl: ModalController
   ) {
     this.form = this.fb.group({
       date: "",
@@ -88,7 +92,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
         this.order = order;
         this.form.patchValue({ ...order.data, rows: [] });
         this.patchOrderRows(order.ext.extRows);
-        this.newOrderRow();
+        this.newRowCtrol = this.fb.control(null);
       })
     );
     this.sub = this.orderRowsCtrl.valueChanges.subscribe(
@@ -122,14 +126,16 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     });
   }
 
-  newOrderRow() {
-    const newOrderRow: Extended<OrderRow2> = {
+  addNewOrderRow(copy?: Extended<OrderRow2>) {
+    const newOrderRow: Extended<OrderRow2> = copy || {
       data: { sequence: 0 },
       ext: { state: "EMPTY" }
     } as Extended<OrderRow2>;
-    const fc = this.fb.control(newOrderRow);
-    fc.patchValue(newOrderRow);
-    this.newRowCtrol = fc;
+    this.newRowCtrol = this.fb.control(newOrderRow);
+
+    this.newRowCtrol.patchValue(newOrderRow);
+    this.newRowComponent.showEditOrderRowModal(newOrderRow);
+
     this.newRowCtrol.valueChanges
       .pipe(first())
       .subscribe((value: Extended<OrderRow2>) => {
@@ -138,7 +144,6 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
           this.newRowCtrol.patchValue(value);
           this.orderRowsCtrl.push(this.newRowCtrol);
         }
-        this.newOrderRow();
       });
   }
 
@@ -146,9 +151,21 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     return this.form.get("ammount");
   }
 
-  presentCopyPlLine(plLine: Extended<OrderRow>) {
-    const plLineData = plLine.data;
-    //  this.navCtrl.push("EditPlLinePage", { plLineData });
+
+  showNewOrderRow() {
+    this.addNewOrderRow();
+    // const newOrderRow: Extended<OrderRow2> = {
+    //   data: { sequence: 0 },
+    //   ext: { state: "EMPTY" }
+    // } as Extended<OrderRow2>;
+    // return this.presentEditOrderRowModal(newOrderRow);
+  }
+
+  showCopyOrderRow(orderRow: Extended<OrderRow2>) {
+    const copyOrderRow = { ...orderRow };
+    copyOrderRow.data = { ...copyOrderRow.data };
+    copyOrderRow.ext = { ...copyOrderRow.ext, state: "NEW" };
+    return this.addNewOrderRow(copyOrderRow);
   }
 
   dismiss(data: Extended<Order>, isDelete = false) {
