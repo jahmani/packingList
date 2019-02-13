@@ -41,11 +41,11 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
     const imageId = this.imageService.getImageId(url);
     return this.getOnce(imageId);
   }
-  async saveNewImage(imageString: string, id?: string) {
+  async saveNewImage(imageSaveInfo: ImageSaveInfo, id?: string) {
     const key = id || this.newKey();
     const folder = this.activeStoreService.activeStoreKey;
-    const ImgSaveInfo = await this.imageService.getImageSaveInfo(
-      imageString,
+    const ImgSaveInfo = await this.imageService.extendImageSaveInfo(
+      imageSaveInfo,
       key,
       folder
     );
@@ -75,13 +75,13 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
           throw err;
         })
       )
+      // todo:
       .subscribe(([url, thumbUrl]) => {
         return this.afterImageUploaded(extImage, { url, thumbUrl }).then(() => {
           this.pendingUploads.delete(extImage.id);
         });
       });
   }
-
   remove(removedItem: Extended<ImageFile>) {
     return this.beforeImageRemoved(removedItem).then(() => {
       return this.imageService.remove(removedItem.data).then(removeRes => {
@@ -100,7 +100,8 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
     const newItem: ImageFile = {
       size: ImgSaveInfo.size,
       height: ImgSaveInfo.height,
-      width: ImgSaveInfo.width
+      width: ImgSaveInfo.width,
+      name: ImgSaveInfo.srcName
     } as ImageFile;
     const extImage: Extended<ImageFile> = {
       id: key,
@@ -111,7 +112,7 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
   }
 
   private afterImageUploaded(newImage: Extended<ImageFile>, { url, thumbUrl }) {
-    newImage.data = { ...newImage.data, url, thumbUrl , isUploaded : true};
+    newImage.data = { ...newImage.data, url, thumbUrl, isUploaded: true };
     return super.saveOld(newImage);
   }
 }

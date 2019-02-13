@@ -62,7 +62,7 @@ export class PhotoGalleryPage implements OnInit {
  trackByFn(index, extImage: Extended<ImageFile>) {
   return extImage.id; // or item.id
 }
-  async openPhoto(index, images, rules?: OpenPhotoRules) {
+  async openPhoto(index, images: Extended<ImageFile>[], rules?: OpenPhotoRules) {
     const modal = await this.modalCtrl.create({
       component: PhotoViewComponent,
       componentProps: {
@@ -75,11 +75,11 @@ export class PhotoGalleryPage implements OnInit {
     modal.present();
     modal.onDidDismiss().then(res => {
       if (res && res.data) {
-        const extImageFile: Partial<Extended<ImageFile>> = {};
-        extImageFile.data = res.data.data;
+        const extImageFile: Partial<Extended<ImageFile>> = res.data;
+        // extImageFile = res.data;
         if (res.role === "upload") {
-          const imgMeta: Partial<ImageSaveInfo> =  {imageString: extImageFile.data.url};
-          this.imagesFsRepository.saveNewImage(extImageFile.data.url);
+          const imgMeta =  {imageString: extImageFile.data.url, srcName: extImageFile.data.name} as ImageSaveInfo;
+          this.imagesFsRepository.saveNewImage(imgMeta);
         } else {
           this.selectPhoto(extImageFile);
         }
@@ -112,14 +112,14 @@ export class PhotoGalleryPage implements OnInit {
       fr.onload = function() {
         src = fr.result;
         // console.log("fileeeeeeeeeeeeeeeeeef", src);
-        self.previewPhoto(src);
+        self.previewPhoto(src, file.name);
       };
       fr.readAsDataURL(file);
     }
   }
-  previewPhoto(src) {
+  previewPhoto(src, name: string) {
     const extimg = {ext: {}} as Extended<ImageFile>;
-    extimg.data = { url: src, thumbUrl: src } as ImageFile;
+    extimg.data = { url: src, thumbUrl: src , name} as ImageFile;
     this.openPhoto(0, [extimg], { canUpload: true });
   }
 

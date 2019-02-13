@@ -21,7 +21,6 @@
 
 <ion-content>
   <div class="image__grid">
-
     <div class="image__square" *ngFor="let image of storeImages|async as images; let i = index; trackBy:trackByFn" (click)="onClick(i,images)">
         <img [src]="image.data.thumbUrl" *ngIf="image.data.thumbUrl; else noThumb"/>
       <ng-template #noThumb>

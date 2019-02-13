@@ -14,6 +14,7 @@ export interface ImageSaveInfo {
   thumbRef: AngularFireStorageReference;
   imageUri: string;
   thumbUri: string;
+  srcName: string;
   imageId: string;
   width: number;
   height: number;

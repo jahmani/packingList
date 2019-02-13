@@ -20,16 +20,35 @@
         "/assets/**"
       ]
     }
+  },
+  {
+    "name": "sImages",
+    "installMode": "lazy",
+    "updateMode": "lazy",
+    "resources": {
+      "urls": [
+        "https://firebasestorage.googleapis.com/**"
+      ]
+    }
   }],
   "dataGroups": [
     {
       "name": "store-images",
-      "urls": ["/https://firebasestorage.googleapis.com/v0/b/cridetmanagement.appspot.com/o/*.jpg*"],
+      "urls": ["https://firebasestorage.googleapis.com/**"],
       "cacheConfig": {
-        "strategy": "performance",
-        "maxAge": "5d",
-        "timeout": "5s"
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "test-images",
+      "urls": ["/assets/img/*"],
+      "cacheConfig": {
+        "maxSize": 100,
+        "maxAge": "3d",
+        "timeout": "10u",
+        "strategy": "freshness"
       }
     }
+
   ]
 }

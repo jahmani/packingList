@@ -24,29 +24,37 @@ export class ImageService {
     }
     return Promise.all([imagePromise, thumbPromise]);
   }
+  getFileExtension(fname) {
+    // tslint:disable-next-line:no-bitwise
+    const ext = fname.slice((fname.lastIndexOf(".") - 1 >>> 0) + 2);
+    return ext ? "." + ext : ext;
+  }
 
-  async getImageSaveInfo(imageString, id, folder) {
-    let imgMeta: ImageSaveInfo = { imageString } as ImageSaveInfo;
-    imgMeta.size = this.getImageSize(imgMeta.imageString);
-    imgMeta = { ...imgMeta, ...this.geRrealImgDimension(imageString) };
-    imgMeta.thumbString = await this.generateThumb(
-      imgMeta.imageString,
+  async extendImageSaveInfo(imageSaveInfo: ImageSaveInfo, id, folder) {
+    const imageString = imageSaveInfo.imageString;
+    imageSaveInfo.ext = this.getFileExtension(imageSaveInfo.srcName);
+
+    imageSaveInfo.size = this.getImageSize(imageSaveInfo.imageString);
+    imageSaveInfo = { ...imageSaveInfo, ...this.geRrealImgDimension(imageString) };
+    imageSaveInfo.thumbString = await this.generateThumb(
+      imageSaveInfo.imageString,
       500,
       500,
       1,
-      imgMeta.type
+      imageSaveInfo.type
     );
-    imgMeta.thumbSize = this.getImageSize(imgMeta.thumbString);
+    imageSaveInfo.thumbSize = this.getImageSize(imageSaveInfo.thumbString);
 
-    imgMeta.imageId = id;
-    imgMeta.imageRef = this.afStorage.ref(folder).child(id + imgMeta.ext);
-    imgMeta.thumbRef = this.afStorage
+    imageSaveInfo.imageId = id;
+    imageSaveInfo.imageRef = this.afStorage.ref(folder).child(id + imageSaveInfo.ext);
+    imageSaveInfo.thumbRef = this.afStorage
       .ref(folder)
-      .child(id + ".thumb" + imgMeta.ext);
-    return imgMeta;
+      .child(id + ".thumb" + imageSaveInfo.ext);
+    return imageSaveInfo;
   }
 
   async upload(imgSaveInfo: ImageSaveInfo, id, folder) {
+    // todo: handke other content types
     const metadata = {
       contentType: "image/jpeg"
     };
@@ -240,7 +248,7 @@ export class ImageService {
       // create an object url of that blob that we can use in the src attribute
       .map(e => URL.createObjectURL(e))
   }
-
+/*
 
   fixMIME(src) {
     const img = this;
