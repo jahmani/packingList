@@ -115,7 +115,7 @@ export class ProductsListPage implements OnInit {
       return modal.present();
     }
   }
-  async showEditProduct2(id, slidingItem?: IonItemSliding) {
+  async showEditProduct(id, slidingItem?: IonItemSliding) {
     if (slidingItem) {
       await slidingItem.close();
     }
