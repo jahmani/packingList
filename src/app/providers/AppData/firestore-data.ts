@@ -2,9 +2,6 @@ import { Editable, Extended, ExtMap } from "../../interfaces/data-models";
 import { Observable, of } from "rxjs";
 import {
   map,
-  share,
-  refCount,
-  publishReplay,
   first,
   switchMap,
   take,
@@ -60,17 +57,17 @@ export class FirestoreData<T extends Editable> {
   private initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
     this.dataList = this.snapList(snapshotChanges)
       .pipe(
-      //  share()
-      shareReplay(1)
-      //  publishReplay(1),
-      //  refCount()
+        //  share()
+        shareReplay(1)
+        //  publishReplay(1),
+        //  refCount()
       );
     this.dataMap = this.snapshotMap(snapshotChanges)
       .pipe(
-      //  share()
-      shareReplay(1)
-      //  publishReplay(1),
-      //  refCount()
+        //  share()
+        shareReplay(1)
+        //  publishReplay(1),
+        //  refCount()
       );
 
   }

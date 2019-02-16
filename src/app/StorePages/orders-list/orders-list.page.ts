@@ -27,7 +27,13 @@ export class OrdersListPage implements OnInit {
     this.orders = this.ordersRep.FormatedList.pipe(tap((orders) => {
       console.log("orderssssssssss");
       console.log(orders);
-    }));
+      console.table(orders.map(order => {
+        return { name: order.ext.account.data.name, ...order.data.lastEditedOn };
+      }
+      )
+      );
+    }
+    ));
     /*
     this.orders.pipe(tap((orders)=>{
       console.log("orderssssssssss")
@@ -36,7 +42,7 @@ export class OrdersListPage implements OnInit {
     */
   }
   copyRows() {
-  //  return this.ordersRowsRep.copyOrderRows();
+    //  return this.ordersRowsRep.copyOrderRows();
   }
   ionViewDidLoad() {
     console.log("ionViewDidLoad OrdersListPage");
@@ -63,16 +69,16 @@ export class OrdersListPage implements OnInit {
       .catch(console.log);
   }
   presentEditOrderModal(orderId?: string) {
-   // this.navCtrl.push("EditOrderPage", { orderId });
+    // this.navCtrl.push("EditOrderPage", { orderId });
   }
   async showOrderImage(orderSnapshot: Extended<Order>) {
     if (orderSnapshot.ext.imageFile) {
-      const modal = await this.modalController.create( {
+      const modal = await this.modalController.create({
         component: PhotoViewComponent,
         componentProps: {
-        canDelete: false,
-        canSelect: false,
-        images: [orderSnapshot.data.imageUrl]
+          canDelete: false,
+          canSelect: false,
+          images: [orderSnapshot.data.imageUrl]
         }
       });
       modal.present();
@@ -104,5 +110,5 @@ export class OrdersListPage implements OnInit {
 
     return this.presentEditOrderModal();
   }
-  ngOnInit() {}
+  ngOnInit() { }
 }

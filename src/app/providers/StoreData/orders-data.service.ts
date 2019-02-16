@@ -13,9 +13,7 @@ import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { Observable } from "rxjs";
 import { mergeMap, map, combineLatest, share } from "rxjs/operators";
-import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { AccountsDataService } from "./accounts-data.service";
-import { ImagesDataService } from "./images-data.service";
 import { ProductsDataService } from "./products-data.service";
 
 @Injectable({
@@ -47,9 +45,9 @@ export class OrdersDataService extends StoreDataService<Order> {
       ref => ref.where("packingListId", "==", plId)
     );
 
-    const ordersMap = super.snapList(OrdersColl.snapshotChanges());
+    const ordersList = super.snapList(OrdersColl.snapshotChanges());
 
-    return this.formateList(ordersMap);
+    return this.formateList(ordersList);
   }
   getExtended(key): Observable<Extended<Order>> {
     return super.get(key).pipe(
@@ -66,7 +64,7 @@ export class OrdersDataService extends StoreDataService<Order> {
       })
     );
   }
-  get FormatedList(): Observable<any[]> {
+  get FormatedList(): Observable<Extended<Order>[]> {
     return this.formateList(this.List());
   }
   private extendRows(
@@ -96,14 +94,14 @@ export class OrdersDataService extends StoreDataService<Order> {
           return orders;
         }
       ),
-      map(ordersArray => {
-        return ordersArray.sort((a, b) => {
-          return compareTimeStamp(
-            a.ext.$computedLastEditedOn,
-            b.ext.$computedLastEditedOn
-          );
-        });
-      })
+      // map(ordersArray => {
+      //   return ordersArray.sort((a, b) => {
+      //     return compareTimeStamp(
+      //       a.ext.$computedLastEditedOn,
+      //       b.ext.$computedLastEditedOn
+      //     );
+      //   });
+      // })
     );
   }
 }

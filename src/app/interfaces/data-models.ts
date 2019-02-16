@@ -41,7 +41,7 @@ export interface OpenPhotoRules {
 }
 export interface AccountInfoExt {
   $balance?: number;
-  $computedLastEditedOn?: string;
+  $computedLastEditedOn?: firebase.firestore.Timestamp;
   $balanceObj?: Extended<AccountBalance>;
 }
 
