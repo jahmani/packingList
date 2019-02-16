@@ -7,18 +7,18 @@
       </ion-buttons>
 
     <ion-buttons slot="start">
-     <ion-menu-toggle menuToggle>
+     <!-- <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
-      </ion-menu-toggle>
+      </ion-menu-toggle> -->
     </ion-buttons>
     <ion-title>Packing List</ion-title>
 
   </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
-  <ion-item *ngFor="let pl of packinglists|async, let i=index"  [routerLink]="['/StoreBase/Packinglist',pl.id]">
+  <ion-item *ngFor="let pl of packinglists|async, let i=index" (click)="open(pl.id)">
     <h1>
       {{pl.data.name}}
     </h1>

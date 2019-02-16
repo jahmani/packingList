@@ -11,11 +11,11 @@
       <ion-button *ngIf="canSelect" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
-      <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
+      <!-- <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
-      </ion-menu-toggle>
+      </ion-menu-toggle> -->
     </ion-buttons>
   </ion-toolbar>
 
@@ -29,7 +29,7 @@
     *ngFor="let product of filteredProducts|async">
       <ion-item>
         <ion-thumbnail slot="end">
-          <img [src]="product.data.thumbUrl">
+          <img [src]="product.data.thumbUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
         </ion-thumbnail>
         <ion-label>
           <ion-row>
@@ -60,7 +60,7 @@
         </ion-item-option>
         <ion-item-option (click)="showCopyProduct(product)" color="primary" >
           <ion-icon name="copy"></ion-icon>
-          Copy & Edit
+          Copy
         </ion-item-option>
         <ion-item-option color="danger" (click)="delete(product)">
           <ion-icon name="trash"></ion-icon>
@@ -74,7 +74,7 @@
 <ion-footer>
     <ion-toolbar>
     <ion-buttons start>
-      <ion-button [routerLink]="['/StoreBase/EditProduct', 'new']" icon-only color="royal">
+      <ion-button  (click)="showNewProduct()" icon-only color="royal">
         <ion-icon name="add"></ion-icon>
       </ion-button>
       <ion-searchbar aria-label="search" [showCancelButton]="true" [formControl]="searchControl"></ion-searchbar>

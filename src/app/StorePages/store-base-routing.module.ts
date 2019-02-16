@@ -7,11 +7,16 @@ const routes: Routes = [
     path: "",
     component: StoreBasePage,
     children: [
-      { path: "", redirectTo: "AccountsList", pathMatch: "full" },
+      { path: "", redirectTo: "tabs", pathMatch: "full" },
       {
         path: "AccountsList",
         loadChildren:
           "./accounts-list/accounts-list.module#AccountsListPageModule"
+      },
+      {
+        path: "tabs",
+        loadChildren:
+          "./tabs/tabs.module#TabsPageModule"
       },
       {
         path: "EditAccount/:id",

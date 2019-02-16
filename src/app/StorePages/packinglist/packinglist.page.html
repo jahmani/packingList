@@ -1,39 +1,41 @@
 <ion-header>
   <ion-toolbar>
-      <ion-buttons slot="end">
-          <ion-button [routerLink]="['/StoreBase/EditOrderHeader',{id:'new', plId:plId|async}]">
-            <ion-icon slot="icon-only" name="add"></ion-icon>
-          </ion-button>
-      </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button [routerLink]="['/StoreBase/EditOrderHeader',{id:'new', plId:plId|async}]">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+      <!-- 
       <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
-      </ion-menu-toggle>
+      </ion-menu-toggle> -->
     </ion-buttons>
     <ion-title>Packing List</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-item  no-padding  *ngIf="(plInfo | async) as pl">
+  <ion-item no-padding *ngIf="(plInfo | async) as pl">
     <ion-label>
-    <ion-row [routerLink]="['/StoreBase/EditPackingListInfo', pl.id]"  style="background-color: #f3fbfd;">
-      <ion-col>
-        <h2>{{ pl.data.name }}</h2>
-        <ion-note>loading in {{ pl.data.date | date: "dd-MM-yy" }} in {{ pl.data.deliveryAdress }}</ion-note>
-      </ion-col>
-    </ion-row>
+      <ion-row [routerLink]="['/StoreBase/EditPackingListInfo', pl.id]" style="background-color: #f3fbfd;">
+        <ion-col>
+          <h2>{{ pl.data.name }}</h2>
+          <ion-note>loading in {{ pl.data.date | date: "dd-MM-yy" }} in {{ pl.data.deliveryAdress }}</ion-note>
+        </ion-col>
+      </ion-row>
 
-    <ion-row *ngIf="(plOrders | async)">
-      <ion-col size="6">Ammount: {{ totals.ammount }}</ion-col>
-      <ion-col size="6">Deposits: {{ totals.deposit }}</ion-col>
-      <ion-col size="6">ctns: {{ totals.ctns }}</ion-col>
-      <ion-col size="6">CBM: {{ totals.cbm }}</ion-col>
-      <ion-col size="6">Quantity: {{ totals.pieces }}</ion-col>
-    </ion-row>
-  </ion-label>
+      <ion-row *ngIf="(plOrders | async)">
+        <ion-col size="6">Ammount: {{ totals.ammount }}</ion-col>
+        <ion-col size="6">Deposits: {{ totals.deposit }}</ion-col>
+        <ion-col size="6">ctns: {{ totals.ctns }}</ion-col>
+        <ion-col size="6">CBM: {{ totals.cbm }}</ion-col>
+        <ion-col size="6">Quantity: {{ totals.pieces }}</ion-col>
+      </ion-row>
+    </ion-label>
   </ion-item>
 
   <ion-segment #displayMode value="rows">
@@ -42,15 +44,12 @@
     <ion-segment-button value="lines"> PAcking Lines </ion-segment-button>
   </ion-segment>
   <ng-container [ngSwitch]="displayMode.value">
-    <app-packing-list
-      *ngSwitchCase="'lines'"
-      [orderRows]="plOrdersRows | async"
-    >
+    <app-packing-list *ngSwitchCase="'lines'" [orderRows]="plOrdersRows | async">
     </app-packing-list>
     <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async">
     </app-order-rows-list>
     <div *ngSwitchCase="'orders'">
-      <ion-item *ngFor="let order of (plOrders | async)" [routerLink]="['/StoreBase/OrderView',order.id]">
+      <ion-item *ngFor="let order of (plOrders | async)" (click)="openOrder(order.id)">
         <app-order-header-view [order]="order"></app-order-header-view>
       </ion-item>
     </div>

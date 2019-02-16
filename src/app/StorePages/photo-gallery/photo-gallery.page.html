@@ -3,12 +3,8 @@
     <ion-buttons slot="start">
       <ion-button *ngIf="canSelect" (click)="close()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
-      </ion-button>
-      <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
-        <ion-button>
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-menu-toggle>
+      </ion-button>      <ion-back-button  *ngIf="!canSelect"></ion-back-button>
+
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button (click)="openNativeFileInput()">

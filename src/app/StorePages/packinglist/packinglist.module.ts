@@ -12,7 +12,10 @@ const routes: Routes = [
   {
     path: '',
     component: PackinglistPage
-  }
+  },      {
+    path: "OrderView/:id",
+    loadChildren: "../order-view/order-view.module#OrderViewPageModule"
+  },
 ];
 
 @NgModule({

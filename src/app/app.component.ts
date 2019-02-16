@@ -11,6 +11,7 @@ import { UsersService } from "./providers/AppData/users.service";
 import { map } from "rxjs/internal/operators/map";
 import { switchMap } from "rxjs/operators";
 import { StoreInfoService } from "./providers/AppData/store-info.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-root",
@@ -27,7 +28,8 @@ export class AppComponent {
     private authService: AuthService,
     private usersService: UsersService,
     private storesService: StoreInfoService,
-    private activeStoreService: ActiveStoreService
+    private activeStoreService: ActiveStoreService,
+    private router: Router
   ) {
     this.initializeApp();
 
@@ -41,6 +43,12 @@ export class AppComponent {
         return this.storesService.get(storeId);
       })
     );
+
+    this.authService.user.subscribe(user => {
+      if (!user) {
+        this.router.navigateByUrl("/login");
+      }
+    });
   }
 
   initializeApp() {

@@ -24,5 +24,7 @@ export class PackinglistsPage implements OnInit {
 
   ngOnInit() {
   }
-
+  open(id: number) {
+    this.router.navigateByUrl(this.router.url + '/Packinglist/' + id);
+  }
 }

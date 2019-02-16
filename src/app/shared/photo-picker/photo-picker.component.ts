@@ -28,7 +28,7 @@ export class PhotoPickerComponent implements OnInit {
     console.log("Hello ImageSelectComponent Component");
   }
   get displayImageSrc() {
-    return this.imgFile ? this.imgFile.data.thumbUrl : this.placeHoldereSrc;
+    return this.imgFile && this.imgFile.data ? this.imgFile.data.thumbUrl : this.placeHoldereSrc;
   }
   srcChangeFunction: any;
   imgFileId: string;

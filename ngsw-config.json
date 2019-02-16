@@ -27,7 +27,7 @@
     "updateMode": "lazy",
     "resources": {
       "urls": [
-        "https://firebasestorage.googleapis.com/**"
+        "https://firebasestorage.googleapis.com/**/o/*?*"
       ]
     }
   }],

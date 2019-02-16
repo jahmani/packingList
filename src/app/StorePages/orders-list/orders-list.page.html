@@ -7,6 +7,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
+<!--  -->
       <ion-button [routerLink]="['/StoreBase/EditOrderHeader',{id:'new'}]">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
@@ -18,11 +19,13 @@
   </ion-buttons>
 
     <ion-buttons slot="start">
-     <ion-menu-toggle menuToggle>
+        <ion-back-button ></ion-back-button>
+
+     <!-- <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
-      </ion-menu-toggle>
+      </ion-menu-toggle> -->
     </ion-buttons>
     <ion-title>Orders List</ion-title>
 

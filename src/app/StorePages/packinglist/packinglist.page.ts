@@ -10,7 +10,7 @@ import {
 import { Observable, combineLatest } from "rxjs";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
 // import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
 import {
   map,
@@ -47,7 +47,8 @@ export class PackinglistPage implements OnInit {
     private ordersFsRep: OrdersDataService,
     private packinglistInfoDataService: PackinglistInfoDataService,
     //  private pLLinesFsRepository: OrderRowsService,
-    public rout: ActivatedRoute
+    public rout: ActivatedRoute,
+    private router: Router
   ) {
     this.plId = this.rout.paramMap.pipe(map(paramMap => paramMap.get("id")));
     this.plInfo = this.plId.pipe(
@@ -97,6 +98,10 @@ export class PackinglistPage implements OnInit {
 
       shareReplay(1)
     );
+  }
+
+  openOrder(id: string) {
+    this.router.navigateByUrl(this.router.url + "/OrderView/" + id);
   }
 
   ngOnInit() {}
