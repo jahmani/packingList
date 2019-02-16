@@ -4,9 +4,9 @@
     [ngClass]="index % 2 == 1 ? 'odd-row' : 'even-row'"
     [class.active]="isActive"
   >
-    <ion-thumbnail slot="start" (click)="onImageClicked($event)">
+    <ion-thumbnail slot="start" (click)="onImageClicked($event)" no-margin>
       <!-- onerror="this.src='../assets/img/6.jpg'" -->
-      <img [src]="orderRow.ext.Product.data.thumbUrl" />
+      <img [src]="orderRow.ext.Product.data.thumbUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';"/>
     </ion-thumbnail>
     <ion-label>
       <ion-row>

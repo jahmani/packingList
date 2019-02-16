@@ -103,7 +103,9 @@ export class OrdersListPage implements OnInit {
     });
     return await alert.present();
   }
-
+  openOrder(id: string) {
+    this.router.navigateByUrl(this.router.url + '/OrderView/' + id);
+  }
   presentNewOrderModal() {
     const date = new Date().toISOString();
     //    date = UTCToLocal(date)

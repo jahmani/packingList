@@ -28,7 +28,7 @@
     <ion-item-sliding (click)="onProductClicked(product)"   #slidingItem
     *ngFor="let product of filteredProducts|async">
       <ion-item>
-        <ion-thumbnail slot="end">
+        <ion-thumbnail slot="end" no-margin>
           <img [src]="product.data.thumbUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
         </ion-thumbnail>
         <ion-label>

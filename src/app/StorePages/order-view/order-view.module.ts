@@ -12,7 +12,8 @@ const routes: Routes = [
   {
     path: '',
     component: OrderViewPage
-  }
+  },
+  { path: "EditOrderHeader", loadChildren: "../edit-order-header/edit-order-header.module#EditOrderHeaderPageModule" },
 ];
 @NgModule({
   imports: [

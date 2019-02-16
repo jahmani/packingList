@@ -105,7 +105,7 @@ async presentNewAccountModal() {
 }
 
   showAccountTransactions(accSnapshot: Extended<AccountInfo>) {
-    this.router.navigateByUrl(`/StoreBase/EditAccount/${accSnapshot.id}`);
+    this.presentEditAccountModal(accSnapshot.id);
   }
 
   selectAccount(extAccount: Extended<AccountInfo>) {
