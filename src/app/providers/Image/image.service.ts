@@ -101,10 +101,13 @@ export class ImageService {
     let name: string;
     try {
       name = this.afStorage.storage.refFromURL(imageUrl).name;
-      name = name.replace(".thumbundefined", "");
-      name = name.replace(".thumb", "");
-      const dotIndex = name.lastIndexOf(".");
-      // name = name.substring(0, dotIndex);
+      // name = name.replace(".thumbundefined", "");
+      // name = name.replace(".thumb", "");
+      // remove file extension
+      const dotIndex = name.indexOf(".");
+      if (dotIndex !== -1) {
+      name = name.substring(0, dotIndex);
+      }
       return name;
     } catch (err) {
       name = undefined;

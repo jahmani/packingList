@@ -7,7 +7,27 @@
   class="order-row-editor-wraper"
   *ngIf="orderRow && orderRow.data.productId; else: newRowButton"
 >
+<ion-item-sliding>
+
   <app-order-row [orderRow]="orderRow"></app-order-row>
+  
+  <ion-item-options slot="start" dir="ltr">
+    <ion-item-option color="primary"  (click)="showEditOrderRowModal()"  expandable="true">
+      <ion-icon name="create"></ion-icon>
+      Edit
+    </ion-item-option>
+    <ion-item-option  (click)="copyOrderRow()"  color="primary" >
+      <ion-icon name="copy"></ion-icon>
+      Copy
+    </ion-item-option>
+    <ion-item-option (click)="removeRow($event)" color="danger" >
+      <ion-icon name="trash"></ion-icon>
+      Delete
+    </ion-item-option>
+  </ion-item-options>
+</ion-item-sliding>
+<!-- 
+
   <ion-fab
     vertical="bottom"
     
@@ -30,7 +50,7 @@
         <ion-fab-button mini color="secondary" (click)="removeRow($event)">
           <ion-icon name="trash"></ion-icon> </ion-fab-button></ion-col
     ></ion-row>
-  </ion-fab>
+  </ion-fab> -->
 </div>
 <ng-template #newRowButton>
   <ion-button (click)="showEditOrderRowModal()" expand="full">

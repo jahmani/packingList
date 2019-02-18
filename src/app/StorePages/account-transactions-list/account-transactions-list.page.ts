@@ -11,7 +11,7 @@ import {
   ModalController
 } from "@ionic/angular";
 import { map, combineLatest, switchMap } from "rxjs/operators";
-import { compareTimeStamp } from "../../Util/compare-timetamp";
+import { compareTimeStamp, compareTimeString } from "../../Util/compare-timetamp";
 import { TransactionsDataService } from "../../providers/StoreData/transactions-data.service";
 import { AccountsDataService } from "../../providers/StoreData/accounts-data.service";
 import { TransactionCatsDataService } from "../../providers/StoreData/transaction-cats-data.service";
@@ -61,7 +61,7 @@ export class AccountTransactionsListPage implements OnInit {
           ? extAccount.ext.$balanceObj.data.balance
           : 0;
         const transes = extTranses.sort((a, b) => {
-          return compareTimeStamp(a.data.date, b.data.date);
+          return compareTimeString(a.data.date, b.data.date);
         });
         transes.forEach(trans => {
           trans.ext.currentBalance = currentBalance;

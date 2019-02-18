@@ -1,7 +1,7 @@
-import { Component, OnInit, Optional } from "@angular/core";
+import { Component, OnInit, Optional, ViewChild } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
 import { Extended, Product } from "../../interfaces/data-models";
-import { NavParams, AlertController, ModalController, IonItemSliding } from "@ionic/angular";
+import { NavParams, AlertController, ModalController, IonItemSliding, IonList } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
@@ -19,6 +19,7 @@ export class ProductsListPage implements OnInit {
   products: Observable<Extended<Product>[]>;
   searchControl: FormControl;
   filteredProducts: Observable<Extended<Product>[]>;
+  @ViewChild('slidingItem') dynamicList: IonList;
 
   constructor(
     public router: Router,
@@ -122,6 +123,7 @@ export class ProductsListPage implements OnInit {
     this.presentEditProduct(id);
   }
   async presentEditProduct(id, copy?) {
+    await this.dynamicList.closeSlidingItems();
     const modal = await this.modalController.create({
       component: EditProductPage,
       componentProps: {
@@ -134,31 +136,29 @@ export class ProductsListPage implements OnInit {
   async showNewProduct() {
     return this.presentEditProduct("new");
   }
-  async showCopyProduct(product: Extended<Product>, slidingItem?: IonItemSliding) {
-    if (slidingItem) {
-      await slidingItem.close();
-    }
+  async showCopyProduct(product: Extended<Product>) {
+
     return this.presentEditProduct("new", product.data);
   }
 
-  async onDelete(productSnapshot: Extended<Product>) {
-    const alert = await this.alertController.create({
-      message: `Are u sure. deleting ${productSnapshot.data.name} Product`,
-      header: "Deleting Product",
-      buttons: [
-        {
-          text: "Ok",
-          handler: () => {
-            this.productsRep.remove(productSnapshot);
-          }
-        },
-        {
-          text: "Cancel"
-        }
-      ]
-    });
-    alert.present();
-  }
+  // async onDelete(productSnapshot: Extended<Product>) {
+  //   const alert = await this.alertController.create({
+  //     message: `Are u sure. deleting ${productSnapshot.data.name} Product`,
+  //     header: "Deleting Product",
+  //     buttons: [
+  //       {
+  //         text: "Ok",
+  //         handler: () => {
+  //           this.productsRep.remove(productSnapshot);
+  //         }
+  //       },
+  //       {
+  //         text: "Cancel"
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
 
   ngOnInit() {

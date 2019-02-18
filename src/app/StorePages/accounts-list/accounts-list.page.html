@@ -19,7 +19,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding  #dynamicList>
   <ion-list>
     <ion-item *ngIf="totalBalanceObj|async as _totalBalanceObj">
       Total Balances :
@@ -41,13 +41,13 @@
           <ion-spinner *ngIf="account.meta.hasPendingWrites" item-right name="bubbles"></ion-spinner>
         </h2>
       </ion-item>
-      <ion-item-options slot="start">
-        <ion-item-option (click)="presentEditAccountModal(account.id)" expandable>
+      <ion-item-options slot="start" dir="ltr">
+        <ion-item-option (click)="presentEditAccountModal(account.id)" expandable="true">
           <ion-icon name="create"></ion-icon>
           Edit
         </ion-item-option>
-        <ion-item-option (click)="onDelete(account)" expandable>
-          <ion-icon name="trash"></ion-icon>
+        <ion-item-option (click)="onDelete(account)" >
+          <ion-icon name="trash"></ion-icon> delete
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>

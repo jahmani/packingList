@@ -40,7 +40,8 @@ export class EditProductPage implements OnInit {
       code: "",
       style: "",
       notice: "",
-      thumbUrl: ""
+      thumbUrl: "",
+      price: ""
     });
     if (this.productId === "new") {
       const newProduct: Product = {...copy} as Product;

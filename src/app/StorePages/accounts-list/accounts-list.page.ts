@@ -1,4 +1,4 @@
-import { Component, OnInit, Optional } from "@angular/core";
+import { Component, OnInit, Optional, ViewChild } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
 import {
   Extended,
@@ -24,6 +24,8 @@ export class AccountsListPage implements OnInit {
   searchControl: FormControl;
   totalBalanceObj: Observable<AccountBalance>;
   canSelect: any;
+  @ViewChild("dynamicList") dynamicList;
+
   constructor(
     public accountsDataService: AccountsDataService,
     private modalController: ModalController,
@@ -92,6 +94,8 @@ export class AccountsListPage implements OnInit {
     this.modalController.dismiss();
   }
   async presentEditAccountModal(id) {
+    this.dynamicList.closeSlidingItems();
+
     const modal = await this.modalController.create({
       component: EditAccountPage,
       componentProps: {
