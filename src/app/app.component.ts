@@ -1,11 +1,11 @@
-import { Component } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 
-import { Platform } from "@ionic/angular";
+import { Platform, ModalController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AuthService } from "./providers/Auth/auth.service";
 import { ActiveStoreService } from "./providers/AppData/active-store.service";
-import { Observable, of } from "rxjs";
+import { Observable, of, fromEvent } from "rxjs";
 import { Extended, User, StoreInfo } from "./interfaces/data-models";
 import { UsersService } from "./providers/AppData/users.service";
 import { map } from "rxjs/internal/operators/map";
@@ -17,9 +17,10 @@ import { Router } from "@angular/router";
   selector: "app-root",
   templateUrl: "app.component.html"
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   user$: Observable<Extended<User>>;
   activeStore$: Observable<Extended<StoreInfo>>;
+  backbuttonSubscription: any;
 
   constructor(
     private platform: Platform,
@@ -29,7 +30,8 @@ export class AppComponent {
     private usersService: UsersService,
     private storesService: StoreInfoService,
     private activeStoreService: ActiveStoreService,
-    private router: Router
+    private router: Router,
+    private modalCtrl: ModalController
   ) {
     this.initializeApp();
 
@@ -50,11 +52,24 @@ export class AppComponent {
       }
     });
   }
+  ngOnInit() {
+    const event = fromEvent(document, 'backbutton');
+    this.backbuttonSubscription = event.subscribe(async () => {
+        const modal = await this.modalCtrl.getTop();
+        if (modal) {
+            modal.dismiss();
+        }
+    });
+}
 
+ngOnDestroy() {
+    this.backbuttonSubscription.unsubscribe();
+}
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
   }
+
 }

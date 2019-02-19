@@ -41,7 +41,8 @@ export class EditProductPage implements OnInit {
       style: "",
       notice: "",
       thumbUrl: "",
-      price: ""
+      price: "",
+      unit: ["pcs", Validators.maxLength(5)]
     });
     if (this.productId === "new") {
       const newProduct: Product = {...copy} as Product;

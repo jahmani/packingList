@@ -8,6 +8,7 @@ import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component
 import { FormControl } from "@angular/forms";
 import { debounceTime, map, startWith, tap } from "rxjs/operators";
 import { EditProductPage } from "../edit-product/edit-product.page";
+import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 
 @Component({
   selector: "app-products-list",
@@ -27,7 +28,8 @@ export class ProductsListPage implements OnInit {
     @Optional() private navParams: NavParams,
     private alertController: AlertController,
     private modalController: ModalController,
-    private productsRep: ProductsDataService
+    private productsRep: ProductsDataService,
+    private imageDataService: ImagesDataService
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
     const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
@@ -73,6 +75,8 @@ export class ProductsListPage implements OnInit {
   }
 
   async delete(extProduct: Extended<Product>) {
+    await this.dynamicList.closeSlidingItems();
+
     const modal = await this.alertController.create({
       message: `Are you sure deleting product: ${extProduct.data.name}`,
       header: `Deleteing Product`,
@@ -100,6 +104,28 @@ export class ProductsListPage implements OnInit {
   }
   cancel(product?: Extended<Product>) {
     this.modalController.dismiss();
+  }
+
+  onImageClicked(event, productSnapshot: Extended<Product>) {
+    event.stopPropagation();
+    if (productSnapshot.data.thumbUrl) {
+      this.imageDataService
+        .getByUrl(productSnapshot.data.thumbUrl)
+        .then(extImage => {
+          this.openPhoto(0, [extImage]);
+        });
+    }
+
+  }
+  async openPhoto(index, images) {
+    const modal = await this.modalController.create({
+      component: PhotoViewComponent, componentProps: {
+        photo_index: index,
+        canSelect: false,
+        images
+      }
+    });
+    modal.present();
   }
 
 

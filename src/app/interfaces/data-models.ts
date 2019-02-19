@@ -129,6 +129,7 @@ export interface Product extends Editable {
     ch?: string;
   };
   price: number;
+  unit: string;
   code: string;
   style: string;
   notice: string;

@@ -94,7 +94,6 @@ export class AccountsListPage implements OnInit {
     this.modalController.dismiss();
   }
   async presentEditAccountModal(id) {
-    this.dynamicList.closeSlidingItems();
 
     const modal = await this.modalController.create({
       component: EditAccountPage,
@@ -109,6 +108,8 @@ async presentNewAccountModal() {
 }
 
   showAccountTransactions(accSnapshot: Extended<AccountInfo>) {
+    this.dynamicList.closeSlidingItems();
+
     this.presentEditAccountModal(accSnapshot.id);
   }
 
@@ -131,6 +132,8 @@ async presentNewAccountModal() {
 
 
   onDelete(accSnapshot: Extended<AccountInfo>) {
+    this.dynamicList.closeSlidingItems();
+
     /*
     const alert = this.alertController.create({
       message: `Are u sure. deleting ${accSnapshot.data.name} information`,

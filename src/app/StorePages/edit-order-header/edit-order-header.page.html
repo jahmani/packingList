@@ -25,7 +25,6 @@
     <ion-list>
       <ion-item lines="none">
         <app-account-picker
-          autofocus
           formControlName="accountId"
         ></app-account-picker>
         <ion-thumbnail slot="end">
@@ -58,7 +57,6 @@
             <ion-label>CBM</ion-label>
             <ion-input
               class="text-end"
-              autofocus
               formControlName="cbm"
               type="number"
             ></ion-input>
@@ -106,9 +104,9 @@
             class="thumbnail-placeholderr"
             slot="start"
           >
-          <ion-fab-button (click)="showNewOrderRow()">
-            <ion-icon name="add"></ion-icon>
-          </ion-fab-button>
+          <ion-button (click)="showNewOrderRow()" expand="full">
+            <ion-icon name="add" slot="icon-only"></ion-icon>
+          </ion-button>
 
           </ion-thumbnail>
           <ion-label>
