@@ -42,6 +42,8 @@ export class EditProductPage implements OnInit {
       notice: "",
       thumbUrl: "",
       price: "",
+      sPrice: "",
+      size: "",
       unit: ["pcs", Validators.maxLength(5)]
     });
     if (this.productId === "new") {

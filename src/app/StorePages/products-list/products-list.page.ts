@@ -20,8 +20,18 @@ export class ProductsListPage implements OnInit {
   products: Observable<Extended<Product>[]>;
   searchControl: FormControl;
   filteredProducts: Observable<Extended<Product>[]>;
-  @ViewChild('slidingItem') dynamicList: IonList;
+  view: "LIST" | "CARDS" = "CARDS";
+  showSerach = false;
+  @ViewChild('slidingItem1') dynamicList1: IonList;
+  @ViewChild('slidingItem2') dynamicList2: IonList;
+  get dynamicList(): IonList {
+    return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
+  }
 
+  settings: any = {
+    lang: 'ar',
+    theme: 'ios'
+};
   constructor(
     public router: Router,
     private rout: ActivatedRoute,
@@ -104,6 +114,16 @@ export class ProductsListPage implements OnInit {
   }
   cancel(product?: Extended<Product>) {
     this.modalController.dismiss();
+  }
+  switchView() {
+    this.dynamicList.closeSlidingItems();
+    this.view = this.view === 'LIST' ? 'CARDS' : 'LIST';
+  }
+  toggleSearch() {
+    if (this.searchControl) {
+      this.searchControl.setValue("");
+    }
+    this.showSerach = !this.showSerach;
   }
 
   onImageClicked(event, productSnapshot: Extended<Product>) {

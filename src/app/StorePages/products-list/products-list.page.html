@@ -1,15 +1,30 @@
 <ion-header>
 
   <ion-toolbar>
-    <ion-title>ProductsList</ion-title>
+
+
+    <ng-template #showTitle>
+      <ion-title>ProductsList</ion-title>
+    </ng-template>
+    <ion-searchbar *ngIf="showSerach; else showTitle" aria-label="search" [formControl]="searchControl" #searchBar>
+    </ion-searchbar>
     <ion-buttons slot="end">
       <ion-button (click)="showNewProduct()">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
+
       <ion-button *ngIf="canSelect" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+      <ion-button (click)="switchView()">
+        <img [src]="view === 'LIST' ? '/assets/svg/card-thumbs.svg' : '/assets/svg/app-products-thumbs-list.svg'"
+          style="height : 100%" />
+      </ion-button>
+      <ion-button (click)="toggleSearch()">
+        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" style="height : 100%" />
+
       </ion-button>
       <!-- <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
         <ion-button>
@@ -19,17 +34,20 @@
     </ion-buttons>
   </ion-toolbar>
 
+
 </ion-header>
 
 
-<ion-content >
+<ion-content>
 
-  <ion-list #slidingItem>
-    <ion-item-sliding (click)="onProductClicked(product)"   
-    *ngFor="let product of filteredProducts|async">
+
+
+  <ion-list #slidingItem1 *ngIf="view === 'LIST'; else cardsView">
+    <ion-item-sliding (click)="onProductClicked(product)" *ngFor="let product of filteredProducts|async">
       <ion-item>
         <ion-thumbnail slot="end" no-margin (click)="onImageClicked($event, product)">
-          <img [src]="product.data.thumbUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+          <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+            onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
         </ion-thumbnail>
         <ion-label>
           <ion-row>
@@ -38,6 +56,14 @@
             </ion-col>
             <ion-col size="auto" *ngIf="product.data.style">
               <ion-note> /{{product.data.style}}</ion-note>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="product.data.sPrice">
+            <ion-col size="auto">
+              <span>السعر</span>
+            </ion-col>
+            <ion-col size="auto" *ngIf="product.data.style">
+              <ion-note> : {{product.data.sPrice}}</ion-note>
             </ion-col>
           </ion-row>
           <ion-row class="row-revers">
@@ -58,7 +84,7 @@
           <ion-icon name="create"></ion-icon>
           Edit
         </ion-item-option>
-        <ion-item-option (click)="showCopyProduct(product)" color="primary" >
+        <ion-item-option (click)="showCopyProduct(product)" color="primary">
           <ion-icon name="copy"></ion-icon>
           Copy
         </ion-item-option>
@@ -70,14 +96,70 @@
     </ion-item-sliding>
 
   </ion-list>
+  <ng-template #cardsView>
+
+    <ion-list #slidingItem2>
+      <ion-card (click)="onProductClicked(product)" *ngFor="let product of filteredProducts|async">
+        <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+        <img (click)="onImageClicked($event, product)" style="object-fit: cover; max-height: 360px"
+          [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+          onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-item-sliding no-padding>
+
+              <ion-item>
+                <ion-label>
+                  <h1>{{product.data.name}}</h1>
+                  <ion-row no-padding class="row-revers font-small">
+                    <ion-col size="auto" *ngIf="product.data.style">
+                      <ion-text>
+                        <h3>model: {{product.data.style}}</h3>
+                      </ion-text>
+                    </ion-col>
+                    <ion-col size="auto" *ngIf="product.data.size">
+                      <ion-text color="primaery">
+                        <h3>size: {{product.data.size}}</h3>
+                      </ion-text>
+
+                    </ion-col>
+                  </ion-row>
+
+                </ion-label>
+                <ion-badge *ngIf="product.data.sPrice" slot="end">{{product.data.sPrice}} JOD</ion-badge>
+
+              </ion-item>
+              <ion-item-options slot="start" dir="ltr">
+                <ion-item-option color="primary" (click)="showEditProduct(product.id)" slot="bottom" expandable="true">
+                  <ion-icon name="create"></ion-icon>
+                  Edit
+                </ion-item-option>
+                <ion-item-option (click)="showCopyProduct(product)" color="primary">
+                  <ion-icon name="copy"></ion-icon>
+                  Copy
+                </ion-item-option>
+                <ion-item-option color="danger" (click)="delete(product)">
+                  <ion-icon name="trash"></ion-icon>
+                  Delete
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+            <ion-row no-padding class="row-revers font-small">
+              <ion-col size="auto" *ngIf="product.data.code">
+                <span color="drafts"> mark :</span>
+                <ion-text color="drafts"> {{product.data.code}}</ion-text>
+              </ion-col>
+
+              <ion-col size="auto" *ngIf="product.data.notice">
+                <ion-note class="font-small">{{product.data.notice}}</ion-note>
+              </ion-col>
+            </ion-row>
+
+          </ion-card-title>
+        </ion-card-header>
+
+      </ion-card>
+    </ion-list>
+  </ng-template>
+
 </ion-content>
-<ion-footer>
-    <ion-toolbar>
-    <ion-buttons start>
-      <ion-button  (click)="showNewProduct()" icon-only color="royal">
-        <ion-icon name="add"></ion-icon>
-      </ion-button>
-      <ion-searchbar aria-label="search" [showCancelButton]="true" [formControl]="searchControl"></ion-searchbar>
-    </ion-buttons>
-  </ion-toolbar>
-  </ion-footer>

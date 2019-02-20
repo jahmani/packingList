@@ -45,7 +45,7 @@ const routes: Routes = [
 
       {
         path: '',
-        redirectTo: 'pls',
+        redirectTo: 'products',
         pathMatch: 'full'
       }
     ]

@@ -1,0 +1,17 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <path id="svg_4" d="m432,218l-240.5,0c-8.8,0 -16,7.2 -16,16s7.2,16 16,16l240.5,0c8.8,0 16,-7.2 16,-16s-7.2,-16 -16,-16zm0,124l-240.5,0c-8.8,0 -16,7.2 -16,16s7.2,16 16,16l240.5,0c8.8,0 16,-7.2 16,-16s-7.2,-16 -16,-16zm-240.5,-216l240.5,0c8.8,0 16,-7.2 16,-16s-7.2,-16 -16,-16l-240.5,0c-8.8,0 -16,7.2 -16,16s7.2,16 16,16z"/>
+  <rect id="svg_5" height="60" width="59" y="89.8375" x="66.5" fill-opacity="null" stroke-opacity="null" stroke-width="null" stroke="null" fill="null"/>
+  <rect id="svg_6" height="60" width="59" y="216.8375" x="66.5" fill-opacity="null" stroke-opacity="null" stroke-width="null" stroke="null" fill="null"/>
+  <rect id="svg_7" height="60" width="59" y="334.8375" x="66.5" fill-opacity="null" stroke-opacity="null" stroke-width="null" stroke="null" fill="null"/>
+  <rect id="svg_8" height="24" width="258" y="130.8375" x="184.5" stroke-opacity="null" stroke-width="null" stroke="null" fill="#999999"/>
+  <rect id="svg_9" height="24" width="258" y="255.8375" x="184.5" stroke-opacity="null" stroke-width="null" stroke="null" fill="#999999"/>
+  <rect id="svg_10" height="24" width="258" y="377.8375" x="184.5" stroke-opacity="null" stroke-width="null" stroke="null" fill="#999999"/>
+ </g>
+</svg>
