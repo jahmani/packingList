@@ -1,0 +1,21 @@
+<ion-content>
+  <ion-segment scrollable mode="ios" [value]="productsPage.view" color="secondary" (ionChange)="viewChanged($event)">
+    <ion-segment-button value="GRID">
+      <ion-label>thumbs</ion-label>
+      <img style="max-height: 1em;" src='/assets/svg/thumbnails.svg'>
+    </ion-segment-button>
+    <ion-segment-button value="LIST">
+      <ion-label>list</ion-label>
+      <img style="max-height: 1em;" src='/assets/svg/list.svg'>
+    </ion-segment-button>
+    <ion-segment-button value="CARDS">
+      <ion-label>cards</ion-label>
+      <img style="max-height: 1em;" src='/assets/svg/thumbnails.svg'>
+    </ion-segment-button>
+    <ion-segment-button value="SLIDES">
+      <ion-label>slides</ion-label>
+      <img style="max-height: 1em;" src='/assets/svg/slideshow.svg'>
+    </ion-segment-button>
+  </ion-segment>
+
+</ion-content>

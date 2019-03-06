@@ -23,7 +23,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content no-badding color="dark" dir="ltr">
+<ion-content no-scroll no-badding color="dark" dir="ltr">
   <ion-slides zoom pager="true" [options]="sliderOptions">
     <ion-slide *ngFor="let image of images">
       <div class="swiper-zoom-container">
@@ -33,7 +33,7 @@
             class="fixed"
             *ngIf="!image.ext.loaded"
           ></ion-spinner>
-          <img
+          <img style="object-fit:scale-down;"
             [src]="image.data.url"
             (load)="image.ext.loaded = true"
             [hidden]="!image.ext.loaded"

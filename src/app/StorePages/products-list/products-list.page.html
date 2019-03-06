@@ -14,20 +14,25 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
-
       <ion-button *ngIf="canSelect" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
-      <ion-button (click)="switchView()">
-        <img [src]="view === 'LIST' ? '/assets/svg/card-thumbs.svg' : '/assets/svg/app-products-thumbs-list.svg'"
-          style="height : 100%" />
+      <ion-button (click)="backView()" *ngIf="toggleView; else toggleViewButton">
+        <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
       </ion-button>
+      <ng-template #toggleViewButton>
+          <ion-button (click)="presentPopover($event)">
+              <ion-icon slot="icon-only" name="more"></ion-icon>
+            </ion-button>
+      
+      </ng-template>
       <ion-button (click)="toggleSearch()">
-        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" style="height : 100%" />
+        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" style="height : 70%" />
 
       </ion-button>
       <!-- <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
         <ion-button>
+
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
       </ion-menu-toggle> -->
@@ -38,128 +43,65 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content no-badding color="dark">
 
-
-
-  <ion-list #slidingItem1 *ngIf="view === 'LIST'; else cardsView">
-    <ion-item-sliding (click)="onProductClicked(product)" *ngFor="let product of filteredProducts|async">
-      <ion-item>
-        <ion-thumbnail slot="end" no-margin (click)="onImageClicked($event, product)">
-          <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
-            onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
-        </ion-thumbnail>
-        <ion-label>
-          <ion-row>
-            <ion-col size="auto">
-              <span>{{product.data.name}}</span>
-            </ion-col>
-            <ion-col size="auto" *ngIf="product.data.style">
-              <ion-note> /{{product.data.style}}</ion-note>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="product.data.sPrice">
-            <ion-col size="auto">
-              <span>السعر</span>
-            </ion-col>
-            <ion-col size="auto" *ngIf="product.data.style">
-              <ion-note> : {{product.data.sPrice}}</ion-note>
-            </ion-col>
-          </ion-row>
-          <ion-row class="row-revers">
-            <ion-col size="auto" *ngIf="product.data.code">
-              <span class="font-small">Code : {{product.data.code}}</span>
-            </ion-col>
-            <ion-col size="auto" *ngIf="product.data.notice">
-              <ion-note class="font-small">{{product.data.notice}}</ion-note>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-          </ion-row>
-        </ion-label>
-
-      </ion-item>
-      <ion-item-options slot="start" dir="ltr">
-        <ion-item-option color="primary" (click)="showEditProduct(product.id)" slot="bottom" expandable="true">
-          <ion-icon name="create"></ion-icon>
-          Edit
-        </ion-item-option>
-        <ion-item-option (click)="showCopyProduct(product)" color="primary">
-          <ion-icon name="copy"></ion-icon>
-          Copy
-        </ion-item-option>
-        <ion-item-option color="danger" (click)="delete(product)">
-          <ion-icon name="trash"></ion-icon>
-          Delete
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-
+  <ion-list #slidingItem1 *ngIf="(view === 'LIST' || view === 'CARDS'); else slidesView">
+    <app-product-view *ngFor="let product of filteredProducts|async; let i=index; trackBy: trackByFn" [product]="product"
+      [options]="{view: view === 'LIST' ? 'ITEM' : 'CARD', editable:true}" (copy)="showCopyProduct(product)"
+      (edit)="showEditProduct(product.id)" (delete)="delete(product)"
+      (prodClick)="onProductClicked(product,i)"></app-product-view>
   </ion-list>
-  <ng-template #cardsView>
+  
+  <!-- 
+    <ion-list #slidingItem1 *ngIf="(view === 'LIST' || view === 'CARDS'); else slidesView">
+    <app-product-view *ngFor="let product of filteredProducts|async" [product]="product"
+      [options]="{view: view === 'LIST' ? 'ITEM' : 'CARD', editable:true}"
+      (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)"
+      (delete)="delete(product)"></app-product-view>
+  </ion-list>
+ -->
 
-    <ion-list #slidingItem2>
-      <ion-card (click)="onProductClicked(product)" *ngFor="let product of filteredProducts|async">
+
+  <ng-template #slidesView >
+    <ng-container  *ngIf="view === 'SLIDES'; else gridView" #slids>
+      
+    <ion-slides style="height:100%;"
+    [options]= "{initialSlide:slideIndex}"    >
+      <ion-slide *ngFor="let product of filteredProducts|async"
+      style=" height: 100%;"
+        (click)="showSlideDetails = !showSlideDetails">
         <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
-        <img (click)="onImageClicked($event, product)" style="object-fit: cover; max-height: 360px"
-          [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
-          onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
-        <ion-card-header>
-          <ion-card-title>
-            <ion-item-sliding no-padding>
+        <div class="swiper-zoom-container">
+          <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false}"
+            style="width: inherit; height: inherit;"></app-product-view>
+        </div>
+      </ion-slide>
 
-              <ion-item>
-                <ion-label>
-                  <h1>{{product.data.name}}</h1>
-                  <ion-row no-padding class="row-revers font-small">
-                    <ion-col size="auto" *ngIf="product.data.style">
-                      <ion-text>
-                        <h3>model: {{product.data.style}}</h3>
-                      </ion-text>
-                    </ion-col>
-                    <ion-col size="auto" *ngIf="product.data.size">
-                      <ion-text color="primaery">
-                        <h3>size: {{product.data.size}}</h3>
-                      </ion-text>
+      <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+    </ion-slides>
+    <ng-container *ngIf="showSlideDetails">
+      <!-- [ngClass]="slids.el.dir ==='rtl' ? 'swiper-button-next' : 'swiper-button-prev'" 
+       *ngIf="!slids.isBeginning()" 
+      -->
+      <div class='swiper-button-next' (click)="slids.slidePrev()"></div>
+      <!--
+               [ngClass]="slids.el.dir !=='rtl' ? 'swiper-button-next' : 'swiper-button-prev'"
+             *ngIf="!slids.isEnd()"
+              -->
+      <div class='swiper-button-prev' (click)="slids.slideNext()"></div>
+    </ng-container>
+  </ng-container >
 
-                    </ion-col>
-                  </ion-row>
-
-                </ion-label>
-                <ion-badge *ngIf="product.data.sPrice" slot="end">{{product.data.sPrice}} JOD</ion-badge>
-
-              </ion-item>
-              <ion-item-options slot="start" dir="ltr">
-                <ion-item-option color="primary" (click)="showEditProduct(product.id)" slot="bottom" expandable="true">
-                  <ion-icon name="create"></ion-icon>
-                  Edit
-                </ion-item-option>
-                <ion-item-option (click)="showCopyProduct(product)" color="primary">
-                  <ion-icon name="copy"></ion-icon>
-                  Copy
-                </ion-item-option>
-                <ion-item-option color="danger" (click)="delete(product)">
-                  <ion-icon name="trash"></ion-icon>
-                  Delete
-                </ion-item-option>
-              </ion-item-options>
-            </ion-item-sliding>
-            <ion-row no-padding class="row-revers font-small">
-              <ion-col size="auto" *ngIf="product.data.code">
-                <span color="drafts"> mark :</span>
-                <ion-text color="drafts"> {{product.data.code}}</ion-text>
-              </ion-col>
-
-              <ion-col size="auto" *ngIf="product.data.notice">
-                <ion-note class="font-small">{{product.data.notice}}</ion-note>
-              </ion-col>
-            </ion-row>
-
-          </ion-card-title>
-        </ion-card-header>
-
-      </ion-card>
-    </ion-list>
   </ng-template>
+
+  <ng-template #gridView >
+      <div class="images">
+        <app-product-view class="one-image"  *ngFor="let product of filteredProducts|async; let i=index" [product]="product" [options]="{view:'THUMB', editable:false}"
+          (prodClick)="onProductClicked(product,i)">
+        </app-product-view>
+
+      </div>
+  </ng-template>
+
 
 </ion-content>

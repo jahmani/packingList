@@ -23,12 +23,13 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { EditOrderRowPageModule } from "./StorePages/edit-order-row/edit-order-row.module";
 import { EditProductPageModule } from "./StorePages/edit-product/edit-product.module";
 import { EditAccountPageModule } from "./StorePages/edit-account/edit-account.module";
+import { ProductsPageSettingsComponent } from './products-page-settings/products-page-settings.component';
 
 @NgModule({
 
-  declarations: [AppComponent, MenuComponent,
+  declarations: [AppComponent, MenuComponent, ProductsPageSettingsComponent,
      ],
-  entryComponents: [AccountsListPage],
+  entryComponents: [AccountsListPage, ProductsPageSettingsComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

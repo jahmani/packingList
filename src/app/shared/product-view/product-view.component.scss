@@ -1,0 +1,99 @@
+.font-small{
+    font-size: small;
+    font-weight: lighter;
+}
+.font-bold{
+    font-weight: bold;
+}
+
+.row-revers{
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+ion-thumbnail{
+    width: 70px;
+    height: 70px;
+}
+.fixed{
+    position: fixed;
+}
+ion-badge 
+{
+    margin-top: 2px;
+    margin-inline-end: 1px;
+
+}
+.item-card-header{
+    -webkit-padding-end: 0px;
+    padding-inline-end: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.item-thumb{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.thumb-view{
+    position: relative;
+}
+.thumb-text{
+    position: absolute;
+    bottom: 0px;
+    margin: 0px;
+    width: 100%;
+    padding-bottom: 8px;
+    background-color: #0f090987;    
+}
+ion-thumbnail{
+    width: 90px;
+    height: 90px;
+}
+.itemView,
+.cardView,
+.slideView{
+    ion-item{
+        --inner-padding-end : 0px;
+        --min-height	: 30px
+    }
+}
+.slideView{
+    ion-card{
+        margin: 16px;
+        background-color: white;
+        ion-card-header{
+            padding-top: 8px;
+            padding-bottom: 8px;
+        }
+    }
+
+}
+.slide-img {
+    object-fit: cover;
+    width: 100%;
+
+}
+ .full-img {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+  //  transition: opacity 1s linear;
+  }
+  
+
+   .full-img.loaded {
+    opacity: 1;
+    position: unset;
+    top: unset;
+    left: unset;
+    width:unset;
+    object-fit: cover;
+  }
+  .thumb-img.loaded {
+      display: none;
+  }
+  
+  .img-small {
+    filter: blur(50px);
+  }

@@ -1,0 +1,19 @@
+.font-small{
+    font-size: small;
+    font-weight: lighter;
+}
+.font-bold{
+    font-weight: bold;
+}
+
+.row-revers{
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+ion-thumbnail{
+    width: 70px;
+    height: 70px;
+}
+.fixed{
+    position: fixed;
+}

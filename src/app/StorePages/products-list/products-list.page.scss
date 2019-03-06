@@ -2,6 +2,9 @@
     font-size: small;
     font-weight: lighter;
 }
+.font-bold{
+    font-weight: bold;
+}
 
 .row-revers{
     flex-direction: row-reverse;
@@ -10,4 +13,33 @@
 ion-thumbnail{
     width: 70px;
     height: 70px;
+}
+.fixed{
+    position: fixed;
+}
+.swiper-zoom-container{
+   height: unset;
+}
+
+
+@media (min-width: 0px) {
+    .images {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 420px) {
+    .images {
+        column-count: 3;
+    }
+}
+
+@media (min-width: 720px) {
+    .images {
+        column-count: 4;
+    }
+}
+
+.one-image {
+    margin: 2px;
 }

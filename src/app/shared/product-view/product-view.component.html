@@ -1,0 +1,135 @@
+<ng-container [ngSwitch]="options.view">
+  <ion-card *ngSwitchCase="'CARD'" class="cardView" >
+    <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+    <img  (click)="prodClick.emit(product)" style="object-fit: cover; max-height: 360px"
+      [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+      onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+    <ion-card-header>
+      <ion-card-title>
+        <ion-item-sliding>
+          <ion-item  (click)="prodClick.emit(product)" no-padding [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
+            <ion-label>
+              <ng-container *ngTemplateOutlet="productDetails"></ng-container>
+            </ion-label>
+          </ion-item>
+          <ng-container *ngTemplateOutlet="ionItemOptions"></ng-container>
+        </ion-item-sliding>
+        <ng-container *ngTemplateOutlet="productNotesRow"></ng-container>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+  <ion-card *ngSwitchCase="'ITEM'" class="itemView">
+    <ion-card-header class="item-card-header">
+      <ion-card-title>
+        <ion-item-sliding no-padding>
+          <ion-item  (click)="prodClick.emit(product)" no-padding [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
+            <ion-thumbnail class="item-thumb" slot="end" (click)="imgClick.emit($event, product)">
+              <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+                onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+            </ion-thumbnail>
+            <ion-label>
+              <ng-container *ngTemplateOutlet="productDetails"></ng-container>
+            </ion-label>
+          </ion-item>
+          <ng-container *ngTemplateOutlet="ionItemOptions"></ng-container>
+        </ion-item-sliding>
+        <ng-container *ngTemplateOutlet="productNotesRow"></ng-container>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+
+  <ng-container *ngSwitchCase="'SLIDE'" >
+    <ion-spinner name="lines" class="fixed" *ngIf="product.data.thumbUrl  && !product.ext.imageFile.ext.loaded">
+    </ion-spinner>
+
+    <img class="slide-img thumb-img" #thumbImg
+      [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+      [ngClass]="{'loaded':product.data.thumbUrl &&  product.ext.imageFile.ext.loaded}"
+      onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+
+    <img class="slide-img full-img" #fullImg *ngIf="product.data.thumbUrl"
+      [src]="product.data.thumbUrl ? product.ext.imageFile.data.url: 'assets/img/no-image.jpg'"
+      [ngClass]="{'loaded':product.data.thumbUrl &&  product.ext.imageFile.ext.loaded}" (load)="onIonImgDidLoad()">
+
+    <div class="slideCardWrapper slideView" style="
+      position: absolute;
+      bottom: 0px;
+      margin: 0px;
+      width: 100%;">
+      <ion-card *ngIf="!options.photoOnly">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-item-sliding>
+              <ion-item [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'" no-padding>
+                <ion-label>
+                  <ng-container *ngTemplateOutlet="productDetails"></ng-container>
+                </ion-label>
+              </ion-item>
+              <ng-container *ngTemplateOutlet="ionItemOptions"></ng-container>
+            </ion-item-sliding>
+            <ng-container *ngTemplateOutlet="productNotesRow"></ng-container>
+          </ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </div>
+
+  </ng-container>
+
+  <div *ngSwitchCase="'THUMB'" class="thumb-view">
+
+    <img  (click)="prodClick.emit(product)" class="slide-img thumb-img" #thumbImg
+      [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+      onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+      <div class="thumb-text">
+        <ion-text>{{product.data.name}}</ion-text>
+      </div>
+    <!-- <ng-container *ngTemplateOutlet="productDetails"></ng-container> -->
+    </div>
+
+
+  <ng-template #ionItemOptions>
+    <ion-item-options *ngIf="options.editable" slot="start" dir="ltr">
+      <ion-item-option color="primary" (click)="edit.emit(product.id)" slot="bottom" expandable="true">
+        <ion-icon name="create"></ion-icon>
+        Edit
+      </ion-item-option>
+      <ion-item-option (click)="copy.emit(product)" color="primary">
+        <ion-icon name="copy"></ion-icon>
+        Copy
+      </ion-item-option>
+      <ion-item-option color="danger" (click)="delete.emit(product)">
+        <ion-icon name="trash"></ion-icon>
+        Delete
+      </ion-item-option>
+    </ion-item-options>
+  </ng-template>
+
+  <ng-template #productNotesRow>
+    <ion-item *ngIf="options.showNotes && product.data.notice" no-padding lines="none">
+      <ion-row no-padding>
+        <!-- <ion-row no-padding *ngIf="options.showNotes" class="row-revers font-small"> -->
+        <!-- <ion-col size="auto" *ngIf="product.data.code">
+      <span color="drafts"> mark :</span>
+      <ion-text color="drafts"> {{product.data.code}}</ion-text>
+    </ion-col> -->
+
+        <ion-col size="auto">
+          <ion-note class="font-small">{{product.data.notice}}</ion-note>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+
+  </ng-template>
+
+
+  <ng-template #productDetails>
+    <h1>{{product.data.name}}</h1>
+    <ion-row no-padding class="row-revers font-small">
+      <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="font-bold">
+        {{product.data.sPrice}} JOD</ion-badge>
+      <ion-badge color="tertiary" *ngIf="product.data.size">size: {{product.data.size}}</ion-badge>
+      <ion-badge color="secondary" *ngIf="product.data.style">
+        model: {{product.data.style}}
+      </ion-badge>
+    </ion-row>
+  </ng-template>

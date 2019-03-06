@@ -12,6 +12,7 @@ import { ProductPickerComponent } from './product-picker/product-picker.componen
 import { RouterModule } from "@angular/router";
 import { PackingListComponent } from './packing-list/packing-list.component';
 import { OrderRowEditorComponent } from './order-row-editor/order-row-editor.component';
+import { ProductViewComponent } from "./product-view/product-view.component";
 
 @NgModule({
   imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
@@ -25,6 +26,7 @@ import { OrderRowEditorComponent } from './order-row-editor/order-row-editor.com
     ProductPickerComponent,
     PackingListComponent,
     OrderRowEditorComponent,
+  ProductViewComponent
   ],
   entryComponents: [PhotoViewComponent],
   exports: [
@@ -34,7 +36,8 @@ import { OrderRowEditorComponent } from './order-row-editor/order-row-editor.com
     OrderRowsListComponent,
     ProductPickerComponent,
     PackingListComponent,
-    OrderRowEditorComponent
+    OrderRowEditorComponent,
+    ProductViewComponent
   ]
 })
 export class SharedModule {}

@@ -81,8 +81,8 @@ export class ImageService {
   }
   generateThumb(
     img,
-    MAX_WIDTH: number = 700,
-    MAX_HEIGHT: number = 700,
+    MAX_WIDTH: number = 70,
+    MAX_HEIGHT: number = 70,
     quality: number = 1,
     type?: string
   ) {

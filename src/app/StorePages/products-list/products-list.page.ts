@@ -1,14 +1,16 @@
 import { Component, OnInit, Optional, ViewChild } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
 import { Extended, Product } from "../../interfaces/data-models";
-import { NavParams, AlertController, ModalController, IonItemSliding, IonList } from "@ionic/angular";
+import { NavParams, AlertController, ModalController, IonItemSliding, IonList, PopoverController } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
-import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
 import { FormControl } from "@angular/forms";
 import { debounceTime, map, startWith, tap } from "rxjs/operators";
 import { EditProductPage } from "../edit-product/edit-product.page";
-import { ImagesDataService } from "../../providers/StoreData/images-data.service";
+import { ProductsPageSettingsComponent } from "../../products-page-settings/products-page-settings.component";
+
+type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
+
 
 @Component({
   selector: "app-products-list",
@@ -16,22 +18,9 @@ import { ImagesDataService } from "../../providers/StoreData/images-data.service
   styleUrls: ["./products-list.page.scss"]
 })
 export class ProductsListPage implements OnInit {
-  canSelect: any;
-  products: Observable<Extended<Product>[]>;
-  searchControl: FormControl;
-  filteredProducts: Observable<Extended<Product>[]>;
-  view: "LIST" | "CARDS" = "CARDS";
-  showSerach = false;
-  @ViewChild('slidingItem1') dynamicList1: IonList;
-  @ViewChild('slidingItem2') dynamicList2: IonList;
   get dynamicList(): IonList {
     return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
   }
-
-  settings: any = {
-    lang: 'ar',
-    theme: 'ios'
-};
   constructor(
     public router: Router,
     private rout: ActivatedRoute,
@@ -39,7 +28,7 @@ export class ProductsListPage implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     private productsRep: ProductsDataService,
-    private imageDataService: ImagesDataService
+    private popoverCtrl: PopoverController
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
     const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
@@ -49,6 +38,25 @@ export class ProductsListPage implements OnInit {
     this.products = this.productsRep.FormatedList;
     this.searchControl = new FormControl();
   }
+  canSelect: any;
+  products: Observable<Extended<Product>[]>;
+  searchControl: FormControl;
+  showSlideDetails = true;
+  filteredProducts: Observable<Extended<Product>[]>;
+  view: ViewType = "GRID";
+  toggleView: ViewType;
+  iconMap: { [id in ViewType]: string } = {
+    "CARDS": '/assets/svg/thumbnails.svg',
+    "GRID": '/assets/svg/list.svg',
+    "LIST": '/assets/svg/card-thumbs.svg',
+    "SLIDES": '/assets/svg/_ionicons_svg_md-arrow-forward.svg'
+  };
+  showSerach = false;
+  @ViewChild('slidingItem1') dynamicList1: IonList;
+  @ViewChild('slidingItem2') dynamicList2: IonList;
+
+
+  slideIndex = 0;
 
   ionViewDidLoad() {
     // searchControl.valueChanges will not emit values untill the user make input
@@ -107,17 +115,46 @@ export class ProductsListPage implements OnInit {
       })
       .catch(console.log);
   }
-  onProductClicked(product?: Extended<Product>) {
+  onProductClicked(product?: Extended<Product>, i?) {
     if (product && this.canSelect) {
       this.modalController.dismiss(product);
+    } else if (product && i !== undefined) {
+      this.toggleView = this.view;
+      this.view = "SLIDES";
+      this.slideIndex = i;
     }
   }
   cancel(product?: Extended<Product>) {
     this.modalController.dismiss();
   }
+  backView() {
+    this.view = this.toggleView;
+    this.toggleView = undefined;
+  }
   switchView() {
-    this.dynamicList.closeSlidingItems();
-    this.view = this.view === 'LIST' ? 'CARDS' : 'LIST';
+    if (this.dynamicList) {
+      this.dynamicList.closeSlidingItems();
+    }
+    // this.view = this.view === 'LIST' ? 'CARDS' : 'LIST';
+    switch (this.view) {
+      case "LIST":
+        this.view = "CARDS";
+        this.toggleView = "CARDS";
+        break;
+      case "CARDS":
+        this.view = "GRID";
+        this.toggleView = "GRID";
+        break;
+      case "SLIDES":
+        this.view = this.toggleView;
+        break;
+      case "GRID":
+        this.view = "LIST";
+        this.toggleView = "LIST";
+        break;
+      default:
+        break;
+    }
   }
   toggleSearch() {
     if (this.searchControl) {
@@ -125,43 +162,56 @@ export class ProductsListPage implements OnInit {
     }
     this.showSerach = !this.showSerach;
   }
+  async presentPopover(ev) {
+    const popover = await this.popoverCtrl.create( {
+      component : ProductsPageSettingsComponent,
+      // dynamic data to display
+      componentProps: {productsPage: this},
+      event: ev,
 
-  onImageClicked(event, productSnapshot: Extended<Product>) {
-    event.stopPropagation();
-    if (productSnapshot.data.thumbUrl) {
-      this.imageDataService
-        .getByUrl(productSnapshot.data.thumbUrl)
-        .then(extImage => {
-          this.openPhoto(0, [extImage]);
-        });
-    }
-
-  }
-  async openPhoto(index, images) {
-    const modal = await this.modalController.create({
-      component: PhotoViewComponent, componentProps: {
-        photo_index: index,
-        canSelect: false,
-        images
-      }
+      // class to force positioning
+      cssClass: 'my-class'
     });
-    modal.present();
+    return await popover.present();
   }
 
+  // onImageClicked(event, productSnapshot: Extended<Product>) {
+  //   event.stopPropagation();
+  //   if (productSnapshot.data.thumbUrl) {
+  //     this.imageDataService
+  //       .getByUrl(productSnapshot.data.thumbUrl)
+  //       .then(extImage => {
+  //         this.openPhoto(0, [extImage]);
+  //       });
+  //   }
 
-  async showProductImage(productSnapshot: Extended<Product>) {
-    if (productSnapshot.ext.imageFile) {
-      const modal = await this.modalController.create({
-        component: PhotoViewComponent,
-        componentProps: {
-          canDelete: false,
-          canSelect: false,
-          images: [productSnapshot.data.thumbUrl]
-        }
-      });
-      return modal.present();
-    }
-  }
+  // }
+  // async openPhoto(index, images) {
+  //   const modal = await this.modalController.create({
+  //     component: PhotoViewComponent, componentProps: {
+  //       photo_index: index,
+  //       canSelect: false,
+  //       images
+  //     }
+  //   });
+  //   modal.present();
+  // }
+
+
+  // async showProductImage(productSnapshot: Extended<Product>) {
+  //   if (productSnapshot.ext.imageFile) {
+  //     const modal = await this.modalController.create({
+  //       component: PhotoViewComponent,
+  //       componentProps: {
+  //         canDelete: false,
+  //         canSelect: false,
+  //         images: [productSnapshot.data.thumbUrl]
+  //       }
+  //     });
+  //     return modal.present();
+  //   }
+  // }
+
   async showEditProduct(id, slidingItem?: IonItemSliding) {
     if (slidingItem) {
       await slidingItem.close();
@@ -169,7 +219,9 @@ export class ProductsListPage implements OnInit {
     this.presentEditProduct(id);
   }
   async presentEditProduct(id, copy?) {
-    await this.dynamicList.closeSlidingItems();
+    if (this.dynamicList) {
+      await this.dynamicList.closeSlidingItems();
+    }
     const modal = await this.modalController.create({
       component: EditProductPage,
       componentProps: {
@@ -177,36 +229,25 @@ export class ProductsListPage implements OnInit {
         copy
       }, cssClass: "edit-modal"
     });
-    return modal.present();
+    modal.present();
+    return modal.onDidDismiss();
   }
   async showNewProduct() {
-    return this.presentEditProduct("new");
+    return this.presentEditProduct("new").then(data => {
+      if (data) {
+        this.slideIndex = 0;
+      }
+    });
   }
   async showCopyProduct(product: Extended<Product>) {
 
     return this.presentEditProduct("new", product.data);
   }
-
-  // async onDelete(productSnapshot: Extended<Product>) {
-  //   const alert = await this.alertController.create({
-  //     message: `Are u sure. deleting ${productSnapshot.data.name} Product`,
-  //     header: "Deleting Product",
-  //     buttons: [
-  //       {
-  //         text: "Ok",
-  //         handler: () => {
-  //           this.productsRep.remove(productSnapshot);
-  //         }
-  //       },
-  //       {
-  //         text: "Cancel"
-  //       }
-  //     ]
-  //   });
-  //   alert.present();
-  // }
-
-
+  trackByFn(index, product: Extended<Product>) {
+    if (product) {
+      return product.id;
+    }
+  }
   ngOnInit() {
     if (this.navParams) {
       this.canSelect = this.navParams.get("canSelect");
@@ -215,3 +256,4 @@ export class ProductsListPage implements OnInit {
 
   }
 }
+

@@ -37,6 +37,11 @@ const routes: Routes = [
           "./products-list/products-list.module#ProductsListPageModule"
       },
       {
+        path: "catalog",
+        loadChildren:
+          "./catalog/catalog2.module#CatalogPageModule"
+      },
+      {
         path: "EditOrderHeader",
         loadChildren:
           "./edit-order-header/edit-order-header.module#EditOrderHeaderPageModule"

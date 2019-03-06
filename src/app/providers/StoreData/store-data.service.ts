@@ -5,12 +5,13 @@ import { ActiveStoreService } from "../AppData/active-store.service";
 import { conatctPaths } from "../../Util/contact-paths";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { map, share } from "rxjs/operators";
+import { Observable, of } from "rxjs";
 
 export class StoreDataService<T extends Editable> extends FirestoreData<T> {
   constructor(
-    afs: AngularFirestore,
+    public afs: AngularFirestore,
     ass: ActiveStoreService,
-    dataSubPath: string
+    private dataSubPath: string
   ) {
     super(
       afs,
@@ -20,5 +21,8 @@ export class StoreDataService<T extends Editable> extends FirestoreData<T> {
         })
       )
     );
+  }
+  ForStore(storeId) {
+    return new FirestoreData(this.afs, of(conatctPaths(StorePathConfig.basePath, storeId, this.dataSubPath)));
   }
 }

@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ProductsListPage } from './products-list.page';
-import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
-
+import { CatalogPage } from './catalog.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProductsListPage
+    component: CatalogPage
   }
 ];
 
@@ -20,10 +18,12 @@ const routes: Routes = [
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SharedModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProductsListPage]
+  declarations: [CatalogPage]
 })
-export class ProductsListPageModule {}
+export class CatalogPageModule {
+c = 0;
+}
+

@@ -1,0 +1,213 @@
+<ion-header>
+
+  <ion-toolbar>
+
+
+    <ng-template #showTitle>
+      <ion-title>ProductsList</ion-title>
+    </ng-template>
+    <ion-searchbar *ngIf="showSerach; else showTitle" aria-label="search" [formControl]="searchControl" #searchBar>
+    </ion-searchbar>
+    <ion-buttons slot="end">
+
+    </ion-buttons>
+    <ion-buttons slot="start">
+
+      <ion-button (click)="switchView()">
+        <img [src]="view === 'LIST' ? '/assets/svg/card-thumbs.svg' : '/assets/svg/app-products-thumbs-list.svg'"
+          style="height : 100%" />
+      </ion-button>
+      <ion-button (click)="toggleSearch()">
+        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" style="height : 100%" />
+
+      </ion-button>
+      <!-- <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
+        <ion-button>
+          <ion-icon slot="icon-only" name="menu"></ion-icon>
+        </ion-button>
+      </ion-menu-toggle> -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content no-badding color="dark">
+  <ion-list #slidingItem1 *ngIf="view === 'LIST'; else cardsView">
+      <ion-item *ngFor="let product of filteredProducts|async">
+        <ion-thumbnail slot="end" no-margin >
+          <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+            onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+        </ion-thumbnail>
+        <ion-label>
+          <ion-row>
+            <ion-col size="auto">
+              <span>{{product.data.name}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row no-padding class="row-revers font-small">
+            <ion-col  class="font-bold" size="auto" *ngIf="product.data.sPrice">
+              <ion-badge>{{product.data.sPrice}} JOD</ion-badge>
+            </ion-col>
+            <ion-col size="auto" *ngIf="product.data.size">
+              <ion-text color="primaery">
+                <h3>size: {{product.data.size}}</h3>
+              </ion-text>
+            </ion-col>
+            <ion-col size="auto" *ngIf="product.data.style">
+              <ion-text>
+                <h3>model: {{product.data.style}}</h3>
+              </ion-text>
+            </ion-col>
+          </ion-row>
+          <ion-row class="row-revers">
+            <ion-col size="auto" *ngIf="product.data.code">
+              <span class="font-small">Code : {{product.data.code}}</span>
+            </ion-col>
+            <ion-col size="auto" *ngIf="product.data.notice">
+              <ion-note class="font-small">{{product.data.notice}}</ion-note>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+          </ion-row>
+        </ion-label>
+
+      </ion-item>
+  </ion-list>
+
+
+  <ng-template #cardsView>
+    <ion-list #slidingItem2 *ngIf='this.view === "CARDS"; else slidesView'>
+      <ion-card *ngFor="let product of filteredProducts|async">
+        <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+        <img  style="object-fit: cover; max-height: 360px"
+          [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+          onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+        <ion-card-header>
+          <ion-card-title>
+              <ion-item  no-padding>
+                <ion-label>
+                  <h1>{{product.data.name}}</h1>
+                  <ion-row no-padding class="row-revers font-small">
+                    <div *ngIf="product.data.sPrice">
+                      <ion-badge color="primary" class="font-bold">{{product.data.sPrice}} JOD</ion-badge>
+                    </div>
+                    <div *ngIf="product.data.size">
+                      <ion-badge>size: {{product.data.size}}</ion-badge>
+                      <h3></h3>
+                    </div>
+                    <div *ngIf="product.data.style">
+                      <ion-badge>
+                        <h3>model: {{product.data.style}}</h3>
+                      </ion-badge>
+                    </div>
+                  </ion-row>
+
+                </ion-label>
+
+              </ion-item>
+
+              <ion-row no-padding class="row-revers font-small">
+              <ion-col size="auto" *ngIf="product.data.code">
+                <span color="drafts"> mark :</span>
+                <ion-text color="drafts"> {{product.data.code}}</ion-text>
+              </ion-col>
+
+              <ion-col size="auto" *ngIf="product.data.notice">
+                <ion-note class="font-small">{{product.data.notice}}</ion-note>
+              </ion-col>
+            </ion-row>
+
+          </ion-card-title>
+        </ion-card-header>
+      </ion-card>
+    </ion-list>
+  </ng-template>
+
+
+
+
+
+
+  <ng-template #slidesView>
+    <ion-slides #slidingItem3 style="height:100%;">
+      <ion-slide  *ngFor="let product of filteredProducts|async"
+        style="    height: 100%;" (click)="showSlideDetails = !showSlideDetails">
+        <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+        <div class="swiper-zoom-container">
+            <ion-spinner
+            name="lines"
+            class="fixed"
+            *ngIf="product.data.thumbUrl  && !product.ext.imageFile.ext.loaded"
+          ></ion-spinner>
+          <ion-img style="object-fit:scale-down;" [hidden]="product.data.thumbUrl &&  product.ext.imageFile.ext.loaded"
+            [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+            onerror="this.src='assets/img/no-image.jpg';this.onerror='';" ></ion-img>
+
+            <!-- 
+              [style.visibility]="!product.data.thumbUrl  || !product.ext.imageFile.ext.loaded ? 'hidden' :  'visible'">
+                        [hidden]="!product.data.thumbUrl  || !product.ext.imageFile.ext.loaded" 
+
+            -->
+
+
+          <ion-img style="object-fit:scale-down;"
+            [src]="product.data.thumbUrl ? product.ext.imageFile.data.url: 'assets/img/no-image.jpg'"
+            (load)="product.data.thumbUrl && product.ext.imageFile.ext.loaded = true"
+            [style.width]="!product.data.thumbUrl  || !product.ext.imageFile.ext.loaded ? '0' :  'auto'">
+
+            ></ion-img>
+          <ion-card *ngIf="showSlideDetails" style="
+        position: absolute;
+        bottom: 0px;
+        margin: 0px;
+        width: 100%;">
+            <ion-card-header>
+              <ion-card-title>
+
+                  <ion-item  style="opacity:1">
+                    <ion-label>
+                      <h1>{{product.data.name}}</h1>
+                      <ion-row no-padding class="row-revers font-small">
+                        <div *ngIf="product.data.sPrice">
+                          <ion-badge color="primary">{{product.data.sPrice}} JOD</ion-badge>
+                        </div>
+                        <div *ngIf="product.data.size">
+                          <ion-badge>size: {{product.data.size}}</ion-badge>
+                          <h3></h3>
+                        </div>
+                        <div *ngIf="product.data.style">
+                          <ion-badge>
+                            <h3>model: {{product.data.style}}</h3>
+                          </ion-badge>
+                        </div>
+                      </ion-row>
+
+                    </ion-label>
+
+                  </ion-item>
+                <!-- <ion-row no-padding class="row-revers font-small">
+                  <ion-col size="auto" *ngIf="product.data.code">
+                    <span color="drafts"> mark :</span>
+                    <ion-text color="drafts"> {{product.data.code}}</ion-text>
+                  </ion-col>
+
+                  <ion-col size="auto" *ngIf="product.data.notice">
+                    <ion-note class="font-small">{{product.data.notice}}</ion-note>
+                  </ion-col>
+                </ion-row> -->
+
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </div>
+
+      </ion-slide>
+
+    </ion-slides>
+    <ng-container *ngIf="showSlideDetails">
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+
+    </ng-container>
+  </ng-template>
+
+
+</ion-content>
