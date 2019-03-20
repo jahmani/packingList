@@ -13,16 +13,7 @@ export class AuthService {
     private afs: AngularFirestore) {
     //// Get auth data, then get firestore user document || null
     this.user = this.afAuth.authState;
-    /*.pipe(
-      switchMap(user => {
-        if (user) {
-          return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
-        } else {
-          return Observable.of(null)
-        }
-      })
-    )
-    */
+
     this.user.subscribe((user) => {
       console.log("Currently Loged in : ", user);
     });

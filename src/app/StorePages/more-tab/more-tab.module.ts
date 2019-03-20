@@ -12,8 +12,8 @@ const routes: Routes = [
   { path: "PhotoGallery", loadChildren: "../photo-gallery/photo-gallery.module#PhotoGalleryPageModule" },
   { path: "OrdersList", loadChildren: "../orders-list/orders-list.module#OrdersListPageModule" },
   { path: "OrderView/:id", loadChildren: "../order-view/order-view.module#OrderViewPageModule" },
-  // { path: 'UserStores', loadChildren: '../../pages/user-stores/user-stores.module#UserStoresPageModule' },
-  { path: 'EditStoreInfo', loadChildren: '../../pages/edit-store-info/edit-store-info.module#EditStoreInfoPageModule' }
+  { path: 'EditStoreInfo', loadChildren: '../../pages/edit-store-info/edit-store-info.module#EditStoreInfoPageModule' },
+  { path: "StoreUsers", loadChildren: '../store-users/store-users.module#StoreUsersPageModule' },
 ];
 
 @NgModule({

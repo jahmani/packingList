@@ -1,5 +1,7 @@
 export const StorePathConfig = {
+    storeUsers: "users",
     usersByEmail: "usersByEmail",
+    usersByPhoneNumber: "usersByPhoneNumber",
     transCatsTemplatPath :
       "/versions/v4/dataTemplates/transactionCats/cats",
     basePath : "versions/v4/stores",

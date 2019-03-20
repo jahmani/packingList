@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 import { Extended, ImageFile } from "../../interfaces/data-models";
-import { NavController, NavParams, ModalController, IonSlides } from "@ionic/angular";
+import { NavParams, ModalController, IonSlides } from "@ionic/angular";
+// import { ImageEditorPage } from "../../pages/image-editor/image-editor.page";
+// import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-photo-view",
@@ -10,17 +12,19 @@ import { NavController, NavParams, ModalController, IonSlides } from "@ionic/ang
 })
 export class PhotoViewComponent implements OnInit {
   images: Extended<ImageFile>[];
-  sliderOptions: {initialSlide: number} = {initialSlide: 0};
+  sliderOptions: { initialSlide: number } = { initialSlide: 0 };
   canDelete: boolean;
   canRemove: boolean;
   canSelect: boolean;
   @ViewChild(IonSlides) slider: IonSlides;
-  canUpload: boolean;
+  deleteInProgress: boolean;
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
+    // private navCtrl: NavController,
+    private navParams: NavParams,
     private modalCtrl: ModalController,
-    private imagesFsRepository: ImagesDataService
+    private imagesFsRepository: ImagesDataService,
+    // private sanitizer: DomSanitizer
+
   ) {
     const startIndex = this.navParams.get("photo_index");
     if (startIndex) {
@@ -30,23 +34,15 @@ export class PhotoViewComponent implements OnInit {
     this.canDelete = this.navParams.get("canDelete");
     this.canRemove = this.navParams.get("canRemove");
     this.canSelect = this.navParams.get("canSelect");
-    this.canUpload = this.navParams.get("canUpload");
-   // this.imagesFsRepository = this.navParams.get("imagesFsRepository");
+    // this.imagesFsRepository = this.navParams.get("imagesFsRepository");
   }
-  ionViewDidEnter() {
-    //   this.slider._rtl = true
-   // this.slider.zoom = true;
-    console.log("ionViewDidEnter");
-  }
+  // sanitize(url) {
+  //   return this.sanitizer.bypassSecurityTrustUrl(url);
+  // }
   async select() {
     const index = await this.slider.getActiveIndex();
     const extImage = await this.images[index];
     return await this.modalCtrl.dismiss(extImage);
-  }
-  async upload() {
-    const index = await this.slider.getActiveIndex();
-    const extImage = await this.images[index];
-    return await this.modalCtrl.dismiss(extImage, "upload");
   }
   remove() {
     if (this.canRemove) {
@@ -55,8 +51,10 @@ export class PhotoViewComponent implements OnInit {
   }
   async delete() {
     const index = await this.slider.getActiveIndex();
-    const extImage = await this.images[index];
+    const extImage = this.images[index];
+    this.deleteInProgress = true;
     this.imagesFsRepository.remove(extImage).then(() => {
+      this.deleteInProgress = false;
       if (this.images.length === 1) {
         this.close();
       } else if (index !== 0) {
@@ -72,7 +70,20 @@ export class PhotoViewComponent implements OnInit {
   close() {
     this.modalCtrl.dismiss();
   }
+  // async showEditImage() {
+  //   const index = await this.slider.getActiveIndex();
+  //   const extImage = await this.images[index];
+  //   const imgEditor = await this.modalCtrl.create({ component: ImageEditorPage, componentProps: { imageUrl: extImage.data.url } });
+  //   await imgEditor.present();
+  //   imgEditor.onDidDismiss().then(((res) => {
+  //     if (res && res.data) {
+  //       console.log("EditorResults: ", res.data);
+  //       extImage.data.url = res.data;
+  //       extImage.data.thumbUrl = res.data;
+  //     }
+  //   }));
 
+  // }
   ngOnInit() {
   }
 }

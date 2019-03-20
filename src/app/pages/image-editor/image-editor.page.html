@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons padding-left padding-right slot="end">
+
+      <ion-button icon-only (click)="done()">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-button>
+      <ion-button (click)="rotaRight()">
+        <ion-icon name="refresh"></ion-icon>
+        rotate
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+        cancel
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content dir="ltr" #container  padding >
+  <!-- <pre></pre> -->
+    <!-- {{container.el|json}} -->
+      <app-image-cropper style="height:100%" #imageCropper  [imageUrl]="imgInfo.imageString">
+  </app-image-cropper>
+</ion-content>

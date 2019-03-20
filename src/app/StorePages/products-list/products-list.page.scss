@@ -41,5 +41,12 @@ ion-thumbnail{
 }
 
 .one-image {
-    margin: 2px;
+    margin: 2px 0px;
+}
+.swiper-zoom-container{
+    height: 100%;
+    display: -webkit-box;
+}
+.slideMoreFAB{
+    --background: #8b7b7b40;
 }

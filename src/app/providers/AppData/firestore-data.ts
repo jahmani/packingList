@@ -156,16 +156,16 @@ export class FirestoreData<T extends Editable> {
       });
   }
 
-  public parseBeforeSave(obj: Extended<T>) {
-    return { id: obj.id, data: this.remove$Properties(obj.data) };
-  }
-  protected remove$Properties(obj: any) {
-    Object.keys(obj).forEach(key => {
-      if (key.startsWith("$")) {
-        delete obj[key];
-      }
-    });
-  }
+  // public parseBeforeSave(obj: Extended<T>) {
+  //   return { id: obj.id, data: this.remove$Properties(obj.data) };
+  // }
+  // protected remove$Properties(obj: any) {
+  //   Object.keys(obj).forEach(key => {
+  //     if (key.startsWith("$")) {
+  //       delete obj[key];
+  //     }
+  //   });
+  // }
 
   catch(err) {
     console.error("Error saving", err);
@@ -174,7 +174,7 @@ export class FirestoreData<T extends Editable> {
 
   saveNew(item: Extended<T>, key?: string) {
     key = key || this.newKey();
-    this.parseBeforeSave(item);
+    // this.parseBeforeSave(item);
     item.data.lastEditedOn = firebase.firestore.FieldValue.serverTimestamp();
     item.data.firstCreatedOn = firebase.firestore.FieldValue.serverTimestamp();
     if (key) {

@@ -1,0 +1,22 @@
+<ion-header no-border color="dark">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button ion-button (click)="close()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+  
+      <ion-buttons slot="end">
+        <ion-button (click)="showEditImage()">
+          Edit </ion-button>
+        <ion-button  ion-button icon-only (click)="upload()">
+          <ion-icon name="cloud-upload"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content no-scroll no-badding color="dark" dir="ltr">
+            <!-- <ion-spinner name="lines" class="fixed" #spinner *ngIf="!loaded"></ion-spinner> -->
+            <img style="object-fit:scale-down;" [src]="imgInfo.imageString"/>
+  </ion-content>

@@ -83,7 +83,9 @@ const routes: Routes = [
         path: "Packinglist/:id",
         loadChildren:
           "./packinglist/packinglist.module#PackinglistPageModule"
-      }
+      },
+      { path: 'StoreUsers', loadChildren: './store-users/store-users.module#StoreUsersPageModule' },
+
     ]
   }
 ];

@@ -1,38 +1,42 @@
-    <ion-header>
-        <ion-toolbar>
-          <ion-title>Menu 10</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <ion-list *ngIf="user && store  && store.data" padding>
-          <ion-item-divider color="light">{{store.data.name}}</ion-item-divider>
-          <ion-item (click)="menu.close()" [routerLink]="link.path" 
-           *ngFor="let link of storeLinks">
-            <ion-label>
-              {{link.title}}
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        <ion-list *ngIf="user" padding>
-            <ion-item-divider color="light">{{user.data.name}}</ion-item-divider>
-            <ion-item (click)="menu.close()" [routerLink]="link.path" 
-             *ngFor="let link of userLinks">
-              <ion-label>
-                {{link.title}}
-              </ion-label>
-            </ion-item>
-            <ion-item (click)="menu.close()" (click)="onLogOut()">
-              <ion-label>
-                logout
-              </ion-label>
-            </ion-item>
-          </ion-list>
-          <ion-list *ngIf="!user" padding>
-              <ion-item (click)="menu.close()" [routerLink]="link.path" 
-               *ngFor="let link of noUserLinks">
-                <ion-label>
-                  {{link.title}}
-                </ion-label>
-              </ion-item>
-            </ion-list>
-    
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Menu 10</ion-title>
+  </ion-toolbar>
+</ion-header>
+  <ion-list *ngIf="user && store  && store.data" padding>
+    <ion-item-divider color="light">
+      <ion-button slot="end" fill="clear" routerLink="/EditStoreInfo">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button>
+      {{store.data.name}}
+    </ion-item-divider>
+    <ion-item (click)="menu.close()" [routerLink]="link.path" *ngFor="let link of storeLinks">
+      <ion-label>
+        {{link.title}}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="user" padding>
+    <ion-item-divider color="light">{{user.data.email || user.data.phoneNumber}}
+      <ion-button slot="end" fill="clear" routerLink="/UserProfile">
+        <ion-icon slot="icon-only" name="settings"></ion-icon>
+      </ion-button>
+    </ion-item-divider>
+    <ion-item (click)="menu.close()" [routerLink]="link.path" *ngFor="let link of userLinks">
+      <ion-label>
+        {{link.title}}
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="menu.close()" (click)="onLogOut()">
+      <ion-label>
+        logout
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-list *ngIf="!user" padding>
+    <ion-item (click)="menu.close()" [routerLink]="link.path" *ngFor="let link of noUserLinks">
+      <ion-label>
+        {{link.title}}
+      </ion-label>
+    </ion-item>
+  </ion-list>

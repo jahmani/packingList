@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ProductsListPage } from '../StorePages/products-list/products-list.page';
+// import { ProductsListPage } from '../StorePages/products-list/products-list.page';
+import { PopoverController } from '@ionic/angular';
 
 @Component({
   selector: 'app-products-page-settings',
@@ -8,11 +9,14 @@ import { ProductsListPage } from '../StorePages/products-list/products-list.page
 })
 export class ProductsPageSettingsComponent implements OnInit {
 
-  @Input() productsPage: ProductsListPage;
-  constructor() { }
+  @Input() productsPage: any;
+  constructor(
+    private popoverController: PopoverController
+  ) { }
   viewChanged(ev: CustomEvent) {
     console.log('Segment changed', ev.detail.value);
     this.productsPage.view = ev.detail.value;
+    this.popoverController.dismiss();
   }
   ngOnInit() {
   }

@@ -23,6 +23,10 @@ ion-badge
     margin-inline-end: 1px;
 
 }
+.thumb-badge{
+    float: left;
+    opacity: 0.6;
+}
 .item-card-header{
     -webkit-padding-end: 0px;
     padding-inline-end: 0px;
@@ -42,7 +46,8 @@ ion-badge
     margin: 0px;
     width: 100%;
     padding-bottom: 8px;
-    background-color: #0f090987;    
+    background-color: #0f090987;
+    padding-inline-start: 2px;
 }
 ion-thumbnail{
     width: 90px;
@@ -68,8 +73,9 @@ ion-thumbnail{
 
 }
 .slide-img {
-    object-fit: cover;
+    object-fit: contain;
     width: 100%;
+    
 
 }
  .full-img {
@@ -78,17 +84,24 @@ ion-thumbnail{
     top: 0;
     left: 0;
     width: 100%;
+    
   //  transition: opacity 1s linear;
   }
   
 
    .full-img.loaded {
     opacity: 1;
-    position: unset;
-    top: unset;
-    left: unset;
-    width:unset;
-    object-fit: cover;
+    //  position: unset;
+    // top: unset;
+    // left: unset;
+    // width:unset;
+    // https://stackoverflow.com/questions/8508275/how-to-center-a-position-absolute-element
+    top: 50%;
+    /* left: 0; */
+    width: 100%;
+    bottom: 50%;
+    transform: translate(0%, -50%);
+
   }
   .thumb-img.loaded {
       display: none;

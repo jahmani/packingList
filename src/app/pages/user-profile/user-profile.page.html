@@ -1,0 +1,91 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>UserProfile</ion-title>
+    <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding *ngIf="currUser|async as u">
+  <ion-row class="ion-justify-content-center">
+    <ion-col></ion-col>
+    <ion-col size="auto">
+      <ion-avatar class="ion-justify-content-center">
+        <img src="./assets/img/avatar.jpg">
+      </ion-avatar>
+      <ion-text>{{u.data.displayName}}</ion-text>
+
+      <ion-icon name="create" size="small" *ngIf="!displayNameCtrlVisible" (click)="showEditDisplayName()"></ion-icon>
+    </ion-col>
+    <ion-col></ion-col>
+
+
+
+  </ion-row>
+  <ion-item-group>
+    <ng-container *ngIf="!u.data.displayName || displayNameCtrlVisible">
+      <ion-item>
+        <ion-label position="fixed">ألأسم: </ion-label>
+        <ion-input [formControl]="displayNameCtrl" type="text"></ion-input>
+      </ion-item>
+      <ion-buttons slot="end">
+        <ion-button color="primary" fill="solid" (click)="updateDisplayName()">
+          <ion-icon slot="end" name="checkmark"></ion-icon>
+          update
+        </ion-button>
+        <ion-button *ngIf="u.data.displayName" (click)="hideEditDisplayName()">
+          <ion-icon slot="start" name="close"></ion-icon>
+          cancel
+        </ion-button>
+      </ion-buttons>
+
+    </ng-container>
+  <ion-item *ngIf="displayNameCtrl.invalid && displayNameCtrl.touched">
+    <ion-text color="danger" class="form-error">
+      Please enter a valid display name.
+    </ion-text>
+  </ion-item>
+
+  <ion-item>
+  </ion-item>
+
+  <ion-item>
+    <ion-icon slot="start" name="phone-portrait"></ion-icon>
+
+    <ion-label>
+      رقم الهاتف:
+      {{u.data.phoneNumber}}
+    </ion-label>
+  </ion-item>
+  <ng-container *ngIf="!u.data.email || emailCtrlVisible; else hasEmail">
+    <ion-item>
+      <ion-label position="stacked">ايميل: </ion-label>
+      <ion-input [formControl]="emailCtrl" type="email"></ion-input>
+    </ion-item>
+    <ion-buttons slot="end">
+        <ion-button color="primary" fill="solid" (click)="updateEmail()">
+          <ion-icon slot="end" name="checkmark"></ion-icon>
+          update
+        </ion-button>
+        <ion-button *ngIf="u.data.email" (click)="hideEditEmail()">
+          <ion-icon slot="start" name="close"></ion-icon>
+          cancel
+        </ion-button>
+      </ion-buttons>
+    <ion-item *ngIf="emailCtrl.invalid && emailCtrl.touched">
+      <ion-text color="danger" class="form-error">
+        Please enter a valid Email.
+      </ion-text>
+    </ion-item>
+  </ng-container>
+  <ng-template #hasEmail>
+    <ion-item>
+      <ion-label position="fixed">ايميل: </ion-label>
+      <ion-label>{{u.data.email}}</ion-label>
+      <ion-icon name="create" size="small" *ngIf="!emailCtrlVisible" (click)="showEditEmail()"></ion-icon>
+
+    </ion-item>
+  </ng-template>
+  </ion-item-group>
+</ion-content>

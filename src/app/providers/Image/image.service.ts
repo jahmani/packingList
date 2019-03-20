@@ -78,6 +78,7 @@ export class ImageService {
       width: i.naturalWidth,
       height: i.naturalHeight
     };
+    console.warn("WRONG DIMENTIONS @ geRrealImgDimension(imgSrc)");
   }
   generateThumb(
     img,
@@ -115,58 +116,58 @@ export class ImageService {
       return name;
     }
   }
-  private generateSquareThumb(
-    img,
-    MAX_LENGTH: number = 700,
-    quality: number = 1,
-    callback
-  ) {
-    const canvas: HTMLCanvasElement = document.createElement("canvas");
-    const image = new Image();
+  // private generateSquareThumb(
+  //   img,
+  //   MAX_LENGTH: number = 700,
+  //   quality: number = 1,
+  //   callback
+  // ) {
+  //   const canvas: HTMLCanvasElement = document.createElement("canvas");
+  //   const image = new Image();
 
-    image.onload = () => {
-      let width = image.width;
-      let height = image.height;
-      let srcX = 0,
-        srcY = 0;
-      const srcLength = image.height < image.width ? image.height : image.width;
+  //   image.onload = () => {
+  //     let width = image.width;
+  //     let height = image.height;
+  //     let srcX = 0,
+  //       srcY = 0;
+  //     const srcLength = image.height < image.width ? image.height : image.width;
 
-      if (width > height) {
-        if (width > MAX_LENGTH) {
-          height *= MAX_LENGTH / width;
-          width = MAX_LENGTH;
-          srcX = (image.width - image.height) / 2;
-        }
-      } else {
-        if (height > MAX_LENGTH) {
-          width *= MAX_LENGTH / height;
-          height = MAX_LENGTH;
-          srcY = (image.height - image.width) / 2;
-        }
-      }
-      canvas.width = MAX_LENGTH;
-      canvas.height = MAX_LENGTH;
-      const ctx = canvas.getContext("2d");
+  //     if (width > height) {
+  //       if (width > MAX_LENGTH) {
+  //         height *= MAX_LENGTH / width;
+  //         width = MAX_LENGTH;
+  //         srcX = (image.width - image.height) / 2;
+  //       }
+  //     } else {
+  //       if (height > MAX_LENGTH) {
+  //         width *= MAX_LENGTH / height;
+  //         height = MAX_LENGTH;
+  //         srcY = (image.height - image.width) / 2;
+  //       }
+  //     }
+  //     canvas.width = MAX_LENGTH;
+  //     canvas.height = MAX_LENGTH;
+  //     const ctx = canvas.getContext("2d");
 
-      ctx.drawImage(
-        image,
-        srcX,
-        srcY,
-        srcLength,
-        srcLength,
-        0,
-        0,
-        MAX_LENGTH,
-        MAX_LENGTH
-      );
+  //     ctx.drawImage(
+  //       image,
+  //       srcX,
+  //       srcY,
+  //       srcLength,
+  //       srcLength,
+  //       0,
+  //       0,
+  //       MAX_LENGTH,
+  //       MAX_LENGTH
+  //     );
 
-      // IMPORTANT: 'jpeg' NOT 'jpg'
-      const dataUrl = canvas.toDataURL("image/jpeg", quality);
+  //     // IMPORTANT: 'jpeg' NOT 'jpg'
+  //     const dataUrl = canvas.toDataURL("image/jpeg", quality);
 
-      callback(dataUrl);
-    };
-    image.src = img;
-  }
+  //     callback(dataUrl);
+  //   };
+  //   image.src = img;
+  // }
   private generateThumbCB(
     img,
     MAX_WIDTH: number = 700,
@@ -204,12 +205,14 @@ export class ImageService {
 
       callback(dataUrl);
     };
+    // const src = this.sanitizer
     image.src = img;
   }
 
   getImageSize(data_url) {
     const head = "data:image/jpeg;base64,";
     return ((data_url.length - head.length) * 3) / 4 / (1024 * 1024);
+    console.warn("WRONG SIZE ", "getImageSize(data_url)");
   }
 
   /*

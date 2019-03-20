@@ -4,7 +4,7 @@
       <ion-button ion-button (click)="close()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
-      <ion-button *ngIf="canDelete" (click)="delete()">
+      <ion-button [disabled]="deleteInProgress" *ngIf="canDelete" (click)="delete()">
         Delete<ion-icon slot="start" name="trash"></ion-icon>
       </ion-button>
       <ion-button *ngIf="canRemove" (click)="remove()">
@@ -16,9 +16,11 @@
       <ion-button *ngIf="canSelect" ion-button icon-only (click)="select()">
         <ion-icon name="checkmark"></ion-icon>
       </ion-button>
+      <!-- <ion-button (click)="showEditImage()">
+        Edit </ion-button>
       <ion-button *ngIf="canUpload" ion-button icon-only (click)="upload()">
         <ion-icon name="cloud-upload"></ion-icon>
-      </ion-button>
+      </ion-button> -->
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -28,16 +30,9 @@
     <ion-slide *ngFor="let image of images">
       <div class="swiper-zoom-container">
         <ng-container *ngIf="image.data.thumbUrl; else noThumb">
-          <ion-spinner
-            name="lines"
-            class="fixed"
-            *ngIf="!image.ext.loaded"
-          ></ion-spinner>
-          <img style="object-fit:scale-down;"
-            [src]="image.data.url"
-            (load)="image.ext.loaded = true"
-            [hidden]="!image.ext.loaded"
-          />
+          <ion-spinner name="lines" class="fixed" *ngIf="!image.ext.loaded || deleteInProgress"></ion-spinner>
+          <img style="object-fit:scale-down;" [src]="image.data.url" (load)="image.ext.loaded = true"
+            [hidden]="!image.ext.loaded" />
           <img [src]="image.data.thumbUrl" [hidden]="image.ext.loaded" />
         </ng-container>
         <ng-template #noThumb>
@@ -45,7 +40,7 @@
             <ion-spinner name="lines" class="fixed"></ion-spinner>
             <img [src]="image.ext.imgSaveInfo.imageString" />
           </ng-container>
-          <ng-template #noImage> <img src="" /> </ng-template>
+          <ng-template #noImage> <img src="" /> no image </ng-template>
         </ng-template>
       </div>
     </ion-slide>

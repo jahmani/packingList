@@ -13,6 +13,10 @@ import { RouterModule } from "@angular/router";
 import { PackingListComponent } from './packing-list/packing-list.component';
 import { OrderRowEditorComponent } from './order-row-editor/order-row-editor.component';
 import { ProductViewComponent } from "./product-view/product-view.component";
+import { ImageEditorPage } from "../pages/image-editor/image-editor.page";
+import { ImageCropperComponent } from "../pages/image-editor/image-cropper/image-cropper.component";
+import { PhotoUploadComponent } from './photo-upload/photo-upload.component';
+import { EditPhotoPage } from "../pages/edit-photo/edit-photo.page";
 
 @NgModule({
   imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
@@ -26,9 +30,9 @@ import { ProductViewComponent } from "./product-view/product-view.component";
     ProductPickerComponent,
     PackingListComponent,
     OrderRowEditorComponent,
-  ProductViewComponent
+  ProductViewComponent, ImageEditorPage, ImageCropperComponent, PhotoUploadComponent, EditPhotoPage
   ],
-  entryComponents: [PhotoViewComponent],
+  entryComponents: [PhotoViewComponent, ImageEditorPage, PhotoUploadComponent, EditPhotoPage],
   exports: [
     OrderHeaderViewComponent,
     PhotoPickerComponent,

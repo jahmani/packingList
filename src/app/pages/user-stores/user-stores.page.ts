@@ -11,6 +11,7 @@ import { StoreInfoService } from "../../providers/AppData/store-info.service";
 import { InvitesService } from "../../providers/AppData/invites.service";
 import { take, mergeMap } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { UserStoresService } from "../../providers/AppData/user-stores.service";
 
 @Component({
   selector: "app-user-stores",
@@ -18,25 +19,26 @@ import { Router } from "@angular/router";
   styleUrls: ["./user-stores.page.scss"]
 })
 export class UserStoresPage implements OnInit {
-  userStores: Observable<Extended<StoreInfo>[]>;
+  userStores: Observable<Extended<UserStore>[]>;
+//  userStores: Observable<Extended<StoreInfo>[]>;
   userPendingStores: Observable<Extended<UserStore>[]>;
 
   constructor(
     public router: Router,
     // tslint:disable-next-line:no-shadowed-variable
     private auth: AuthService,
-    // private userStoresFsRepository: UserStoresService,
+     private userStoresFsRepository: UserStoresService,
     // private userPendingStoresFsRepository: UserPendingStoresService,
     private storesFsRepository: StoreInfoService,
     private invitesFsRepository: InvitesService,
     private activeStoreServise: ActiveStoreService
   ) {
-    this.userStores = this.auth.user.pipe(
-      mergeMap(user => {
-        return this.storesFsRepository.getUserStores(user.uid);
-      })
-    );
-    // this.userStores = this.userStoresFsRepository.FormatedList;
+    // this.userStores = this.auth.user.pipe(
+    //   mergeMap(user => {
+    //     return this.storesFsRepository.getUserStores(user.uid);
+    //   })
+    // );
+     this.userStores = this.userStoresFsRepository.List();
     // this.userPendingStores = this.userPendingStoresFsRepository.FormatedList;
   }
   /*

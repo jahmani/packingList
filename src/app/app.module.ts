@@ -24,10 +24,12 @@ import { EditOrderRowPageModule } from "./StorePages/edit-order-row/edit-order-r
 import { EditProductPageModule } from "./StorePages/edit-product/edit-product.module";
 import { EditAccountPageModule } from "./StorePages/edit-account/edit-account.module";
 import { ProductsPageSettingsComponent } from './products-page-settings/products-page-settings.component';
+import { CatigoryCtrlComponent } from './catigory-ctrl/catigory-ctrl.component';
+import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
 
 @NgModule({
 
-  declarations: [AppComponent, MenuComponent, ProductsPageSettingsComponent,
+  declarations: [AppComponent, MenuComponent, ProductsPageSettingsComponent, CatigoryCtrlComponent,
      ],
   entryComponents: [AccountsListPage, ProductsPageSettingsComponent],
   imports: [
@@ -43,7 +45,7 @@ import { ProductsPageSettingsComponent } from './products-page-settings/products
     ProductsListPageModule,
     PhotoGalleryPageModule,
     EditProductPageModule,
-    EditAccountPageModule,
+    EditAccountPageModule,    InternationalPhoneNumberModule,
     ServiceWorkerModule.register("/ngsw-worker.js", {
       enabled: environment.production
     })

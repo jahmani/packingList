@@ -93,7 +93,9 @@ export class ProductsListPage implements OnInit {
   }
 
   async delete(extProduct: Extended<Product>) {
-    await this.dynamicList.closeSlidingItems();
+    if (this.dynamicList) {
+      await this.dynamicList.closeSlidingItems();
+    }
 
     const modal = await this.alertController.create({
       message: `Are you sure deleting product: ${extProduct.data.name}`,
@@ -163,10 +165,10 @@ export class ProductsListPage implements OnInit {
     this.showSerach = !this.showSerach;
   }
   async presentPopover(ev) {
-    const popover = await this.popoverCtrl.create( {
-      component : ProductsPageSettingsComponent,
+    const popover = await this.popoverCtrl.create({
+      component: ProductsPageSettingsComponent,
       // dynamic data to display
-      componentProps: {productsPage: this},
+      componentProps: { productsPage: this },
       event: ev,
 
       // class to force positioning

@@ -1,0 +1,126 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Store Users</ion-title>
+    <ion-buttons slot="start">
+      <ion-buttons slot="end">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  
+    <ion-card class="no-margin-horizantal">
+
+        <ion-card-header color="primary">
+          <ion-card-title class="ion-text-center" (click)="phoneNumberCtrl.reset(); showInviteNewUser=!showInviteNewUser;">
+            {{showInviteNewUser ? "cancel": "Invite new user"}}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content *ngIf="showInviteNewUser">
+    <ion-segment (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="byEmail">
+        <ion-label>by Email</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="byPhone" checked>
+        <ion-label>by Phone Number</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <ng-container  *ngIf="searchBy === 'byPhone'; else byEmail">
+    
+          <ion-item  dir="ltr" no-padding>
+            <ion-icon slot="start" name="phone-portrait"></ion-icon>
+            <ion-input [formControl]="phoneNumberCtrl" type="tel"></ion-input>
+          </ion-item>
+          <ion-item *ngIf="phoneNumberCtrl.invalid && phoneNumberCtrl.touched">
+              <ion-text color="danger" class="form-error">
+                Please enter a valid Phone number.
+              </ion-text>
+            </ion-item>
+            <ion-button expand="full" [disabled]="phoneNumberCtrl.invalid" (click)="lookupPhoneNumber()">
+                <ion-icon expand="full" name="search"></ion-icon>
+                search
+              </ion-button>
+            </ng-container>
+    
+          <ng-template #byEmail>
+              <ion-item dir="ltr" no-padding *ngIf="searchBy === 'byEmail'">
+                  <ion-icon slot="start" name="mail"></ion-icon>
+                  <ion-input  [formControl]="emailCtrl" type="email"></ion-input>
+                </ion-item>  
+                <ion-item *ngIf="emailCtrl.invalid && emailCtrl.touched">
+                    <ion-text color="danger" class="form-error">
+                      Please enter a valid Email.
+                    </ion-text>
+                  </ion-item>
+                  <ion-button expand="full" [disabled]="emailCtrl.invalid" (click)="lookupEmail()">
+                      <ion-icon expand="full" name="search"></ion-icon>
+                      search
+                    </ion-button>
+               
+          </ng-template>
+    
+    
+          <ng-container *ngIf="foundUser|async as user">
+            <ion-item *ngIf="user.notFound; else userFound">
+              no users found with phone number : {{user.notFound}}
+            </ion-item>
+            <ng-template #userFound>
+                <ion-item no-padding *ngIf="user.data.phoneNumber">
+                    <ion-icon slot="start" name="phone-portrait"></ion-icon>
+                  <ion-label text-wrap>
+                    <ion-text >
+                      Tele : {{user.data.phoneNumber}}
+                    </ion-text>
+                  </ion-label>
+                </ion-item> 
+                 <ion-item no-padding *ngIf="user.data.email">
+                    <ion-icon slot="start" name="mail"></ion-icon>
+                  <ion-label text-wrap>
+                    <ion-text >
+                      Email : {{user.data.email}}
+                    </ion-text>
+                  </ion-label>
+                </ion-item>
+              <ion-button expand="full" (click)="invite(user)">
+                <ion-icon name="send"></ion-icon>
+                send invite
+              </ion-button>
+            </ng-template>
+          </ng-container>
+    
+        </ion-card-content>
+      </ion-card>
+    
+    <ion-item-divider>
+      <ion-label>current users</ion-label>
+    </ion-item-divider>
+    <ion-card class="no-margin-horizantal" *ngFor="let user of storeUsers|async">
+      <ion-card-header>
+        <ion-item no-padding>
+          <ion-avatar slot="start">
+            <img src="./assets/img/avatar.jpg">
+          </ion-avatar>
+          <ion-label>{{user.data.userInfo?.displayName}}</ion-label>
+          <ion-icon slot="end" [name]="user.data.isEnabled ? 'checkmark' : 'help'"></ion-icon>
+
+        </ion-item>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-item *ngIf="user.data.userInfo?.email" no-padding>
+          <ion-icon slot="start" name="mail"></ion-icon>
+          <ion-label color="primary">
+            Email: {{user.data.userInfo.email}}
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="user.data.userInfo?.phoneNumber" no-padding>
+          <ion-icon slot="start" name="phone-portrait"></ion-icon>
+          <ion-label> Tele : {{user.data.userInfo.phoneNumber}}
+          </ion-label>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+
+
+
+</ion-content>

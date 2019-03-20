@@ -1,0 +1,22 @@
+<ion-content padding>
+  <form [formGroup]="form" (ngSubmit)="signIn(phoneNumberCtrl.value)">
+    <div id="recaptcha-container"></div>
+    <ion-item>
+      <ion-label stacked>Phone Number</ion-label>
+      <ion-input dir="ltr" type="phoneNumber" formControlName="phoneNumber" #phoneNumberCtrl placeholder="{{exampleNumber}}"
+        required="true"></ion-input>
+    </ion-item>
+
+    <ion-button  [disabled]="form.invalid" id="sign-in-button" type="submit">
+      Sign In
+    </ion-button>
+  </form>
+
+  <!-- <form name="sample-form" (ngSubmit)="signIn(phoneNumber2)" #f="ngForm">
+    <international-phone-number [(ngModel)]="phoneNumber2" placeholder="Enter phone number" [maxlength]="20"
+      [required]="true" #phoneNumber="ngModel" name="phone_number"></international-phone-number>
+
+    <div *ngIf="!phoneNumber.valid" class="help-block">Phone number is required and should be valid</div>
+    <button type="submit">Submit</button>
+  </form> -->
+</ion-content>

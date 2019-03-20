@@ -1,13 +1,14 @@
 <ng-container [ngSwitch]="options.view">
-  <ion-card *ngSwitchCase="'CARD'" class="cardView" >
+  <ion-card *ngSwitchCase="'CARD'" class="cardView">
     <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
-    <img  (click)="prodClick.emit(product)" style="object-fit: cover; max-height: 360px"
+    <img (click)="prodClick.emit(product)" style="object-fit: cover; max-height: 360px"
       [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
       onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
     <ion-card-header>
       <ion-card-title>
         <ion-item-sliding>
-          <ion-item  (click)="prodClick.emit(product)" no-padding [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
+          <ion-item (click)="prodClick.emit(product)" no-padding
+            [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
             <ion-label>
               <ng-container *ngTemplateOutlet="productDetails"></ng-container>
             </ion-label>
@@ -22,7 +23,8 @@
     <ion-card-header class="item-card-header">
       <ion-card-title>
         <ion-item-sliding no-padding>
-          <ion-item  (click)="prodClick.emit(product)" no-padding [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
+          <ion-item (click)="prodClick.emit(product)" no-padding
+            [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
             <ion-thumbnail class="item-thumb" slot="end" (click)="imgClick.emit($event, product)">
               <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
                 onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
@@ -38,7 +40,7 @@
     </ion-card-header>
   </ion-card>
 
-  <ng-container *ngSwitchCase="'SLIDE'" >
+  <div *ngSwitchCase="'SLIDE'">
     <ion-spinner name="lines" class="fixed" *ngIf="product.data.thumbUrl  && !product.ext.imageFile.ext.loaded">
     </ion-spinner>
 
@@ -52,10 +54,12 @@
       [ngClass]="{'loaded':product.data.thumbUrl &&  product.ext.imageFile.ext.loaded}" (load)="onIonImgDidLoad()">
 
     <div class="slideCardWrapper slideView" style="
-      position: absolute;
-      bottom: 0px;
-      margin: 0px;
-      width: 100%;">
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    margin: auto;
+    width: 100%;
+          ">
       <ion-card *ngIf="!options.photoOnly">
         <ion-card-header>
           <ion-card-title>
@@ -73,18 +77,20 @@
       </ion-card>
     </div>
 
-  </ng-container>
+  </div>
 
   <div *ngSwitchCase="'THUMB'" class="thumb-view">
 
-    <img  (click)="prodClick.emit(product)" class="slide-img thumb-img" #thumbImg
+    <img (click)="prodClick.emit(product)" class="slide-img thumb-img" #thumbImg
       [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
       onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
-      <div class="thumb-text">
-        <ion-text>{{product.data.name}}</ion-text>
-      </div>
-    <!-- <ng-container *ngTemplateOutlet="productDetails"></ng-container> -->
+    <div class="thumb-text ">
+      <ion-text>{{product.data.name}}</ion-text>
+      <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="thumb-badge">
+        {{product.data.sPrice}} JOD</ion-badge>
     </div>
+    <!-- <ng-container *ngTemplateOutlet="productDetails"></ng-container> -->
+  </div>
 
 
   <ng-template #ionItemOptions>
@@ -123,11 +129,11 @@
 
 
   <ng-template #productDetails>
-    <h1>{{product.data.name}}</h1>
+    <span class="font-bold">{{product.data.name}}</span>
     <ion-row no-padding class="row-revers font-small">
-      <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="font-bold">
-        {{product.data.sPrice}} JOD</ion-badge>
-      <ion-badge color="tertiary" *ngIf="product.data.size">size: {{product.data.size}}</ion-badge>
+        <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="font-bold">
+            {{product.data.sPrice}} JOD</ion-badge>
+            <ion-badge color="tertiary" *ngIf="product.data.size">size: {{product.data.size}}</ion-badge>
       <ion-badge color="secondary" *ngIf="product.data.style">
         model: {{product.data.style}}
       </ion-badge>

@@ -17,9 +17,9 @@ import { User } from 'firebase';
 export class MoreTabPage implements OnInit {
 
   storeLinks = [
-    { path: "EditStoreInfo", title: "EditStoreInfo" },
-    { path: "OrdersList", title: "All Orders" },
+    { path: "OrdersList", title: "Orders List" },
     { path: "PhotoGallery", title: "Photo Gallery" },
+    { path: "StoreUsers", title: "StoreUsers" },
   ];
 
   userLinks = [

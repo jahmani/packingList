@@ -21,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   user$: Observable<Extended<User>>;
   activeStore$: Observable<Extended<StoreInfo>>;
   backbuttonSubscription: any;
+  initialAppLoad = true;
 
   constructor(
     private platform: Platform,
@@ -35,11 +36,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {
     this.initializeApp();
 
-    this.user$ = this.authService.user.pipe(
-      switchMap(u => {
-        return u ? this.usersService.get(u.uid) : of(null);
-      })
-    );
+    this.user$ = this.usersService.currentUser;
+    //  this.authService.user.pipe(
+    //   switchMap(u => {
+    //     return u ? this.usersService.get(u.uid) : of(null);
+    //   })
+    // );
     this.activeStore$ = this.activeStoreService.activeStoreKey$.pipe(
       switchMap(storeId => {
         return this.storesService.get(storeId);
@@ -49,6 +51,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.authService.user.subscribe(user => {
       if (!user) {
         this.router.navigateByUrl("/login");
+      }
+      if (user && !this.initialAppLoad) {
+        this.router.navigateByUrl("/");
+        this.initialAppLoad = false;
       }
     });
   }

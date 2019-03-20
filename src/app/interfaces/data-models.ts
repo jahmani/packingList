@@ -12,6 +12,7 @@ export interface ImageSaveInfo {
   thumbString: string;
   imageRef: AngularFireStorageReference;
   thumbRef: AngularFireStorageReference;
+  imageSrcUri: string;
   imageUri: string;
   thumbUri: string;
   srcName: string;
@@ -136,6 +137,9 @@ export interface Product extends Editable {
   style: string;
   notice: string;
   size: string;
+  tags: string[];
+
+  cats: {[name: string]: string[]};
 
   thumbUrl: string;
   images: string[];
@@ -153,23 +157,20 @@ export interface User extends Editable {
   displayName: string;
   photoURL: string;
   name: string;
-  code: string;
-  mobile: string;
-  city: string;
-  address: string;
-  role: string;
+  phoneNumber: string;
 }
 export interface StoreUser extends Editable {
   dateTimeAdded: string | any;
   isEnabled: true;
-  role: string;
+  rule: string;
   canRead: boolean;
   canWrite: boolean;
-  inviteId: string;
+  userInfo: User;
 }
 
 export interface UserStore extends Editable {
-  inviteId: string;
+  status: "INVITED" | "OWNER" | "ACTIVE";
+  storeInfo: StoreInfo;
   isDefault: boolean;
 }
 

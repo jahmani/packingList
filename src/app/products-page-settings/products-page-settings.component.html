@@ -1,5 +1,4 @@
-<ion-content>
-  <ion-segment scrollable mode="ios" [value]="productsPage.view" color="secondary" (ionChange)="viewChanged($event)">
+  <!-- <ion-segment scrollable mode="ios" [value]="productsPage.view" color="secondary" (ionChange)="viewChanged($event)">
     <ion-segment-button value="GRID">
       <ion-label>thumbs</ion-label>
       <img style="max-height: 1em;" src='/assets/svg/thumbnails.svg'>
@@ -16,6 +15,38 @@
       <ion-label>slides</ion-label>
       <img style="max-height: 1em;" src='/assets/svg/slideshow.svg'>
     </ion-segment-button>
-  </ion-segment>
+  </ion-segment> -->
 
-</ion-content>
+  <ion-list>
+      <ion-radio-group [value]="productsPage.view"  (ionChange)="viewChanged($event)">
+        <ion-list-header>
+          <ion-label>View</ion-label>
+        </ion-list-header>
+    
+        <ion-item>
+          <ion-label>Thumbs</ion-label>
+          <ion-radio slot="end" value="GRID" checked></ion-radio>
+          <img slot="start" style="max-height: 1em;" src='/assets/svg/thumbnails.svg'>
+
+        </ion-item>
+    
+        <ion-item>
+          <ion-label>list</ion-label>
+          <ion-radio slot="end" value="LIST"></ion-radio>
+          <img  slot="start" style="max-height: 1em;" src='/assets/svg/list.svg'>
+
+        </ion-item>
+    
+        <ion-item>
+            <ion-label>CARDS</ion-label>
+            <ion-radio slot="end" value="CARDS"></ion-radio>
+            <img  slot="start" style="max-height: 1em;" src='/assets/svg/card-thumbs.svg'>
+          </ion-item>
+    
+          <ion-item>
+              <ion-label>SLIDES</ion-label>
+              <ion-radio slot="end" value="SLIDES"></ion-radio>
+              <img slot="start" style="max-height: 1em;" src='/assets/svg/slideshow.svg'>
+            </ion-item>
+            </ion-radio-group>
+    </ion-list>

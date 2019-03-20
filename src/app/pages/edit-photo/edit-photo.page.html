@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Edit Image</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="rotate()">
+                <ion-icon slot="end" name="refresh"></ion-icon>
+                rotate
+            </ion-button>
+            <ion-button (click)="close()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+            </ion-button>
+            <ion-button (click)="done()">
+                <ion-icon slot="icon-only" name="checkmark"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+<input type="file" name="" (change)="onFileInpuChanged($event)" #inputImage>
+<div class="container">
+
+<img id="image" (load)="onImageLoaded()" #image alt="Picture">
+
+</div>
+</ion-content>
