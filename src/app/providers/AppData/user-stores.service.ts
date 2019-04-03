@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, combineLatest } from "rxjs";
+import { Observable, combineLatest, of } from "rxjs";
 import { UserStore, Extended, StoreInfo } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { map, mergeMap, startWith } from "rxjs/operators";
@@ -15,10 +15,11 @@ export class UserStoresService extends FirestoreData<UserStore>  {
   fsRep$: Observable<FirestoreData<UserStore>>;
   constructor(
     protected afs: AngularFirestore,
-    auth: AuthService,
+    private auth: AuthService,
     private storeInfoFsRepository: StoreInfoService
   ) {
-    super(afs, "users/" + auth.currentUser.uid + "/stores");
+    super(afs, auth.user.pipe(map(user => "users/" + user.uid + "/stores")));
+    // super(afs, "users/" + auth.currentUser.uid + "/stores");
     // console.log("Hello UserStoresFsRepository Provider");
     // this.fsRep$ = auth.user.pipe(
     //   map(user => {
@@ -44,7 +45,7 @@ export class UserStoresService extends FirestoreData<UserStore>  {
     const us: UserStore = {} as UserStore;
     us.status = "INVITED";
     us.storeInfo = storeInfo;
-    this.forUser(uid).saveNew({data: us}as Extended<UserStore>, key);
+    this.forUser(uid).saveNew({ data: us } as Extended<UserStore>, key);
   }
 
   // List() {
@@ -74,17 +75,30 @@ export class UserStoresService extends FirestoreData<UserStore>  {
   //   });
   // }
 
-  getSingleOrDefault(): Observable<Extended<UserStore>> {
+
+  getDefaultStoreKey() {
+    return window.localStorage.getItem(this.auth.currentUser.uid + ".DEFAULT_STORE");
+  }
+  setDefaultStoreKey(newKey) {
+    window.localStorage.setItem(this.auth.currentUser.uid + ".DEFAULT_STORE", newKey);
+  }
+
+
+  getFirstOrDefaultID(): Observable<string> {
+    const localDefaulteStoreID = this.getDefaultStoreKey();
+    if (localDefaulteStoreID) {
+      return of(localDefaulteStoreID);
+    }
     return this.FormatedList.pipe(
       map(extUserStores => {
-        if (extUserStores.length === 1) {
-          return extUserStores[0];
+        if (extUserStores.length) {
+          return extUserStores[0].id;
         }
-        extUserStores.forEach(extUserStore => {
-          if (extUserStore.data.isDefault) {
-            return extUserStore;
-          }
-        });
+        // extUserStores.forEach(extUserStore => {
+        //   if (extUserStore.data.isDefault) {
+        //     return extUserStore;
+        //   }
+        // });
         return null;
       })
     );

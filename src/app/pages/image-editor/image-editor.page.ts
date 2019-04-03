@@ -52,7 +52,7 @@ export class ImageEditorPage implements OnInit, AfterViewInit, AfterContentInit 
     // console.log("dataurl,", dataUrl);
     this.imageCropper.exportCanvas(true);
     this.imageCropper.export.subscribe((data) => {
-      this.imgInfo.imageString = data.dataUrl;
+    //  this.imgInfo.imageString = data.dataUrl;
       console.log(data.dataUrl);
       this.modalController.dismiss(this.imgInfo);
 

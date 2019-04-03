@@ -23,9 +23,10 @@ export class AccountsBalanceService extends StoreDataService<AccountBalance> {
     return this.List();
   }
 
-  setAccountBalanceInvalid(accountId: string) {
+  async setAccountBalanceInvalid(accountId: string) {
+    const storeId = await this.activeStoreService.getlatest();
     const invalidFlagpath = `/versions/v4/stores/${
-      this.activeStoreService.activeStoreKey
+      storeId
     }/accountsBalance/${accountId}/flags/invalid`;
     const invalidFlagRef = firestore().doc(invalidFlagpath);
 

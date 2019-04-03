@@ -41,7 +41,12 @@
   </ion-card>
 
   <div *ngSwitchCase="'SLIDE'">
-    <ion-spinner name="lines" class="fixed" *ngIf="product.data.thumbUrl  && !product.ext.imageFile.ext.loaded">
+  
+      <img class="slide-img thumb-img" #thumbImg
+      [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+      onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+
+    <!-- <ion-spinner name="lines" class="fixed" *ngIf="product.data.thumbUrl  && !product.ext.imageFile.ext.loaded">
     </ion-spinner>
 
     <img class="slide-img thumb-img" #thumbImg
@@ -52,7 +57,7 @@
     <img class="slide-img full-img" #fullImg *ngIf="product.data.thumbUrl"
       [src]="product.data.thumbUrl ? product.ext.imageFile.data.url: 'assets/img/no-image.jpg'"
       [ngClass]="{'loaded':product.data.thumbUrl &&  product.ext.imageFile.ext.loaded}" (load)="onIonImgDidLoad()">
-
+ -->
     <div class="slideCardWrapper slideView" style="
     position: absolute;
     bottom: 0px;

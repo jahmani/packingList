@@ -30,26 +30,50 @@ export class ImageService {
     return ext ? "." + ext : ext;
   }
 
-  async extendImageSaveInfo(imageSaveInfo: ImageSaveInfo, id, folder) {
-    const imageString = imageSaveInfo.imageString;
+  // async extendImageSaveInfo(imageSaveInfo: ImageSaveInfo, id, folder) {
+  //   const imageString = imageSaveInfo.imageString;
+  //   imageSaveInfo.ext = this.getFileExtension(imageSaveInfo.srcName);
+
+  //   imageSaveInfo.size = this.getImageSize(imageSaveInfo.imageString);
+  //   imageSaveInfo = { ...imageSaveInfo, ...this.geRrealImgDimension(imageString) };
+  //   imageSaveInfo.thumbString = await this.generateThumb(
+  //     imageSaveInfo.imageString,
+  //     500,
+  //     500,
+  //     1,
+  //     imageSaveInfo.type
+  //   );
+  //   imageSaveInfo.thumbSize = this.getImageSize(imageSaveInfo.thumbString);
+
+  //   imageSaveInfo.imageId = id;
+  //   imageSaveInfo.imageRef = this.afStorage.ref(folder).child(id + imageSaveInfo.ext);
+  //   imageSaveInfo.thumbRef = this.afStorage
+  //     .ref(folder)
+  //     .child(id + ".thumb" + imageSaveInfo.ext);
+  //   return imageSaveInfo;
+  // }
+
+  async extendImageSaveInfo(imageSaveInfo: ImageSaveInfo, id, folder: string) {
+ //   const imageString = imageSaveInfo.imageString;
     imageSaveInfo.ext = this.getFileExtension(imageSaveInfo.srcName);
 
-    imageSaveInfo.size = this.getImageSize(imageSaveInfo.imageString);
-    imageSaveInfo = { ...imageSaveInfo, ...this.geRrealImgDimension(imageString) };
-    imageSaveInfo.thumbString = await this.generateThumb(
-      imageSaveInfo.imageString,
-      500,
-      500,
-      1,
-      imageSaveInfo.type
-    );
-    imageSaveInfo.thumbSize = this.getImageSize(imageSaveInfo.thumbString);
+ //   imageSaveInfo.size = this.getImageSize(imageSaveInfo.imageString);
+  //  imageSaveInfo = { ...imageSaveInfo, ...this.geRrealImgDimension(imageString) };
+    // imageSaveInfo.thumbString = await this.generateThumb(
+    //   imageSaveInfo.imageString,
+    //   500,
+    //   500,
+    //   1,
+    //   imageSaveInfo.type
+    // );
+    // imageSaveInfo.thumbSize = this.getImageSize(imageSaveInfo.thumbString);
 
     imageSaveInfo.imageId = id;
-    imageSaveInfo.imageRef = this.afStorage.ref(folder).child(id + imageSaveInfo.ext);
-    imageSaveInfo.thumbRef = this.afStorage
-      .ref(folder)
-      .child(id + ".thumb" + imageSaveInfo.ext);
+    imageSaveInfo.imageRef = this.afStorage.ref("storeImages")
+    .child(folder).child("products").child("images").child(id + imageSaveInfo.ext);
+    // imageSaveInfo.thumbRef = this.afStorage
+    //   .ref(folder)
+    //   .child(id + ".thumb" + imageSaveInfo.ext);
     return imageSaveInfo;
   }
 
@@ -59,27 +83,47 @@ export class ImageService {
       contentType: "image/jpeg"
     };
 
-    const imageTask = imgSaveInfo.imageRef.putString(
-      imgSaveInfo.imageString,
-      "data_url",
+    // https://stackoverflow.com/questions/11876175/how-to-get-a-file-or-blob-from-an-object-url
+    const editedBlob = await fetch(imgSaveInfo.editedBlobUrl).then(r => r.blob());
+   // URL.revokeObjectURL(imgSaveInfo.editedBlobUrl);
+   // const thumbBlob = await fetch(imgSaveInfo.thumbBlobUrl).then(r => r.blob());
+   // URL.revokeObjectURL(imgSaveInfo.thumbBlobUrl);
+
+
+//     const thumbTask = imgSaveInfo.thumbRef.put(
+//       thumbBlob,
+// //      "data_url",
+//       metadata
+//     );
+   // const imageTask = thumbTask;
+    const imageTask = imgSaveInfo.imageRef.put(
+      editedBlob,
+      // "data_url",
       metadata
     );
-    const thumbTask = imgSaveInfo.thumbRef.putString(
-      imgSaveInfo.thumbString,
-      "data_url"
-    );
+    // const imageTask = imgSaveInfo.imageRef.putString(
+    //   imgSaveInfo.imageString,
+    //   "data_url",
+    //   metadata
+    // );
+    // const thumbTask = imgSaveInfo.thumbRef.putString(
+    //   imgSaveInfo.thumbString,
+    //   "data_url"
+    // );
 
-    return { imageTask, thumbTask };
-  }
-  private geRrealImgDimension(imgSrc) {
-    const i = new Image();
-    i.src = imgSrc;
     return {
-      width: i.naturalWidth,
-      height: i.naturalHeight
-    };
-    console.warn("WRONG DIMENTIONS @ geRrealImgDimension(imgSrc)");
+      imageTask,
+       thumbTask: null, imgSaveInfo };
   }
+  // private geRrealImgDimension(imgSrc) {
+  //   const i = new Image();
+  //   i.src = imgSrc;
+  //   return {
+  //     width: i.naturalWidth,
+  //     height: i.naturalHeight
+  //   };
+  //   console.warn("WRONG DIMENTIONS @ geRrealImgDimension(imgSrc)");
+  // }
   generateThumb(
     img,
     MAX_WIDTH: number = 70,
@@ -116,58 +160,7 @@ export class ImageService {
       return name;
     }
   }
-  // private generateSquareThumb(
-  //   img,
-  //   MAX_LENGTH: number = 700,
-  //   quality: number = 1,
-  //   callback
-  // ) {
-  //   const canvas: HTMLCanvasElement = document.createElement("canvas");
-  //   const image = new Image();
 
-  //   image.onload = () => {
-  //     let width = image.width;
-  //     let height = image.height;
-  //     let srcX = 0,
-  //       srcY = 0;
-  //     const srcLength = image.height < image.width ? image.height : image.width;
-
-  //     if (width > height) {
-  //       if (width > MAX_LENGTH) {
-  //         height *= MAX_LENGTH / width;
-  //         width = MAX_LENGTH;
-  //         srcX = (image.width - image.height) / 2;
-  //       }
-  //     } else {
-  //       if (height > MAX_LENGTH) {
-  //         width *= MAX_LENGTH / height;
-  //         height = MAX_LENGTH;
-  //         srcY = (image.height - image.width) / 2;
-  //       }
-  //     }
-  //     canvas.width = MAX_LENGTH;
-  //     canvas.height = MAX_LENGTH;
-  //     const ctx = canvas.getContext("2d");
-
-  //     ctx.drawImage(
-  //       image,
-  //       srcX,
-  //       srcY,
-  //       srcLength,
-  //       srcLength,
-  //       0,
-  //       0,
-  //       MAX_LENGTH,
-  //       MAX_LENGTH
-  //     );
-
-  //     // IMPORTANT: 'jpeg' NOT 'jpg'
-  //     const dataUrl = canvas.toDataURL("image/jpeg", quality);
-
-  //     callback(dataUrl);
-  //   };
-  //   image.src = img;
-  // }
   private generateThumbCB(
     img,
     MAX_WIDTH: number = 700,
@@ -215,100 +208,4 @@ export class ImageService {
     console.warn("WRONG SIZE ", "getImageSize(data_url)");
   }
 
-  /*
-  public xhrLoad(src: string) {
-    const xhr = new XMLHttpRequest();
-
-    // Use JSFiddle logo as a sample image to avoid complicating
-    // this example with cross-domain issues.
-  //  xhr.open("GET", "http://fiddle.jshell.net/img/logo.png", true);
-    xhr.open("GET", src, true);
-
-    // Ask for the result as an ArrayBuffer.
-    xhr.responseType = "arraybuffer";
-    const promise = new Promise<string>((resolve, reject) => {
-      xhr.onerror = function(e) {
-        reject(e);
-      };
-      xhr.onload = function(e) {
-        // Obtain a blob: URL for the image data.
-        const arrayBufferView = new Uint8Array(this.response);
-        const  blob = new Blob([arrayBufferView], { type: "image/jpeg" });
-        const urlCreator = window.URL; // || window.webkitURL;
-        const imageUrl = urlCreator.createObjectURL(blob);
-        resolve(imageUrl);
-       // const img = document.querySelector("#photo");
-       // img.src = imageUrl;
-      };
-
-      xhr.send();
-    });
-    return promise;
-
-  }
-  */
-  /*  private loadImage(url: string): Observable<any> {
-    return this.httpClient
-      // load the image as a blob
-      .get(url, {responseType: 'blob'})
-      // create an object url of that blob that we can use in the src attribute
-      .map(e => URL.createObjectURL(e))
-  }
-/*
-
-  fixMIME(src) {
-    const img = this;
-
-    // First of all, try to guess the MIME type based on the file extension.
-    let mime;
-    switch (src.toLowerCase().slice(-4)) {
-      case ".bmp":
-        mime = "bmp";
-        break;
-      case ".gif":
-        mime = "gif";
-        break;
-      case ".jpg":
-      case "jpeg":
-        mime = "jpeg";
-        break;
-      case ".png":
-      case "apng":
-        mime = "png";
-        break;
-      case ".svg":
-      case "svgz":
-        mime = "svg+xml";
-        break;
-      case ".tif":
-      case "tiff":
-        mime = "tiff";
-        break;
-      default:
-        console.log("Unknown file extension: " + src);
-        return;
-    }
-    console.log("Couldn't load " + src + "; retrying as image/" + mime);
-
-    // Attempt to download the image data via an XMLHttpRequest.
-    const xhr = new XMLHttpRequest();
-    let result;
-    xhr.onload = function() {
-      if (this.status !== 200) {
-        return console.log("FAILED: " + src);
-      }
-      // Blob > ArrayBuffer: http://stackoverflow.com/a/15981017/4200092
-      const reader = new FileReader();
-      reader.onload = function() {
-        // TypedArray > Base64 text: http://stackoverflow.com/a/12713326/4200092
-        const data = String.fromCharCode.apply(null, new Uint8Array(result));
-        src = "data:image/" + mime + ";base64," + btoa(data);
-      };
-      reader.readAsArrayBuffer(this.response);
-    };
-    xhr.open("get", src, true);
-    xhr.responseType = "blob";
-    xhr.send();
-  }
-  */
 }

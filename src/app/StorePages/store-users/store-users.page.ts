@@ -50,9 +50,9 @@ export class StoreUsersPage implements OnInit {
     const email = this.emailCtrl.value;
     this.foundUser = this.us.getByEmail(email);
   }
-  invite(user: Extended<User>) {
+  async invite(user: Extended<User>) {
     const storeUser: StoreUser = { userInfo: user.data, isEnabled: false, canRead: false, canWrite: false } as unknown as StoreUser;
-    const asid = this.as.activeStoreKey;
+    const asid = await this.as.getlatest();
     this.sinfoS.getOnce(asid).then(esi => {
       this.userStoresService.invite(user.id, esi.data, asid);
     });

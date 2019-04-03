@@ -43,7 +43,8 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
   }
   async saveNewImage(imageSaveInfo: ImageSaveInfo, id?: string) {
     const key = id || this.newKey();
-    const folder = this.activeStoreService.activeStoreKey;
+    // const folder = this.activeStoreService.activeStoreKey;
+    const folder = await this.activeStoreService.getlatest();
     const ImgSaveInfo = await this.imageService.extendImageSaveInfo(
       imageSaveInfo,
       key,
@@ -55,33 +56,56 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
     const uploadRes = await this.imageService.upload(
       ImgSaveInfo,
       key,
-      this.activeStoreService.activeStoreKey
+      folder
     );
     ImgSaveInfo.uploadRes = uploadRes;
 
-    forkJoin(
-      uploadRes.imageTask.snapshotChanges(),
-      uploadRes.thumbTask.snapshotChanges()
-    )
-      .pipe(
-        switchMap(any => {
-          return combineLatest(
-            ImgSaveInfo.imageRef.getDownloadURL(),
-            ImgSaveInfo.thumbRef.getDownloadURL()
-          );
-        }),
-        catchError(err => {
-          console.log("Error upload image", err);
-          throw err;
-        })
+//    if (uploadRes.imageTask) {
+      if (uploadRes.thumbTask) {
+        forkJoin(
+        uploadRes.imageTask.snapshotChanges(),
+        uploadRes.thumbTask.snapshotChanges()
       )
-      // todo:
-      .subscribe(([url, thumbUrl]) => {
-        return this.afterImageUploaded(extImage, { url, thumbUrl }).then(() => {
-          this.pendingUploads.delete(extImage.id);
+        .pipe(
+          switchMap(any => {
+            return combineLatest(
+              ImgSaveInfo.imageRef.getDownloadURL(),
+              ImgSaveInfo.thumbRef.getDownloadURL()
+            );
+          }),
+          catchError(err => {
+            console.log("Error upload image", err);
+            throw err;
+          })
+        )
+        // todo:
+        .subscribe(([url, thumbUrl]) => {
+          return this.afterImageUploaded(extImage, { url, thumbUrl }).then(() => {
+            this.pendingUploads.delete(extImage.id);
+          });
         });
+    } else {
+      uploadRes.imageTask.snapshotChanges().toPromise().then(() => {
+        return ImgSaveInfo.imageRef.getDownloadURL()
+
+          // todo:
+          .subscribe((url) => {
+            return this.afterImageUploaded(extImage, { url, thumbUrl: null }).then(() => {
+              URL.revokeObjectURL(uploadRes.imgSaveInfo.editedBlobUrl);
+              this.pendingUploads.delete(extImage.id);
+
+            });
+          },
+            err => {
+              console.log("Error upload image", err);
+              throw err;
+            }
+          );
       });
+
+    }
   }
+
   remove(removedItem: Extended<ImageFile>) {
     return this.beforeImageRemoved(removedItem).then(() => {
       return this.imageService.remove(removedItem.data).then(removeRes => {
@@ -101,7 +125,11 @@ export class ImagesDataService extends StoreDataService<ImageFile> {
       size: ImgSaveInfo.size,
       height: ImgSaveInfo.height,
       width: ImgSaveInfo.width,
-      name: ImgSaveInfo.srcName
+      name: ImgSaveInfo.srcName,
+      // thumbWidth: ImgSaveInfo.thumbWidth,
+      // thumbHeight: ImgSaveInfo.thumbHeight,
+      // thumbSize: ImgSaveInfo.thumbSize
+
     } as ImageFile;
     const extImage: Extended<ImageFile> = {
       id: key,

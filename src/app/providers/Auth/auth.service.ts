@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import * as firebase from 'firebase/app';
 import {AngularFireAuth } from "@angular/fire/auth";
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,9 @@ export class AuthService {
   }
   get currentUser() {
     return this.afAuth.auth.currentUser;
+  }
+  getUser() {
+    return this.afAuth.authState.pipe(take(1)).toPromise();
   }
   signInWithEmail(email: string, password: string): Promise<any> {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password);

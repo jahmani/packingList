@@ -1,11 +1,13 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { StoreBasePage } from "./store-base/store-base.page";
+import { StoreGuardService } from "../providers/routGuards/store-guard.service";
 
 const routes: Routes = [
   {
     path: "",
     component: StoreBasePage,
+    canActivateChild: [StoreGuardService],
     children: [
       { path: "", redirectTo: "tabs", pathMatch: "full" },
       {

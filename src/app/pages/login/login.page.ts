@@ -32,7 +32,7 @@ export class LoginPage implements OnInit {
     if (valid) {
       this.auth
         .signInWithEmail(value.email, value.password)
-        .then(() => this.router.navigateByUrl("home"));
+        .then(() => this.router.navigateByUrl("/"));
     }
 
     // throw "please take care , invalid form"

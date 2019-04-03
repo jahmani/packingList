@@ -19,11 +19,11 @@
 <ion-content>
   <div class="image__grid">
     <div class="image__square" *ngFor="let image of storeImages|async as images; let i = index; trackBy:trackByFn" (click)="onClick(i,images)">
-        <img [src]="image.data.thumbUrl" *ngIf="image.data.thumbUrl; else noThumb"/>
+        <img [src]="image.data.url" *ngIf="image.data.url; else noThumb"/>
       <ng-template #noThumb>
         <ng-container  *ngIf="image.ext.imgSaveInfo; else noImage">
             <ion-spinner name="lines" class="fixed"></ion-spinner>
-            <img [src]="image.ext.imgSaveInfo.imageString"/>
+            <img [src]="image.ext.imgSaveInfo.safeThumbBlobUrl"/>
         </ng-container>
         <ng-template #noImage>
           <img src="" >
@@ -34,4 +34,4 @@
   
 
 </ion-content>
-<input type="file" (change)="onFileInpuChanged($event)" accept="image/*" id="file-input" #fileInput />
+<input type="file" (change)="onFileInpuChanged2($event)" accept="image/*" id="file-input" #fileInput />

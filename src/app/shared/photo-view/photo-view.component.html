@@ -28,17 +28,27 @@
 <ion-content no-scroll no-badding color="dark" dir="ltr">
   <ion-slides zoom pager="true" [options]="sliderOptions">
     <ion-slide *ngFor="let image of images">
-      <div class="swiper-zoom-container">
-        <ng-container *ngIf="image.data.thumbUrl; else noThumb">
-          <ion-spinner name="lines" class="fixed" *ngIf="!image.ext.loaded || deleteInProgress"></ion-spinner>
+        <p  slot="fixed"> Size: {{image.data.size}}, Dim : {{image.data.width + "x" + image.data.height}}</p>
+        <p  slot="fixed"> Size: {{image.data.thumbSize}}, Dim : {{image.data.thumbWidth + "x" + image.data.thumbHeight}}</p>
+        <div class="swiper-zoom-container">
+          <ion-fab vertical="top" horizontal="start" slot="fixed">
+            <ion-fab-button (click)="editImage(image)">
+              <ion-icon name="create"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+
+        <ng-container *ngIf="image.data.url; else noThumb">
+          <!-- <ion-spinner name="lines" class="fixed" *ngIf="!image.ext.loaded || deleteInProgress"></ion-spinner>
+          
           <img style="object-fit:scale-down;" [src]="image.data.url" (load)="image.ext.loaded = true"
             [hidden]="!image.ext.loaded" />
-          <img [src]="image.data.thumbUrl" [hidden]="image.ext.loaded" />
-        </ng-container>
+            <img [src]="image.data.thumbUrl" [hidden]="image.ext.loaded" /> -->
+            <img [src]="image.data.url" />
+          </ng-container>
         <ng-template #noThumb>
           <ng-container *ngIf="image.ext.imgSaveInfo; else noImage">
             <ion-spinner name="lines" class="fixed"></ion-spinner>
-            <img [src]="image.ext.imgSaveInfo.imageString" />
+            <img [src]="image.ext.imgSaveInfo.safeThumbBlobUrl" />
           </ng-container>
           <ng-template #noImage> <img src="" /> no image </ng-template>
         </ng-template>

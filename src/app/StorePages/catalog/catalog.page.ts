@@ -3,7 +3,7 @@ import { ProductsListPage } from '../products-list/products-list.page';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NavParams, IonList } from '@ionic/angular';
 import { CatalogService, ProductsService } from '../../providers/catalogData/catalog-data.service';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { Extended, Product } from '../../interfaces/data-models';
 import { FormControl } from '@angular/forms';
 import { map, switchMap, flatMap, debounceTime, startWith } from 'rxjs/operators';
@@ -39,7 +39,13 @@ export class CatalogPage implements OnInit {
     private catalogService: CatalogService
   ) {
     this.products = this.rout.paramMap.pipe(
-      map(paramMap => paramMap.get("storeId") || activeStoreService.activeStoreKey ),
+      switchMap(paramMap => {
+        const storeId = paramMap.get("storeId");
+        if (storeId) {
+          return of(storeId);
+        } else {
+          return activeStoreService.activeStoreKey$;
+        }}),
       map(storeId => this.catalogService.forStore(storeId)),
       flatMap(prodService => prodService.FormatedList)
     );

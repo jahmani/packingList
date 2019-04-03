@@ -28,7 +28,7 @@ export class PhotoPickerComponent implements OnInit {
     console.log("Hello ImageSelectComponent Component");
   }
   get displayImageSrc() {
-    return this.imgFile && this.imgFile.data ? this.imgFile.data.thumbUrl : this.placeHoldereSrc;
+    return this.imgFile && this.imgFile.data ? this.imgFile.data.url : this.placeHoldereSrc;
   }
   srcChangeFunction: any;
   imgFileId: string;
@@ -64,7 +64,7 @@ export class PhotoPickerComponent implements OnInit {
         const extImageFile: Extended<ImageFile> = res.data;
         this.imgFile = extImageFile;
         this.imgFileId = extImageFile.id;
-        this.srcChangeFunction(extImageFile.data.thumbUrl);
+        this.srcChangeFunction(extImageFile.data.url);
       }
     });
   }

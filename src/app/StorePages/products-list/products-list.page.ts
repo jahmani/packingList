@@ -35,7 +35,8 @@ export class ProductsListPage implements OnInit {
     if (productsFsRepository) {
       this.productsRep = productsFsRepository;
     }
-    this.products = this.productsRep.FormatedList;
+  //  this.products = this.productsRep.FormatedList;
+    this.products = this.productsRep.List();
     this.searchControl = new FormControl();
   }
   canSelect: any;

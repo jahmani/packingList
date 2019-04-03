@@ -4,7 +4,7 @@
 
 
     <ng-template #showTitle>
-      <ion-title>ProductsList</ion-title>
+      <ion-title>ProductsList 6</ion-title>
     </ng-template>
     <ion-searchbar *ngIf="showSerach; else showTitle" aria-label="search" [formControl]="searchControl" #searchBar>
     </ion-searchbar>
@@ -28,7 +28,7 @@
 
       </ng-template>
       <ion-button (click)="toggleSearch()">
-        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" style="height : 70%" />
+        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
 
       </ion-button>
       <!-- <ion-menu-toggle  *ngIf="!canSelect" menuToggle>

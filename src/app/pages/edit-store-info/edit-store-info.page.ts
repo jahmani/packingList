@@ -44,8 +44,8 @@ export class EditStoreInfoPage {
       mergeMap(paramMap => {
         const paramStoreId = paramMap.get("id");
         if (!paramStoreId) {
-          const activeStoreId = this.activeStoreService.activeStoreKey;
-          const storeDoc = this.storesFsRepository.get(activeStoreId);
+          const storeDoc = this.activeStoreService.activeStoreKey$.pipe(switchMap(
+            activeStoreId => this.storesFsRepository.get(activeStoreId)));
           return storeDoc;
         } else if (paramStoreId === "new") {
           return this.authService.user.pipe(

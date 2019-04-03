@@ -8,21 +8,27 @@ export class DataModels {}
   for more info on providers and Angular 2 DI.
 */
 export interface ImageSaveInfo {
-  imageString: string;
-  thumbString: string;
+  editedBlobUrl: string;
+  // thumbBlobUrl: string;
+  safeBlobUrl: string;
+  blobURL: string;
+  // imageString: string;
+  // thumbString: string;
   imageRef: AngularFireStorageReference;
   thumbRef: AngularFireStorageReference;
-  imageSrcUri: string;
-  imageUri: string;
-  thumbUri: string;
+  // imageSrcUri: string;
+  // imageUri: string;
+  // thumbUri: string;
   srcName: string;
   imageId: string;
   width: number;
   height: number;
+  // thumbWidth: number;
+  // thumbHeight: number;
+  // thumbSize: number;
   type: string;
   ext: string;
   size: number;
-  thumbSize: number;
   uploadRes: {
     imageTask: AngularFireUploadTask;
     thumbTask: AngularFireUploadTask;
@@ -186,6 +192,10 @@ export interface ImageFile extends Editable, Delteable {
   size: number;
   width: number;
   height: number;
+  thumbWidth: number;
+  thumbHeight: number;
+  thumbSize: number;
+
   tags: string[];
   isUploaded: boolean;
 }

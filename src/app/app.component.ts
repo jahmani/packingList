@@ -9,7 +9,7 @@ import { Observable, of, fromEvent } from "rxjs";
 import { Extended, User, StoreInfo } from "./interfaces/data-models";
 import { UsersService } from "./providers/AppData/users.service";
 import { map } from "rxjs/internal/operators/map";
-import { switchMap } from "rxjs/operators";
+import { switchMap, combineLatest } from "rxjs/operators";
 import { StoreInfoService } from "./providers/AppData/store-info.service";
 import { Router } from "@angular/router";
 
@@ -44,18 +44,26 @@ export class AppComponent implements OnInit, OnDestroy {
     // );
     this.activeStore$ = this.activeStoreService.activeStoreKey$.pipe(
       switchMap(storeId => {
-        return this.storesService.get(storeId);
+        if (storeId) {
+          return this.storesService.get(storeId);
+        } else {
+          return of(null);
+        }
       })
     );
 
-    this.authService.user.subscribe(user => {
+    this.authService.user.pipe(combineLatest(this.activeStore$)).subscribe(([user, store]) => {
       if (!user) {
         this.router.navigateByUrl("/login");
-      }
-      if (user && !this.initialAppLoad) {
-        this.router.navigateByUrl("/");
+      } else if ( store ) {
+        if (!this.initialAppLoad) {
+          this.router.navigateByUrl("/");
+          this.initialAppLoad = false;
+        }
+       } else {
+        this.router.navigateByUrl("/UserStores");
         this.initialAppLoad = false;
-      }
+     }
     });
   }
   ngOnInit() {

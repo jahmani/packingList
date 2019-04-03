@@ -49,10 +49,8 @@ export class UserStoresPage implements OnInit {
   }
   */
 
-  onStoreSelected(extStore: Extended<UserStore>) {
-    this.activeStoreServise.setActiveStoreKey(extStore.id);
-    //  const accountsPage = { title: "Accounts", component: "AccountsListPage" };
-
+  async onStoreSelected(extStore: Extended<UserStore>) {
+    await this.activeStoreServise.setActiveStoreKey(extStore.id);
     this.router.navigateByUrl("/StoreBase");
   }
 

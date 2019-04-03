@@ -8,6 +8,18 @@
  .fixed{
      position: fixed;
  }
+ .thumb-text{
+    position: absolute;
+    bottom: 0px;
+    margin: 0px;
+    width: 100%;
+    padding-bottom: 8px;
+    background-color: #0f090987;
+    padding-inline-start: 2px;
+}
+.thumb-view{
+    position: relative;
+}
 .image__grid {
     margin-top: 5px;
     overflow: hidden;

@@ -17,7 +17,7 @@ import * as firebase from "firebase/app";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 
 export class FirestoreData<T extends Editable> {
-  get FormatedList(): Observable<any[]> {
+  get FormatedList(): Observable<Extended<T>[]> {
     return this.dataList;
   }
   protected path: string;

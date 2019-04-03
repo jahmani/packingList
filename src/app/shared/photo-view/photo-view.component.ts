@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
-import { Extended, ImageFile } from "../../interfaces/data-models";
+import { Extended, ImageFile, ImageSaveInfo } from "../../interfaces/data-models";
 import { NavParams, ModalController, IonSlides } from "@ionic/angular";
+import { EditPhotoPage } from "../../pages/edit-photo/edit-photo.page";
 // import { ImageEditorPage } from "../../pages/image-editor/image-editor.page";
 // import { DomSanitizer } from "@angular/platform-browser";
 
@@ -85,5 +86,30 @@ export class PhotoViewComponent implements OnInit {
 
   // }
   ngOnInit() {
+  }
+  editImage(image:  Extended<ImageFile>) {
+    // image.data
+    const imgInfo: ImageSaveInfo = {
+      blobURL: image.data.url,
+      srcName: image.data.name || "",
+      imageId: image.id,
+     } as ImageSaveInfo;
+
+    return this.showEditImage(imgInfo);
+  }
+  async showEditImage(imgInfo: ImageSaveInfo) {
+    // const imgInfo: ImageSaveInfo = { blobURL, srcName } as ImageSaveInfo;
+    const imgEditor = await this.modalCtrl.create(
+      { component: EditPhotoPage, componentProps: { imgInfo } });
+    await imgEditor.present();
+    imgEditor.onDidDismiss().then(((res) => {
+      if (res.role === "upload" && res && res.data) {
+        const imgMeta = res.data as ImageSaveInfo; // { imageSrcUri: res.data, srcName };
+        // imgMeta.srcName = srcName;
+        this.imagesFsRepository.saveNewImage(imgMeta, imgInfo.imageId);
+      }
+
+    }));
+
   }
 }

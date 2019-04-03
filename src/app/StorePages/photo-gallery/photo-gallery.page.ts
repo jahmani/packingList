@@ -1,9 +1,10 @@
 import {
   Component,
   OnInit,
-  Optional,
+  // Optional,
   ViewChild,
   ElementRef,
+  Input,
 } from "@angular/core";
 import { Observable } from "rxjs";
 import {
@@ -13,7 +14,7 @@ import {
   ImageSaveInfo
 } from "../../interfaces/data-models";
 import {
-   NavParams,
+  //  NavParams,
    ModalController } from "@ionic/angular";
 // import { ViewController } from "@ionic/core";
 // import { ImageService } from "../../providers/Image/image.service";
@@ -21,8 +22,9 @@ import { ImagesDataService } from "../../providers/StoreData/images-data.service
 import { PhotoViewComponent } from "../../shared/photo-view/photo-view.component";
 // import { ImageEditorPage } from "../../pages/image-editor/image-editor.page";
 // import { DomSanitizer } from "@angular/platform-browser";
-import { PhotoUploadComponent } from "../../shared/photo-upload/photo-upload.component";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+// import { PhotoUploadComponent } from "../../shared/photo-upload/photo-upload.component";
+// import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { EditPhotoPage } from "../../pages/edit-photo/edit-photo.page";
 // import * as  exifStripper from "exif-stripper";
 
 @Component({
@@ -32,7 +34,7 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 })
 export class PhotoGalleryPage implements OnInit {
   storeImages: Observable<Extended<ImageFile>[]>;
-  canSelect = false;
+  @Input() canSelect; // = false;
   // canGoBack = true;
   // galleryType = "slides";
   @ViewChild("fileInput") fileInput: ElementRef;
@@ -41,16 +43,16 @@ export class PhotoGalleryPage implements OnInit {
   // uploadedImageURL: any;
 
   constructor(
-    @Optional() private navParams: NavParams,
+  //  @Optional() private navParams: NavParams,
     private modalCtrl: ModalController,
     private imagesFsRepository: ImagesDataService,
   //  private imagesService: ImageService,
   //  private sanitizer: DomSanitizer
 
   ) {
-    if (this.navParams) {
-      this.canSelect = navParams.get("canSelect") ;
-    }
+    // if (this.navParams) {
+    //   this.canSelect = navParams.get("canSelect") ;
+    // }
     // this.canGoBack = navParams.get("canGoBack");
 
     // if (!imagesFsRepository) {
@@ -89,36 +91,51 @@ export class PhotoGalleryPage implements OnInit {
       if (res && res.data) {
         const extImageFile: Partial<Extended<ImageFile>> = res.data;
         // extImageFile = res.data;
-        if (res.role === "upload") {
-          const imgMeta = { imageString: extImageFile.data.url, srcName: extImageFile.data.name } as ImageSaveInfo;
-          this.imagesFsRepository.saveNewImage(imgMeta);
-        } else {
+        // if (res.role === "upload") {
+        //   const imgMeta = { imageString: extImageFile.data.url, srcName: extImageFile.data.name } as ImageSaveInfo;
+        //   this.imagesFsRepository.saveNewImage(imgMeta);
+        // } else {
           this.selectPhoto(extImageFile);
-        }
+        // }
       }
     });
   }
-  async openUploadPhoto(imageString, srcName) {
-    const imgInfo: ImageSaveInfo = { imageString, srcName } as ImageSaveInfo;
-    const modal = await this.modalCtrl.create({
-      component: PhotoUploadComponent,
-      componentProps: {
-        imgInfo
+  async showEditImage(blobURL, srcName) {
+    const imgInfo: ImageSaveInfo = { blobURL, srcName } as ImageSaveInfo;
+    const imgEditor = await this.modalCtrl.create(
+      { component: EditPhotoPage, componentProps: { imgInfo } });
+    await imgEditor.present();
+    imgEditor.onDidDismiss().then(((res) => {
+      if (res.role === "upload" && res && res.data) {
+        const imgMeta = res.data as ImageSaveInfo; // { imageSrcUri: res.data, srcName };
+        imgMeta.srcName = srcName;
+        this.imagesFsRepository.saveNewImage(imgMeta);
       }
-    });
-    modal.present();
-    modal.onDidDismiss().then(res => {
-      if (res && res.data) {
-        const extImageFile: Partial<Extended<ImageFile>> = res.data;
-        // extImageFile = res.data;
-        if (res.role === "upload") {
-          const imgMeta = res.data as ImageSaveInfo; // { imageSrcUri: res.data, srcName };
-          imgMeta.srcName = srcName;
-          this.imagesFsRepository.saveNewImage(imgMeta);
-        }
-      }
-    });
+
+    }));
+
   }
+  // async openUploadPhoto(imageString, srcName) {
+  //   const imgInfo: ImageSaveInfo = { imageString, srcName } as ImageSaveInfo;
+  //   const modal = await this.modalCtrl.create({
+  //     component: PhotoUploadComponent,
+  //     componentProps: {
+  //       imgInfo
+  //     }
+  //   });
+  //   modal.present();
+  //   modal.onDidDismiss().then(res => {
+  //     if (res && res.data) {
+  //       const extImageFile: Partial<Extended<ImageFile>> = res.data;
+  //       // extImageFile = res.data;
+  //       if (res.role === "upload") {
+  //         const imgMeta = res.data as ImageSaveInfo; // { imageSrcUri: res.data, srcName };
+  //         imgMeta.srcName = srcName;
+  //         this.imagesFsRepository.saveNewImage(imgMeta);
+  //       }
+  //     }
+  //   });
+  // }
 
   selectPhoto(image: Partial<Extended<ImageFile>>) {
     if (image) {
@@ -131,24 +148,45 @@ export class PhotoGalleryPage implements OnInit {
   openNativeFileInput() {
     this.fileInput.nativeElement.click();
   }
-  onFileInpuChanged(event) {
+  // onFileInpuChanged(event) {
+  //   event.stopPropagation();
+  //   const file: File = event.target.files[0];
+  //   let src: any;
+
+  //   const self = this;
+  //   if (FileReader && file) {
+  //     const fr = new FileReader();
+  //     fr.onload = function () {
+  //       src = fr.result;
+  //       // self.src = src;
+  //       // console.log("fileeeeeeeeeeeeeeeeeef", src);
+  //       //  self.previewPhoto(src, file.name);
+  //       self.openUploadPhoto(src, name);
+  //       self.fileInput.nativeElement.value = null;
+  //     };
+  //     fr.readAsDataURL(file);
+  //   }
+  // }
+  onFileInpuChanged2(event) {
     event.stopPropagation();
     const file: File = event.target.files[0];
-    let src: any;
-
-    const self = this;
-    if (FileReader && file) {
-      const fr = new FileReader();
-      fr.onload = function () {
-        src = fr.result;
-        // self.src = src;
-        // console.log("fileeeeeeeeeeeeeeeeeef", src);
-        //  self.previewPhoto(src, file.name);
-        self.openUploadPhoto(src, name);
-        self.fileInput.nativeElement.value = null;
-      };
-      fr.readAsDataURL(file);
-    }
+    // let src: any;
+    const url = URL.createObjectURL(file);
+    this.showEditImage(url, file.name);
+    this.fileInput.nativeElement.value = null;
+    // const self = this;
+    // if (FileReader && file) {
+    //   const fr = new FileReader();
+    //   fr.onload = function () {
+    //     src = fr.result;
+    //     // self.src = src;
+    //     // console.log("fileeeeeeeeeeeeeeeeeef", src);
+    //     //  self.previewPhoto(src, file.name);
+    //     self.openUploadPhoto(src, name);
+    //     self.fileInput.nativeElement.value = null;
+    //   };
+    //   fr.readAsDataURL(file);
+    // }
   }
 
   // onFileInpuChanged2(event) {
