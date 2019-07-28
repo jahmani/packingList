@@ -20,7 +20,7 @@ export class AccountsBalanceService extends StoreDataService<AccountBalance> {
     console.log("Helloooooo AccountsBalance FBRepository Provider");
   }
   get FormatedList(): Observable<any[]> {
-    return this.List();
+    return this.list;
   }
 
   async setAccountBalanceInvalid(accountId: string) {

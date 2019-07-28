@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { RoleGuardService } from '../../providers/routGuards/role-guard.service';
 
 const routes: Routes = [
   {
@@ -12,7 +13,8 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            loadChildren: '../products-list/products-list.module#ProductsListPageModule'
+            loadChildren: '../products-list/products-list.module#ProductsListPageModule',
+            canActivate: [RoleGuardService]
           }
         ]
       },

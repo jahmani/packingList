@@ -3,22 +3,23 @@ import { Observable, combineLatest, of } from "rxjs";
 import { UserStore, Extended, StoreInfo } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { map, mergeMap, startWith } from "rxjs/operators";
-import { FirestoreData } from "./firestore-data";
+import { AppData } from "./firestore-data";
 import { StoreInfoService } from "./store-info.service";
 import { AuthService } from "../Auth/auth.service";
 import { conatctPaths } from "../../Util/contact-paths";
+import { ReactivePathFirestoreData } from "./reactive-path-firestore-data.service";
 
 @Injectable({
   providedIn: "root"
 })
-export class UserStoresService extends FirestoreData<UserStore>  {
-  fsRep$: Observable<FirestoreData<UserStore>>;
+export class UserStoresService extends ReactivePathFirestoreData<UserStore>  {
+  fsRep$: Observable<AppData<UserStore>>;
   constructor(
     protected afs: AngularFirestore,
     private auth: AuthService,
     private storeInfoFsRepository: StoreInfoService
   ) {
-    super(afs, auth.user.pipe(map(user => "users/" + user.uid + "/stores")));
+    super(afs, auth.user.pipe(map(user => user ? "users/" + user.uid + "/stores" : "NULLPATH")));
     // super(afs, "users/" + auth.currentUser.uid + "/stores");
     // console.log("Hello UserStoresFsRepository Provider");
     // this.fsRep$ = auth.user.pipe(
@@ -35,7 +36,7 @@ export class UserStoresService extends FirestoreData<UserStore>  {
     // );
   }
   forUser(uid) {
-    return new FirestoreData(
+    return new AppData(
       this.afs,
       conatctPaths("users", uid, "stores")
     );
@@ -49,10 +50,10 @@ export class UserStoresService extends FirestoreData<UserStore>  {
   }
 
   // List() {
-  //   return this.fsRep$.pipe(mergeMap(fsRep => fsRep && fsRep.List()));
+  //   return this.fsRep$.pipe(mergeMap(fsRep => fsRep && fsReplist));
   // }
   // get FormatedList(): Observable<Extended<UserStore>[]> {
-  //   return this.List().pipe(
+  //   return this.list.pipe(
   //     mergeMap(stores => {
   //       //  return Promise.all(this.getStores(stores));
   //       return combineLatest(this.getStores(stores));

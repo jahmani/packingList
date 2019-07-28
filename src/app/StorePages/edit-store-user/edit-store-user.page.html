@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>EditStoreUser</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="permissionsCtrlsGroup" #frm (ngSubmit)="onSubmit(permissionsCtrlsGroup)">
+
+      <ion-list *ngIf="(storeUser|async) as su">
+          <ion-list-header>
+            <ion-label>{{su.data.userInfo.displayName}}</ion-label>
+          </ion-list-header>
+          <ion-item *ngFor="let perm of permessions">
+            <ion-label>{{perm}}</ion-label>
+            <ion-checkbox [formControlName]="perm" slot="start"></ion-checkbox>
+          </ion-item>
+        </ion-list>
+    <ion-button  expand="full" color="primary" type="submit" [disabled]="permissionsCtrlsGroup.invalid">
+      Save
+    </ion-button>
+    <ion-button  expand="full"  (click)="onCancel()">
+      <ion-icon slot="primary" name="arrow-back"></ion-icon>
+      cancel
+    </ion-button>
+  </form>
+</ion-content>

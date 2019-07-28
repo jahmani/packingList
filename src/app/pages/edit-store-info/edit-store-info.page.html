@@ -13,24 +13,35 @@
   </ion-toolbar>
 </ion-header>
 
+
+
 <ion-content padding>
-  <form *ngIf="storeDoc$|async as storeDoc" novalidate ng-submit="onSubmit()" [formGroup]="form">
+  <form *ngIf="storeDoc$|async as storeDoc" novalidate (ngSubmit)="onSubmit(form)" [formGroup]="form">
     <ion-list>
       <ion-item [class.invalid]="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
         <ion-label floating>Name</ion-label>
         <ion-input formControlName="name" type="text"></ion-input>
       </ion-item>
-      <ion-item color="danger" *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
-        <p *ngIf="nameCtrl.hasError('required')" class="err">* ammount is rquired</p>
-        <p *ngIf="nameCtrl.hasError('max')" class="err">*too much big ammount!</p>
+      <ion-item *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
+          <ion-text color="danger" class="form-error" *ngIf="nameCtrl.hasError('required')" >
+          * name is rquired
+        </ion-text>
+        <ion-text color="danger" class="form-error" *ngIf="nameCtrl.hasError('minlength') || nameCtrl.hasError('maxlength')">
+          * name must be at least 3 chars, at most 40 chars
+        </ion-text>
       </ion-item>
+
       <ion-item [class.invalid]="!currencyCtrl.valid && (nameCtrl.touched || submitAttempt)">
         <ion-label floating>Currency</ion-label>
         <ion-input formControlName="currency" type="text"></ion-input>
       </ion-item>
-      <ion-item color="danger" *ngIf="!currencyCtrl.valid && (currencyCtrl.touched || submitAttempt)">
-        <p *ngIf="currencyCtrl.hasError('required')" class="err">* ammount is rquired</p>
-        <p *ngIf="currencyCtrl.hasError('max')" class="err">*too much big ammount!</p>
+      <ion-item *ngIf="!currencyCtrl.valid && (currencyCtrl.touched || submitAttempt)">
+          <ion-text color="danger" class="form-error" *ngIf="currencyCtrl.hasError('required')" >
+          * currency is rquired
+        </ion-text>
+        <ion-text color="danger" class="form-error" *ngIf="currencyCtrl.hasError('maxlength')">
+          * currency must be at most 3 letters
+        </ion-text>
       </ion-item>
     </ion-list>
   </form>
@@ -40,10 +51,10 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button full (click)="onCancel()" color="light">cancel</ion-button>
+        <ion-button expand="full" (click)="onCancel()" color="light">cancel</ion-button>
       </ion-col>
       <ion-col>
-        <ion-button type="submit" full (click)="onSubmit(form)" color="primary"> save</ion-button>
+        <ion-button expand="full" [disabled]="form.invalid" (click)="onSubmit(form)" full  color="primary"> save</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

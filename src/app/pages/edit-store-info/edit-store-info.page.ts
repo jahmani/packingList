@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { Extended, StoreInfo } from "../../interfaces/data-models";
+import { Extended, StoreInfo, UserStore, StoreUser } from "../../interfaces/data-models";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 import { StoreInfoService } from "../../providers/AppData/store-info.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -8,6 +8,7 @@ import { Location } from "@angular/common";
 import { switchMap, tap, map, mergeMap } from "rxjs/operators";
 import { Observable } from "rxjs";
 import { AuthService } from "../../providers/Auth/auth.service";
+import { UserStoresService } from "../../providers/AppData/user-stores.service";
 
 @Component({
   selector: "app-edit-store-info",
@@ -25,6 +26,7 @@ export class EditStoreInfoPage {
     private fb: FormBuilder,
     private storesFsRepository: StoreInfoService,
     private activeStoreService: ActiveStoreService,
+    private uss: UserStoresService,
     private authService: AuthService,
     public router: Router,
     private location: Location,
@@ -35,9 +37,10 @@ export class EditStoreInfoPage {
         "",
         Validators.compose([Validators.required, Validators.minLength(3)])
       ],
-      currency: ["", Validators.compose([Validators.required])],
+      currency: ["", Validators.compose([Validators.required, Validators.maxLength(3)])],
       code: "",
-      users: ""
+      users: "",
+      creatorId: ""
     });
 
     this.storeDoc$ = this.rout.paramMap.pipe(
@@ -54,8 +57,10 @@ export class EditStoreInfoPage {
               const newStoreInfo: StoreInfo = {
                 name: "NewStore",
                 code: "new",
-                users: [uid]
+                users: [uid],
+                creatorId : uid
               } as StoreInfo;
+
               const extNewStore: Extended<StoreInfo> = {
                 data: newStoreInfo
               } as Extended<StoreInfo>;
@@ -92,7 +97,12 @@ export class EditStoreInfoPage {
       if (this.storeDoc.id) {
         this.storesFsRepository.saveOld(updatedStoreDoc);
       } else {
-        this.storesFsRepository.saveNew(updatedStoreDoc);
+        const newId = this.storesFsRepository.newKey();
+        this.storesFsRepository.saveNew(updatedStoreDoc, newId);
+        // const su: StoreUser = {isAdmin: true,userInfo:}
+        const us: UserStore = {storeInfo: {...value, }, status: "OWNER"} as UserStore;
+        const eUs: Extended<UserStore> = {data: us, id: newId};
+      //   this.uss.saveNew(eUs);
       }
       return this.dismiss();
     }

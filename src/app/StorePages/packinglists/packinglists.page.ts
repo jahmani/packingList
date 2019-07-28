@@ -19,7 +19,7 @@ export class PackinglistsPage implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     public router: Router) {
-      this.packinglists = this.plInfoDataService.List();
+      this.packinglists = this.plInfoDataService.list;
      }
 
   ngOnInit() {

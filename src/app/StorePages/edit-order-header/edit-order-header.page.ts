@@ -63,7 +63,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
       })
     );
     */
-    this.packinglists = this.plInfoDataService.List();
+    this.packinglists = this.plInfoDataService.list;
 
     this.order$ = this.route.paramMap.pipe(
       switchMap(paramMap => {
@@ -197,7 +197,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     // throw "please take care , invalid form"
   }
 
-  onSave(order: Order) {
+  async onSave(order: Order) {
     const extOrder = { data: order } as Extended<Order>;
 
     order.rows = order.rows.map(curr => {
@@ -207,7 +207,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
       extOrder.id = this.orderId;
       this.ordersFsRep.saveOld(extOrder);
     } else {
-      const newId = this.ordersFsRep.newKey();
+      const newId = await this.ordersFsRep.newKey();
       extOrder.id = newId;
       this.ordersFsRep.saveNew(extOrder, newId);
     }

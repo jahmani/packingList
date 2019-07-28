@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FirestoreData } from "./firestore-data";
+import { AppData } from "./firestore-data";
 import { Invite, Extended, InviteState } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { mergeMap } from "rxjs/operators";
@@ -9,7 +9,7 @@ import { StoreInfoService } from "./store-info.service";
 @Injectable({
   providedIn: "root"
 })
-export class InvitesService extends FirestoreData<Invite> {
+export class InvitesService extends AppData<Invite> {
   constructor(
     afs: AngularFirestore,
     private usersFsRepository: UsersService,

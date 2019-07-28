@@ -1,10 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Optional } from "@angular/core";
 import { Extended, Product } from "../../interfaces/data-models";
 import { Observable, of } from "rxjs";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { NavParams, ModalController } from "@ionic/angular";
 import { tap } from "rxjs/operators";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
+import { ActivatedRoute } from "@angular/router";
+import { Location } from "@angular/common";
 
 @Component({
   selector: "app-edit-product",
@@ -17,16 +19,25 @@ export class EditProductPage implements OnInit {
   form: FormGroup;
   productId: string;
   productId$: Observable<string>;
+  isModal: boolean;
   constructor(
     private fb: FormBuilder,
     private productsFsRep: ProductsDataService,
-    private navParams: NavParams,
-    private modalControler: ModalController
+    @Optional() private navParams: NavParams,
+    private modalControler: ModalController,
+    activatedRoute: ActivatedRoute,
+    private location: Location
   ) {
-    // this.productId = this.navParams.get("productId");
-    // this.productId = this.rout.snapshot.paramMap.get("productId");
-    this.productId = this.navParams.get("id");
-    const copy = this.navParams.get("copy");
+    if (this.navParams) {
+      this.isModal = !!this.navParams; // .get("isModal");
+      this.productId = this.navParams.get("id");
+    } else {
+      this.productId = activatedRoute.snapshot.paramMap.get("id");
+    }
+    // this.isModal = !!this.navParams; // .get("isModal");
+    // this.productId = this.navParams.get("id");
+
+   // const copy = this.navParams.get("copy");
 
     this.form = this.fb.group({
       name: [
@@ -47,7 +58,7 @@ export class EditProductPage implements OnInit {
       unit: ["pcs", Validators.maxLength(5)]
     });
     if (this.productId === "new") {
-      const newProduct: Product = {...copy} as Product;
+      const newProduct: Product = {} as Product;
       this.product$ = of({ data: newProduct, id: null } as Extended<Product>);
     } else {
       this.product$ = this.productsFsRep.get(this.productId);
@@ -66,7 +77,12 @@ export class EditProductPage implements OnInit {
   }
 
   dismiss(data) {
-    this.modalControler.dismiss(data);
+    // this.modalControler.dismiss(data);
+    if (this.isModal) {
+      return this.modalControler.dismiss();
+    } else {
+    this.location.back();
+    }
   }
   onCancel() {
     return this.dismiss(null);

@@ -29,7 +29,7 @@
   <ion-slides zoom pager="true" [options]="sliderOptions">
     <ion-slide *ngFor="let image of images">
         <p  slot="fixed"> Size: {{image.data.size}}, Dim : {{image.data.width + "x" + image.data.height}}</p>
-        <p  slot="fixed"> Size: {{image.data.thumbSize}}, Dim : {{image.data.thumbWidth + "x" + image.data.thumbHeight}}</p>
+        <!-- <p  slot="fixed"> Size: {{image.data.thumbSize}}, Dim : {{image.data.thumbWidth + "x" + image.data.thumbHeight}}</p> -->
         <div class="swiper-zoom-container">
           <ion-fab vertical="top" horizontal="start" slot="fixed">
             <ion-fab-button (click)="editImage(image)">
@@ -48,7 +48,7 @@
         <ng-template #noThumb>
           <ng-container *ngIf="image.ext.imgSaveInfo; else noImage">
             <ion-spinner name="lines" class="fixed"></ion-spinner>
-            <img [src]="image.ext.imgSaveInfo.safeThumbBlobUrl" />
+            <img [src]="image.ext.imgSaveInfo.safeBlobUrl" />
           </ng-container>
           <ng-template #noImage> <img src="" /> no image </ng-template>
         </ng-template>

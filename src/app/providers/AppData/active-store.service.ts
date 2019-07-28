@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, merge } from "rxjs";
-import { take, map, skip } from "rxjs/operators";
+import { take, map, skip, switchMap } from "rxjs/operators";
 import { AuthService } from "../Auth/auth.service";
+import { UserStoresService } from "./user-stores.service";
 // import { UserStoresService } from "./user-stores.service";
 
 @Injectable({
@@ -16,13 +17,13 @@ export class ActiveStoreService {
   activeStoreKey$: Observable<string>;
   // latestStoreKey: Promise<string>;
   constructor(
-  //  userStoresService: UserStoresService
-  private authService: AuthService
+    private userStoresService: UserStoresService,
+    private authService: AuthService
   ) {
     this.initialDefaultLocalStoreKey = this.authService.user.pipe(
       map(user => user ? window.localStorage.getItem(`${user.uid}DEFAULT_STORE`) : null));
 
-  //  const defaultk = this.defaultLocalStoreKey();
+    //  const defaultk = this.defaultLocalStoreKey();
     // this._activeStoreKey = defaultk;  // || "HW1TAwI2hz0pLNINa51Q";
     this.subject = new BehaviorSubject(null);
     this.userChangedActiveStoreKey$ = this.subject.asObservable().pipe(skip(1));
@@ -36,7 +37,10 @@ export class ActiveStoreService {
   //   return this._activeStoreKey$;
   // }
   getlatest() {
-    return  this.activeStoreKey$.pipe(take(1)).toPromise();
+    return this.activeStoreKey$.pipe(take(1)).toPromise();
+  }
+  getActiveStoreInfo() {
+    return this.activeStoreKey$.pipe(switchMap((key) => this.userStoresService.get(key)));
   }
   // public getReactivePath(subPath: string) {
 
@@ -50,7 +54,7 @@ export class ActiveStoreService {
   //   window.localStorage.getItem(`${user.uid}DEFAULT_STORE`);
   // }
   async setActiveStoreKey(newKey) {
-     const currentKey = await this.getlatest();
+    const currentKey = await this.getlatest();
     if (newKey !== currentKey) {
       // this._activeStoreKey = newKey;
       await this.setDefaultStoreKey(newKey);

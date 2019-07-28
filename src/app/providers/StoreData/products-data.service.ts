@@ -20,7 +20,7 @@ export class ProductsDataService extends StoreDataService<Product> {
     console.log("Hello ProductsFBRepository Provider");
   }
   get FormatedList(): Observable<Extended<Product>[]> {
-    return this.List().pipe(
+    return this.list.pipe(
       combineLatest(this.imagesDataService.dataMap),
       map(([productsArray, imgMap]) => {
         return productsArray.map((prod => this.extendImage(prod, imgMap))).sort((a, b) => {

@@ -1,6 +1,7 @@
 import { AngularFireStorageReference, AngularFireUploadTask } from "@angular/fire/storage";
+import { Observable } from "rxjs";
 
-export class DataModels {}
+export class DataModels { }
 /*
   Generated class for the DataModels provider.
 
@@ -22,6 +23,7 @@ export interface ImageSaveInfo {
   srcName: string;
   imageId: string;
   width: number;
+  downloadUrl: Observable<any>;
   height: number;
   // thumbWidth: number;
   // thumbHeight: number;
@@ -77,7 +79,7 @@ export interface ImageExt {
 
 export interface OrderRowExt {
   Product?: Extended<Product>;
-  state?: "EMPTY"|"NEW"|"EDITED"|"ADDED"|"DELETED"|"NONE";
+  state?: "EMPTY" | "NEW" | "EDITED" | "ADDED" | "DELETED" | "NONE";
 }
 
 export type ExtType = CatTreeNodeExtension &
@@ -116,7 +118,7 @@ export class ExtMap<T> {
     return this.map.forEach(callbackfn);
   }
   constructor(vals?) {
-    this.map = new Map<string, T>(vals);
+    this.map = new Map<string, T>();
   }
 }
 
@@ -128,8 +130,17 @@ export interface Editable {
 export interface Delteable {
   isDelted: boolean;
 }
+export interface CustomProperty {
+  propertyName: string;
+  type: "STRING" | "NUMBER" | "MULTICHOICE";
+}
 export interface Product extends Editable {
   name: string;
+  customProperties: {
+    [propName: string]: string | number;
+    batch: string  ;
+    source: string;
+  };
   translatedName: {
     ar?: string;
     en?: string;
@@ -145,7 +156,7 @@ export interface Product extends Editable {
   size: string;
   tags: string[];
 
-  cats: {[name: string]: string[]};
+  cats: { [name: string]: string[] };
 
   thumbUrl: string;
   images: string[];
@@ -165,10 +176,18 @@ export interface User extends Editable {
   name: string;
   phoneNumber: string;
 }
+export interface StoreUserPermesions {
+  canReadProductImages: boolean;
+  canReadProducts: boolean;
+  canWriteProductImages: boolean;
+  canWriteProducts: boolean;
+}
 export interface StoreUser extends Editable {
   dateTimeAdded: string | any;
   isEnabled: true;
+  isAdmin: boolean;
   rule: string;
+  permesions: StoreUserPermesions;
   canRead: boolean;
   canWrite: boolean;
   userInfo: User;
@@ -219,7 +238,7 @@ export interface Order extends Editable, Delteable {
   deposit: number;
   currency: string;
   cbm: number;
-  rows:  OrderRow2[];
+  rows: OrderRow2[];
   packingListId: string;
 }
 
@@ -310,6 +329,7 @@ export interface StoreInfo extends Editable {
   name: string;
   code: string;
   users: string[];
+  creatorId: string;
 }
 
 export enum ItemChangeState {

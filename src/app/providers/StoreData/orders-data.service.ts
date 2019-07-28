@@ -12,7 +12,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { Observable } from "rxjs";
-import { mergeMap, map, combineLatest, share } from "rxjs/operators";
+import { mergeMap, map, combineLatest, share, flatMap } from "rxjs/operators";
 import { AccountsDataService } from "./accounts-data.service";
 import { ProductsDataService } from "./products-data.service";
 
@@ -30,22 +30,34 @@ export class OrdersDataService extends StoreDataService<Order> {
     console.log("Hello TransactionsFsRepository Provider");
   }
   forAccount(accountKey: string) {
-    const OrdersColl = this.afs.collection<Order>(
-      this.collection.ref.path,
-      ref => ref.where("accountId", "==", accountKey)
-    );
+    // const OrdersColl = this.afs.collection<Order>(
+    //   this.collection.ref.path,
+    //   ref => ref.where("accountId", "==", accountKey)
+    // );
+    const ordersMap = this.path$.pipe(map(path => {
+      const OrdersColl = this.afs.collection<Order>(
+        path,
+        ref => ref.where("accountId", "==", accountKey)
+      );
+      return OrdersColl;
+    }), flatMap((afColl => {
+      return super.snapList(afColl.snapshotChanges());
+    })));
     // const transactionsList = super.snapList(transactionsColl);
-    const ordersMap = super.snapshotMap(OrdersColl.snapshotChanges());
+   // const ordersMap = super.snapshotMap(OrdersColl.snapshotChanges());
     // return transactionsMap
     return ordersMap;
   }
   forPackingList(plId: string) {
-    const OrdersColl = this.afs.collection<Order>(
-      this.collection.ref.path,
-      ref => ref.where("packingListId", "==", plId)
-    );
-
-    const ordersList = super.snapList(OrdersColl.snapshotChanges());
+    const ordersList = this.path$.pipe(map(path => {
+      const OrdersColl = this.afs.collection<Order>(
+        path,
+        ref => ref.where("packingListId", "==", plId)
+      );
+      return OrdersColl;
+    }), flatMap((afColl => {
+      return super.snapList(afColl.snapshotChanges());
+    })));
 
     return this.formateList(ordersList);
   }
@@ -65,7 +77,7 @@ export class OrdersDataService extends StoreDataService<Order> {
     );
   }
   get FormatedList(): Observable<Extended<Order>[]> {
-    return this.formateList(this.List());
+    return this.formateList(this.list);
   }
   private extendRows(
     order: Extended<Order>,
@@ -79,7 +91,7 @@ export class OrdersDataService extends StoreDataService<Order> {
     });
   }
   formateList(list: Observable<Extended<Order>[]>) {
-    return list.pipe(
+    return this.list.pipe(
       /*  */
 
       combineLatest(

@@ -22,7 +22,7 @@ export class AccountsDataService extends StoreDataService<AccountInfo> {
     console.log("Hello AccountsFBRepository Provider");
   }
   get FormatedList(): Observable<any[]> {
-    return combineLatest(this.accountsBalanceFBRepository.dataMap, this.List())
+    return combineLatest(this.accountsBalanceFBRepository.dataMap, this.list)
       .pipe(
         map(([balancesMap, accounts]) => {
           accounts.forEach(account => {

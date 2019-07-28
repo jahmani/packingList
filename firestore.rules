@@ -1,0 +1,52 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isUserStoreAdmin(storeId){
+      return  get(/databases/$(database)/documents/versions/v4/stores/$(storeId)/users/$(request.auth.uid)).data.isAdmin==true;
+    }
+    function getStoreUser(storeId){
+      return  get(/databases/$(database)/documents/versions/v4/stores/$(storeId)/users/$(request.auth.uid)).data;
+    }
+    function getStoreUserPermessions(storeId){
+      return  getStoreUser(storeId).permessions;
+    }
+    match /users/{uid}{
+    // allow list: if false;
+    allow get : if request.auth != null;
+    allow update : if request.auth.uid == uid;
+    allow create, delete : if false;
+      match /stores/{storeID}{
+        allow update: if request.auth.uid == uid;
+        allow read: if request.auth.uid == uid;
+        allow create: if isUserStoreAdmin(storeID);
+      }
+    }
+    match /versions/v4/stores/{storeId}/{document=**}{
+        allow read: if getStoreUser(storeId).canRead;
+      allow write: if getStoreUser(storeId).canWrite;
+    }  
+    // match /versions/v4/stores/{storeId}/{subPath}/{productId}{
+    //     allow read: if (subPath == ProductsInfo || subPath == Images ) && getStoreUser(storeId).permesions.canReadProducts;
+    //   allow write: if (subPath == ProductsInfo || subPath == Images ) && getStoreUser(storeId).permesions.canWriteProducts;
+    // }  
+    match /versions/v4/stores/{storeId}/users/{userId}{
+        allow read: if getStoreUser(storeId) != null;
+      allow write: if isUserStoreAdmin(storeId);
+    }  
+    
+    
+    match /versions/v4/storesInfo/{storeId}{
+    
+      allow read: if getStoreUser(storeId).canRead;
+      allow create: if request.auth != null
+
+      allow update: if isUserStoreAdmin(storeId);
+    }
+    match /usersByEmail/{emailHash}{
+            allow read: if request.auth != null;
+    }
+    match /usersByPhoneNumber/{phoneNumber}{
+            allow read: if request.auth != null;
+
+    }
+  }
+}

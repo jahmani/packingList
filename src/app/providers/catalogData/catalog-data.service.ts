@@ -8,7 +8,7 @@ import { map, combineLatest } from "rxjs/operators";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 import { ImageService } from "../Image/image.service";
 import { StoreDataService } from "../StoreData/store-data.service";
-import { FirestoreData } from "../AppData/firestore-data";
+import { AppData } from "../AppData/firestore-data";
 import { conatctPaths } from "../../Util/contact-paths";
 
 @Injectable({
@@ -25,7 +25,7 @@ export class CatalogService {
   }
 }
 
-  export class ProductsService extends FirestoreData<Product> {
+  export class ProductsService extends AppData<Product> {
     constructor(
       afs: AngularFirestore,
        private imagesDataService: ImagesDataService,
@@ -36,7 +36,7 @@ export class CatalogService {
     console.log("Hello ProductsFBRepository Provider");
   }
   get FormatedList(): Observable<Extended<Product>[]> {
-    return this.List().pipe(
+    return this.list.pipe(
       combineLatest(this.imagesDataService.dataMap),
       map(([productsArray, imgMap]) => {
         return productsArray.map((prod => this.extendImage(prod, imgMap))).sort((a, b) => {
@@ -64,7 +64,7 @@ export class CatalogService {
 }
 
 
-export class ImagesDataService extends FirestoreData<ImageFile> {
+export class ImagesDataService extends AppData<ImageFile> {
   extendedList: Observable<Extended<ImageFile>[]>;
 
   constructor(

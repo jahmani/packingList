@@ -8,7 +8,7 @@ import { UserStore, Extended, StoreInfo } from "../../interfaces/data-models";
 import { StoreDataService } from "../../providers/StoreData/store-data.service";
 import { UserPendingStoresService } from "../../providers/AppData/user-pending-stores.service";
 import { StoreInfoService } from "../../providers/AppData/store-info.service";
-import { InvitesService } from "../../providers/AppData/invites.service";
+// import { InvitesService } from "../../providers/AppData/invites.service";
 import { take, mergeMap } from "rxjs/operators";
 import { Router } from "@angular/router";
 import { UserStoresService } from "../../providers/AppData/user-stores.service";
@@ -30,7 +30,7 @@ export class UserStoresPage implements OnInit {
      private userStoresFsRepository: UserStoresService,
     // private userPendingStoresFsRepository: UserPendingStoresService,
     private storesFsRepository: StoreInfoService,
-    private invitesFsRepository: InvitesService,
+    // private invitesFsRepository: InvitesService,
     private activeStoreServise: ActiveStoreService
   ) {
     // this.userStores = this.auth.user.pipe(
@@ -38,7 +38,7 @@ export class UserStoresPage implements OnInit {
     //     return this.storesFsRepository.getUserStores(user.uid);
     //   })
     // );
-     this.userStores = this.userStoresFsRepository.List();
+     this.userStores = this.userStoresFsRepository.list;
     // this.userPendingStores = this.userPendingStoresFsRepository.FormatedList;
   }
   /*
@@ -51,17 +51,17 @@ export class UserStoresPage implements OnInit {
 
   async onStoreSelected(extStore: Extended<UserStore>) {
     await this.activeStoreServise.setActiveStoreKey(extStore.id);
-    this.router.navigateByUrl("/StoreBase");
+    this.router.navigateByUrl("StoreBase/ProductsList");
   }
 
   ionViewDidLoad() {
     console.log("ionViewDidLoad UserStoresPage");
   }
   accept(inviteId: string) {
-    this.invitesFsRepository.accpetInvite(inviteId);
+  //  this.invitesFsRepository.accpetInvite(inviteId);
   }
   reject(inviteId: string) {
-    this.invitesFsRepository.rejectInvite(inviteId);
+  //  this.invitesFsRepository.rejectInvite(inviteId);
   }
 
   ngOnInit() {}

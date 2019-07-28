@@ -1,11 +1,9 @@
 import { Editable, Extended, ExtMap } from "../../interfaces/data-models";
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import {
   map,
   first,
-  switchMap,
-  take,
-  shareReplay
+  shareReplay,
 } from "rxjs/operators";
 import {
   AngularFirestoreCollection,
@@ -16,46 +14,19 @@ import {
 import * as firebase from "firebase/app";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
 
-export class FirestoreData<T extends Editable> {
+
+export class FireStoreData<T extends Editable> {
   get FormatedList(): Observable<Extended<T>[]> {
-    return this.dataList;
+    return this.list;
   }
-  protected path: string;
-  protected path$: Observable<string>;
-  private dataList: Observable<Extended<T>[]>;
+  public list: Observable<Extended<T>[]>;
   protected collection: AngularFirestoreCollection<T>;
   dataMap: Observable<ExtMap<Extended<T>>>;
 
-  constructor(
-    protected afs: AngularFirestore,
-    path: string | Observable<string>
-  ) {
-    console.log("Hello FBRepository Provider");
-    if (typeof path === "string") {
-      this.initialize(path);
-    } else if (path instanceof Observable) {
-      this.reactiveInitialize(path);
-    }
+  constructor(  ) {
   }
-
-  private reactiveInitialize(path$: Observable<string>) {
-    this.path$ = path$;
-    this.path$.pipe(take(1)).subscribe(path => {
-      this.path = path;
-      this.collection = this.afs.collection(path);
-    });
-    const snapshotChanges = path$.pipe(
-      switchMap(path => {
-        this.path = path;
-        this.collection = this.afs.collection(path);
-        return this.collection.snapshotChanges();
-      })
-    );
-    this.initData(snapshotChanges);
-  }
-
-  private initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
-    this.dataList = this.snapList(snapshotChanges)
+  protected initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
+    this.list = this.snapList(snapshotChanges)
       .pipe(
         //  share()
         shareReplay(1)
@@ -72,22 +43,7 @@ export class FirestoreData<T extends Editable> {
 
   }
 
-  initialize(path: string) {
-    this.path = path;
-    this.path$ = of(path);
-    console.log(`path : ${path} `);
-
-    this.collection = this.afs.collection(path);
-    const snapshotChanges = this.collection
-      .snapshotChanges()
-      .pipe
-      //  share()
-      ();
-    this.initData(snapshotChanges);
-  }
-  snapList(
-    snapshotChanges: Observable<DocumentChangeAction<T>[]>
-  ): Observable<Extended<T>[]> {
+  snapList(snapshotChanges: Observable<DocumentChangeAction<T>[]>): Observable<Extended<T>[]> {
     return snapshotChanges.pipe(
       map(actions => {
         const res = actions
@@ -100,9 +56,7 @@ export class FirestoreData<T extends Editable> {
     );
   }
 
-  snapshotMap(
-    snapshotChanges: Observable<DocumentChangeAction<T>[]>
-  ): Observable<ExtMap<Extended<T>>> {
+  snapshotMap(snapshotChanges: Observable<DocumentChangeAction<T>[]>): Observable<ExtMap<Extended<T>>> {
     return snapshotChanges.pipe(
       map(actions => {
         const _map = new ExtMap<Extended<T>>();
@@ -115,20 +69,10 @@ export class FirestoreData<T extends Editable> {
     );
   }
   List(): Observable<Extended<T>[]> {
-    return this.dataList;
+    return this.list;
   }
 
-  get(key): Observable<Extended<T>> {
-    return this.path$
-      .pipe(
-        switchMap(path => {
-          return this.afs.doc<T>(path + `/${key}`).snapshotChanges();
-        })
-      )
-      .pipe(map(a => this.extractSnapshotData(a.payload)));
-  }
-
-  private extractSnapshotData(snapshot: QueryDocumentSnapshot<T>) {
+  protected extractSnapshotData(snapshot: QueryDocumentSnapshot<T>) {
     const meta = snapshot.metadata;
     let data: T;
     if (snapshot.exists) {
@@ -140,6 +84,48 @@ export class FirestoreData<T extends Editable> {
     const ret = { id, data, ext: {}, meta };
     return ret;
   }
+
+  catch(err) {
+    console.error("Error saving", err);
+    throw err;
+  }
+
+}
+
+export class AppData<T extends Editable> extends FireStoreData<T>  {
+  protected path: string;
+  constructor(
+    protected afs: AngularFirestore,
+    path: string | Observable<string>
+  ) {
+    super();
+    console.log("Hello FBRepository Provider");
+    if (typeof path === "string") {
+      this.initialize(path);
+    }
+  }
+
+  initialize(path: string) {
+    this.path = path;
+    // this.path$ = of(path);
+    console.log(`path : ${path} `);
+
+    this.collection = this.afs.collection(path);
+    const snapshotChanges = this.collection
+      .snapshotChanges()
+      .pipe
+      //  share()
+      ();
+    this.initData(snapshotChanges);
+  }
+
+
+  get(key): Observable<Extended<T>> {
+
+    return this.afs.doc<T>(this.path + `/${key}`).snapshotChanges()
+      .pipe(map(a => this.extractSnapshotData(a.payload)));
+  }
+
 
   getOnce(key): Promise<Extended<T>> {
     return this.get(key)
@@ -156,20 +142,29 @@ export class FirestoreData<T extends Editable> {
       });
   }
 
-  // public parseBeforeSave(obj: Extended<T>) {
-  //   return { id: obj.id, data: this.remove$Properties(obj.data) };
-  // }
-  // protected remove$Properties(obj: any) {
-  //   Object.keys(obj).forEach(key => {
-  //     if (key.startsWith("$")) {
-  //       delete obj[key];
-  //     }
-  //   });
-  // }
+  public remove(item: Extended<T>) {
+    // this.parseBeforeSave(item);
+    return this.collection
+      .doc(item.id)
+      .delete()
+      .catch(this.catch);
+    // return this.fbLoggableSaver.remove(item, this.urlOrRef)
+  }
+  newKey() {
+    return this.collection.ref.firestore
+      .collection(this.collection.ref.path)
+      .doc().id;
+  }
+  saveOld(editedItem: Extended<T>) {
+    // let key = editedItem.$key;
 
-  catch(err) {
-    console.error("Error saving", err);
-    throw err;
+    const data = editedItem.data;
+    data.lastEditedOn = firebase.firestore.FieldValue.serverTimestamp();
+
+    return this.collection
+      .doc(editedItem.id)
+      .update(data)
+      .catch(this.catch);
   }
 
   saveNew(item: Extended<T>, key?: string) {
@@ -184,45 +179,5 @@ export class FirestoreData<T extends Editable> {
         .then(() => key)
         .catch(this.catch);
     }
-  }
-
-  public remove(item: Extended<T>) {
-    // this.parseBeforeSave(item);
-    return this.collection
-      .doc(item.id)
-      .delete()
-      .catch(this.catch);
-    // return this.fbLoggableSaver.remove(item, this.urlOrRef)
-  }
-
-  newKey() {
-    return this.collection.ref.firestore
-      .collection(this.collection.ref.path)
-      .doc().id;
-  }
-  saveOld(editedItem: Extended<T>) {
-    // let key = editedItem.$key;
-
-    const data = editedItem.data;
-    data.lastEditedOn = firebase.firestore.FieldValue.serverTimestamp();
-    // this.parseBeforeSave(copy);
-    return this.collection
-      .doc(editedItem.id)
-      .update(data)
-      .catch(this.catch);
-  }
-
-  reactiveSaveOld(editedItem: Extended<T>) {
-    // let key = editedItem.$key;
-    const data = editedItem.data;
-    data.lastEditedOn = firebase.firestore.FieldValue.serverTimestamp();
-    // this.parseBeforeSave(copy);
-    return this.path$.toPromise().then(path => {
-      this.afs
-        .collection(path)
-        .doc(editedItem.id)
-        .update(data)
-        .catch(this.catch);
-    });
   }
 }

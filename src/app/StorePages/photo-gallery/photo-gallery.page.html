@@ -23,7 +23,7 @@
       <ng-template #noThumb>
         <ng-container  *ngIf="image.ext.imgSaveInfo; else noImage">
             <ion-spinner name="lines" class="fixed"></ion-spinner>
-            <img [src]="image.ext.imgSaveInfo.safeThumbBlobUrl"/>
+            <img [src]="image.ext.imgSaveInfo.safeBlobUrl"/>
         </ng-container>
         <ng-template #noImage>
           <img src="" >

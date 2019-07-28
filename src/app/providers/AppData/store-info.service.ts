@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { FirestoreData } from "./firestore-data";
+import { AppData } from "./firestore-data";
 import { StoreInfo, StoreUser } from "../../interfaces/data-models";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
@@ -9,27 +9,23 @@ import { map, mergeMap } from "rxjs/operators";
 @Injectable({
   providedIn: "root"
 })
-export class StoreInfoService extends FirestoreData<StoreInfo> {
+export class StoreInfoService extends AppData<StoreInfo> {
   constructor(afs: AngularFirestore) {
     super(afs, StorePathConfig.storesInfo);
     console.log("Hello StoreInfoService Provider");
   }
 
   getUserStores(uid: string) {
-    const storesInfoColl$ = this.path$.pipe(
-      mergeMap(path => {
-        return this.afs.collection<StoreInfo>(path, ref =>
+    const storesInfoColl$ =  this.afs.collection<StoreInfo>(this.path, ref =>
           ref.where("users", "array-contains", uid)
         ).snapshotChanges();
-      })
-    );
     return this.snapList(storesInfoColl$);
     // todo continue coding this method
     // throw new Error("in Complete method");
   }
   replicateStoreInfo() {
     /*   const col = this.afs.collection(StorePathConfig.storesInfo);
-    this.List().subscribe((storDos => {
+    this.list.subscribe((storDos => {
       storDos.forEach((stor => {
         const doc = col.doc(stor.id);
         doc.set(stor.data.storeInfo);

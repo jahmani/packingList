@@ -5,14 +5,14 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { AuthService } from "../Auth/auth.service";
 import { map, mergeMap } from "rxjs/operators";
 import { conatctPaths } from "../../Util/contact-paths";
-import { FirestoreData } from "./firestore-data";
+import { AppData } from "./firestore-data";
 import { StoreInfoService } from "./store-info.service";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserPendingStoresService {
-  fsRep$: Observable<FirestoreData<UserStore>>;
+  fsRep$: Observable<AppData<UserStore>>;
 
   constructor(
     afs: AngularFirestore,
@@ -25,7 +25,7 @@ export class UserPendingStoresService {
     this.fsRep$ = auth.user.pipe(
       map(user => {
         if (user) {
-          return new FirestoreData(
+          return new AppData(
             afs,
             conatctPaths("users", user.uid, "pendingStores")
           );
@@ -36,7 +36,7 @@ export class UserPendingStoresService {
     );
   }
   List() {
-    return this.fsRep$.pipe(mergeMap(fsRep => fsRep && fsRep.List()));
+    return this.fsRep$.pipe(mergeMap(fsRep => fsRep && fsRep.list));
   }
   get FormatedList(): Observable<Extended<UserStore>[]> {
     return this.List().pipe(

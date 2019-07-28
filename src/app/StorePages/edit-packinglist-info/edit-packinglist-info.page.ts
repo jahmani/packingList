@@ -68,13 +68,13 @@ export class EditPackinglistInfoPage implements OnInit {
     // throw "please take care , invalid form"
   }
 
-  onSave(packinglist: PackinglistInfo) {
+  async onSave(packinglist: PackinglistInfo) {
     const extPackinglist = { data: packinglist } as Extended<PackinglistInfo>;
     if (this.packinglistId) {
       extPackinglist.id = this.packinglistId;
       this.packinglistInfoDataService.saveOld(extPackinglist);
     } else {
-      const newId = this.packinglistInfoDataService.newKey();
+      const newId = await this.packinglistInfoDataService.newKey();
       extPackinglist.id = newId;
       this.packinglistInfoDataService.saveNew(extPackinglist, newId);
     }

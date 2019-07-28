@@ -18,7 +18,10 @@
         <ion-buttons slot="end">
             <ion-button [disabled]="!this.ready"  *ngIf="!previewVisable"  (click)="rotate()">
                 <ion-icon slot="end" name="refresh"></ion-icon>
-            </ion-button>
+            </ion-button>  
+                      <!-- <ion-button [disabled]="!this.ready"  *ngIf="previewVisable"  (click)="rotate2(container, srcImg)">
+                <rot
+            </ion-button> -->
             <!-- <ion-button (click)="onCancelEdit()">
                     <ion-icon slot="icon-only" name="close"></ion-icon>
                 </ion-button> -->
@@ -50,8 +53,9 @@
     
     
     -->
+    <!-- <div  style='display: none' [ngClass]='rotateClass' #container class="container2"><img #srcImg [src]=' this.uploadedImageURL'></div> -->
     <div #previewContainer [ngClass]="previewVisable? '': 'not-visable'" class="preview"></div>
-    <div class="container" [ngClass]="previewVisable? 'not-visable': ''">
+    <div   class="container" [ngClass]="previewVisable? 'not-visable': ''">
         <img id="image" (load)="onImageLoaded()" #image alt="Picture">
     </div>
 

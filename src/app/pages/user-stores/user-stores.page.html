@@ -14,9 +14,9 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
+  <ion-list *ngIf='userStores | async as ss'>
     <ion-item
-      *ngFor="let userStore of (userStores | async)"
+      *ngFor="let userStore of ss"
       (click)="onStoreSelected(userStore)"    >
      
       <ion-icon name="person" slot="start"></ion-icon>

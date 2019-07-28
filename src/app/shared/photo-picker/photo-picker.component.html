@@ -1,1 +1,22 @@
-<img [src]="displayImageSrc" (click)="imageClicked($event)">
+<ng-container *ngIf="imgFile; else noImageFile" >
+<img (click)="imageClicked($event)" [src]="imgFile.data.url" >
+
+<ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="removeImage()" size="small" class="slideMoreFAB" >
+        <ion-icon name="remove"></ion-icon>
+    </ion-fab-button>
+</ion-fab>
+</ng-container>
+<ng-template #noImageFile>
+    <ng-container *ngIf="imageSaveInfo; else noImage">
+        <ion-fab vertical="center" horizontal="center" slot="fixed">
+                    <ion-spinner name="lines"></ion-spinner>
+        </ion-fab>
+        <img [src]="imageSaveInfo.safeBlobUrl" />
+    </ng-container>
+    <ng-template #noImage>
+        <img src="{{placeHoldereSrc}}" (click)="openNativeFileInput($event)">
+    </ng-template>
+</ng-template>
+<input type="file" style="display: none" (change)="onFileInpuChanged2($event)" accept="image/*" id="file-input"
+    #fileInput />

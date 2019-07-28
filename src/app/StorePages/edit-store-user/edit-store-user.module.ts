@@ -5,14 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { StoreUsersPage } from './store-users.page';
+import { EditStoreUserPage } from './edit-store-user.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: StoreUsersPage
-  },  { path: "edit/:id", loadChildren: "../edit-store-user/edit-store-user.module#EditStoreUserPageModule" },
-
+    component: EditStoreUserPage
+  }
 ];
 
 @NgModule({
@@ -22,6 +21,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [StoreUsersPage]
+  declarations: [EditStoreUserPage]
 })
-export class StoreUsersPageModule {}
+export class EditStoreUserPageModule {}

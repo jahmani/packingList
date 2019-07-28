@@ -1,8 +1,8 @@
-import * as functions from 'firebase-functions';
-import * as admin from "firebase-admin";
-import { user } from 'firebase-functions/lib/providers/auth';
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+// import { user } from 'firebase-functions/lib/providers/auth';
 
-export const onNewUser = functions.auth.user().onCreate(userRecord => {
+export const onNewUser = functions.auth.user().onCreate((userRecord: any) => {
 
     console.log("userRecord", userRecord)
     
@@ -31,7 +31,7 @@ export const onNewUser = functions.auth.user().onCreate(userRecord => {
 
     return batch.commit().then(function () {
         console.log("onNewUser  successfully committed!");
-    }).catch(function (error) {
+    }).catch(function (error:any) {
         console.log("onNewUser  failed: ", error);
     });
 })

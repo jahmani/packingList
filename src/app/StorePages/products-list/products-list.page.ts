@@ -1,6 +1,6 @@
 import { Component, OnInit, Optional, ViewChild } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
-import { Extended, Product } from "../../interfaces/data-models";
+import { Extended, Product, UserStore } from "../../interfaces/data-models";
 import { NavParams, AlertController, ModalController, IonItemSliding, IonList, PopoverController } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -8,6 +8,8 @@ import { FormControl } from "@angular/forms";
 import { debounceTime, map, startWith, tap } from "rxjs/operators";
 import { EditProductPage } from "../edit-product/edit-product.page";
 import { ProductsPageSettingsComponent } from "../../products-page-settings/products-page-settings.component";
+import { StoreInfoService } from "../../providers/AppData/store-info.service";
+import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 
 type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
 
@@ -18,6 +20,7 @@ type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
   styleUrls: ["./products-list.page.scss"]
 })
 export class ProductsListPage implements OnInit {
+  userStore: Observable<Extended<UserStore>>;
   get dynamicList(): IonList {
     return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
   }
@@ -28,7 +31,9 @@ export class ProductsListPage implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     private productsRep: ProductsDataService,
-    private popoverCtrl: PopoverController
+    private storesInfo: StoreInfoService,
+    private popoverCtrl: PopoverController,
+    private ass: ActiveStoreService
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
     const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
@@ -36,7 +41,8 @@ export class ProductsListPage implements OnInit {
       this.productsRep = productsFsRepository;
     }
   //  this.products = this.productsRep.FormatedList;
-    this.products = this.productsRep.List();
+  this.userStore = this.ass.getActiveStoreInfo();
+    this.products = this.productsRep.list;
     this.searchControl = new FormControl();
   }
   canSelect: any;

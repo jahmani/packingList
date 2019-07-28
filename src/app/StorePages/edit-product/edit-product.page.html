@@ -13,74 +13,64 @@
 </ion-header>
 
 <ion-content padding>
-  <form
-    novalidate
-    *ngIf="(product$ | async) as p"
-    ng-submit="onSubmit()"
-    [formGroup]="form"
-  >
+  <form novalidate *ngIf="(product$ | async) as p" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
+
       <ion-item>
         <ion-label>name: </ion-label>
-        <ion-input
-          formControlName="name"
-          type="text"
-          placeholder="Product Name"
-        ></ion-input>
+        <ion-input autofocus formControlName="name" type="text" placeholder="Product Name"></ion-input>
+      </ion-item>
+      <ion-item *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">
+          <ion-text color="danger" class="form-error" *ngIf="nameCtrl.hasError('required')" >
+          * name is rquired
+        </ion-text>
+        <ion-text color="danger" class="form-error" *ngIf="nameCtrl.hasError('minlength') || nameCtrl.hasError('maxlength')">
+          * name must be at least 3 chars, at most 40 chars
+        </ion-text>
       </ion-item>
 
-      <ion-item
-        color="danger"
-        *ngIf="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)"
-      >
-        <p *ngIf="nameCtrl.hasError('required')" class="err">
-          * ammount is rquired
-        </p>
-        <p *ngIf="nameCtrl.hasError('max')" class="err">
-          *too much big ammount!
-        </p>
+      
+      <ion-item>
+        <ion-label>Sell price</ion-label>
+        <ion-input formControlName="sPrice" type="number"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label>code</ion-label>
-        <ion-input autofocus formControlName="code" type="text"></ion-input>
+        <ion-label>size</ion-label>
+        <ion-input formControlName="size" type="text"></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label>unit</ion-label>
-        <ion-input formControlName="unit" type="text" ></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>price</ion-label>
-        <ion-input autofocus formControlName="price" type="number"></ion-input>
-      </ion-item>
-
-      <ion-item>
-          <ion-label>Sell price</ion-label>
-          <ion-input autofocus formControlName="sPrice" type="number"></ion-input>
-        </ion-item>
-  
-        <ion-item>
-            <ion-label>size</ion-label>
-            <ion-input autofocus formControlName="size" type="text"></ion-input>
-          </ion-item>
-    
-            <ion-item>
         <ion-label>styles</ion-label>
-        <ion-input autofocus formControlName="style" type="text"></ion-input>
+        <ion-input formControlName="style" type="text"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label>notice</ion-label>
-        <ion-input autofocus formControlName="notice" type="text"></ion-input>
+        <ion-input formControlName="notice" type="text"></ion-input>
       </ion-item>
       <ion-item>
-        <app-photo-picker
-          slot="end"
-          formControlName="thumbUrl"
-        ></app-photo-picker>
+        <app-photo-picker formControlName="thumbUrl"></app-photo-picker>
       </ion-item>
     </ion-list>
+
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Buying Info</ion-label>
+      </ion-list-header>
+      <ion-item>
+        <ion-label>code</ion-label>
+        <ion-input formControlName="code" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>unit</ion-label>
+        <ion-input formControlName="unit" type="text"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>price</ion-label>
+        <ion-input formControlName="price" type="number"></ion-input>
+      </ion-item>
+    </ion-list>
+  
   </form>
 </ion-content>

@@ -1,11 +1,13 @@
-import { Component, OnInit, forwardRef } from "@angular/core";
-import { Extended, ImageFile } from "../../interfaces/data-models";
+import { Component, OnInit, forwardRef, ViewChild, ElementRef } from "@angular/core";
+import { Extended, ImageFile, ImageSaveInfo } from "../../interfaces/data-models";
 import { ModalController } from "@ionic/angular";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 import { ImageService } from "../../providers/Image/image.service";
 import { PhotoViewComponent } from "../photo-view/photo-view.component";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { PhotoGalleryPage } from "../../StorePages/photo-gallery/photo-gallery.page";
+import { EditPhotoPage } from "../../pages/edit-photo/edit-photo.page";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-photo-picker",
@@ -20,6 +22,9 @@ import { PhotoGalleryPage } from "../../StorePages/photo-gallery/photo-gallery.p
   ]
 })
 export class PhotoPickerComponent implements OnInit {
+  @ViewChild("fileInput") fileInput: ElementRef;
+  imageSaveInfo: ImageSaveInfo;
+
   constructor(
     private modalCtrl: ModalController,
     private imagesFsRepository: ImagesDataService,
@@ -42,10 +47,24 @@ export class PhotoPickerComponent implements OnInit {
       });
     }
   }
+  setNewImagrFile(imageUrl: string): void {
+    const imgFileId = this.imageService.getImageId(imageUrl);
+    if (imgFileId) {
+      this.imagesFsRepository.getOnce(imgFileId).then(extImage => {
+        this.imgFile = extImage;
+      });
+    }
+  }
   removeImage($event) {
-    this.imgFile = null;
-    this.imgFileId = null;
+    if (this.imgFile) {
+      if (this.imgFile.id !== this.imgFileId) {
+        this.imagesFsRepository.remove(this.imgFile);
+      }
+      this.imgFile = null;
+    }
+    // this.imgFileId = null;
     this.srcChangeFunction(this.imgFileId);
+    this.imageSaveInfo = null;
   }
   async selectImage($event?) {
     /*    */
@@ -97,8 +116,46 @@ export class PhotoPickerComponent implements OnInit {
   registerOnChange(fn: any): void {
     this.srcChangeFunction = fn;
   }
-  registerOnTouched(fn: any): void {}
-  setDisabledState?(isDisabled: boolean): void {}
+  registerOnTouched(fn: any): void { }
+  setDisabledState?(isDisabled: boolean): void { }
 
-  ngOnInit() {}
+
+  openNativeFileInput() {
+    this.fileInput.nativeElement.click();
+  }
+
+  onFileInpuChanged2(event) {
+    event.stopPropagation();
+    const file: File = event.target.files[0];
+    // let src: any;
+    const url = URL.createObjectURL(file);
+    this.showEditImage(url, file.name);
+    this.fileInput.nativeElement.value = null;
+  }
+
+  async showEditImage(blobURL, srcName) {
+    const imgInfo: ImageSaveInfo = { blobURL, srcName } as ImageSaveInfo;
+    // this.imageSaveInfo = imgInfo;
+    const imgEditor = await this.modalCtrl.create(
+      { component: EditPhotoPage, componentProps: { imgInfo } });
+    await imgEditor.present();
+    const res = await imgEditor.onDidDismiss();
+    // .then(((res) => {
+    if (res.role === "upload" && res && res.data) {
+      const imgMeta = res.data as ImageSaveInfo; // { imageSrcUri: res.data, srcName };
+      imgMeta.srcName = srcName;
+      this.imageSaveInfo = await this.imagesFsRepository.saveNewImage(imgMeta);
+      this.imageSaveInfo.downloadUrl.subscribe(url => {
+        this.setNewImagrFile(url);
+        this.srcChangeFunction(url);
+      });
+
+    }
+
+    // }));
+
+  }
+
+
+  ngOnInit() { }
 }

@@ -78,7 +78,7 @@ export class EditPhotoPage {
         movable: false,
         zoomable: true,
         rotatable: true,
-        scalable: false,
+        scalable: true,
         viewMode: 2, autoCrop: false,
         ready() { self.ready = true; self.preview(); },
         //  preview: ".preview"
@@ -113,8 +113,15 @@ export class EditPhotoPage {
   }
 
   async upload() {
-    // this.cropper.se
-    const croppedCanava = this.cropper.getCroppedCanvas({ maxWidth: 1024 });
+    let croppedCanava;
+        const canvaWidth =  this.cropper.getCroppedCanvas().width;
+        if (canvaWidth > 1024) {
+          croppedCanava = this.cropper.scale(1024 / canvaWidth).getCroppedCanvas();
+
+        } else {
+          croppedCanava = this.cropper.getCroppedCanvas();
+
+        }
  //   const croppedThumbCanvas = this.cropper.getCroppedCanvas({ maxWidth: 1024 });
 
     // const croppedThumbPromise = new Promise<Blob>(resolve => croppedThumbCanvas.toBlob(resolve, "image/jpeg", this.imgQuality));

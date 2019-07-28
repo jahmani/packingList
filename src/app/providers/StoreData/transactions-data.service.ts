@@ -68,8 +68,8 @@ export class TransactionsDataService extends StoreDataService<Transaction> {
     return Promise.resolve();
     }
   }
-  saveNew(newItem, id?: string) {
-    id = id || this.newKey();
+  async saveNew(newItem, id?: string) {
+    id = id || await this.newKey();
     return this.beforeTransactionUpdated(null, newItem, id).then(() => {
       return super.saveNew(newItem, id).then(() => {
         return this.afterTransactionUpdated(null, newItem);

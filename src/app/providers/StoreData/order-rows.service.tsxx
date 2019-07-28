@@ -43,11 +43,11 @@ export class OrderRowsService extends StoreDataService<OrderRow> {
     return this.formateList(orderRowssList);
   }
   get FormatedList(): Observable<Extended<OrderRow>[]> {
-    return this.formateList(this.List());
+    return this.formateList(this.list);
   }
 
   copyOrderRows() {
-    this.ordersRep.List().pipe(first() ,
+    this.ordersRep.list.pipe(first() ,
       tap(extOrders => {
         extOrders.forEach(extOrder => {
           this.forOrder(extOrder.id).pipe( first() ,

@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
-import { FirestoreData } from "./firestore-data";
+import { AppData } from "./firestore-data";
 import { User, Extended } from "../../interfaces/data-models";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
 import { first } from "rxjs/internal/operators/first";
@@ -11,7 +11,7 @@ import { switchMap } from "rxjs/operators";
 @Injectable({
   providedIn: "root"
 })
-export class UsersService extends FirestoreData<User> {
+export class UsersService extends AppData<User> {
   currentUser: Observable<Extended<User>>;
   constructor(
     protected afs: AngularFirestore,

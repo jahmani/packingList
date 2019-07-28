@@ -113,7 +113,7 @@ export class ImageService {
 
     return {
       imageTask,
-       thumbTask: null, imgSaveInfo };
+       thumbTask: null };
   }
   // private geRrealImgDimension(imgSrc) {
   //   const i = new Image();

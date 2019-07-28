@@ -38,6 +38,7 @@ import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
+    // AngularFirestoreModule.(),
     AngularFireAuthModule,
     AngularFireStorageModule,
     AccountsListPageModule,

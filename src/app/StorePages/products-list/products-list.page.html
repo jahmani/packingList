@@ -1,18 +1,9 @@
 <ion-header>
 
   <ion-toolbar>
+    <!-- <ng-template #showTitle>    </ng-template> -->
 
-
-    <ng-template #showTitle>
-      <ion-title>ProductsList 6</ion-title>
-    </ng-template>
-    <ion-searchbar *ngIf="showSerach; else showTitle" aria-label="search" [formControl]="searchControl" #searchBar>
-    </ion-searchbar>
-    <ion-buttons slot="end">
-      <ion-button (click)="showNewProduct()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-    </ion-buttons>
+      <ion-title>{{(userStore|async)?.data.storeInfo.name}}</ion-title>
     <ion-buttons slot="start">
       <ion-button *ngIf="canSelect" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -20,23 +11,11 @@
       <ion-button (click)="backView()" *ngIf="toggleView; else toggleViewButton">
         <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
       </ion-button>
-
       <ng-template #toggleViewButton>
         <ion-button (click)="presentPopover($event)">
           <ion-icon slot="icon-only" name="more"></ion-icon>
         </ion-button>
-
       </ng-template>
-      <ion-button (click)="toggleSearch()">
-        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
-
-      </ion-button>
-      <!-- <ion-menu-toggle  *ngIf="!canSelect" menuToggle>
-        <ion-button>
-
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-menu-toggle> -->
     </ion-buttons>
   </ion-toolbar>
 
@@ -68,20 +47,21 @@
 
       <ion-slides style="height:100%;" [options]="{initialSlide:slideIndex}">
         <ion-slide *ngFor="let product of filteredProducts|async" style=" height: 100%;"
-          (click)="showSlideDetails = !showSlideDetails" >
+          (click)="showSlideDetails = !showSlideDetails">
           <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
           <div class="swiper-zoom-container">
-              <ion-fab vertical="top" horizontal="end" slot="fixed">
-                  <ion-fab-button class="slideMoreFAB" size="small" >
-                    <ion-icon name="more"></ion-icon>
-                  </ion-fab-button>
-                  <ion-fab-list side="bottom">
-                      <ion-fab-button (click)="showEditProduct(product.id)">Edit</ion-fab-button>
-                      <ion-fab-button (click)="showCopyProduct(product)">Copy</ion-fab-button>
-                      <ion-fab-button  (click)="delete(product)">Delete</ion-fab-button>
-                    </ion-fab-list>
-                  
-                </ion-fab>
+            <ion-fab vertical="top" horizontal="end" slot="fixed">
+              <ion-fab-button class="slideMoreFAB" size="small">
+                <ion-icon name="more"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-list side="bottom">
+                <!-- <ion-fab-button (click)="showEditProduct(product.id)">Edit</ion-fab-button> -->
+                <ion-fab-button [routerLink]="'/EditProduct/'+product.id">Edit</ion-fab-button>
+                <ion-fab-button (click)="showCopyProduct(product)">Copy</ion-fab-button>
+                <ion-fab-button (click)="delete(product)">Delete</ion-fab-button>
+              </ion-fab-list>
+
+            </ion-fab>
             <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false}"
               style="width: inherit; height: inherit;"></app-product-view>
           </div>
@@ -115,3 +95,36 @@
 
 
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-searchbar *ngIf="showSerach" aria-label="search" [formControl]="searchControl" #searchBar>
+    </ion-searchbar>
+    <ion-buttons slot="primary">
+      <ion-button *ngIf='canSelect else normal' (click)="showNewProduct()">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+      <ng-template #normal>
+          <ion-button [routerLink]="'/EditProduct/new'">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>       
+      </ng-template>
+    </ion-buttons>
+
+    <ion-buttons slot="start">
+      <ion-button (click)="toggleSearch()">
+        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+            <ion-menu-toggle>
+        <ion-button>
+          <ion-icon name="menu" slot="icon-only">
+          </ion-icon>
+        </ion-button>
+      </ion-menu-toggle>
+        <!-- <ion-button >
+            <ion-icon name="apps"></ion-icon>
+          </ion-button> -->
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

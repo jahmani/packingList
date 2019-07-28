@@ -1,12 +1,13 @@
-import * as functions from 'firebase-functions';
-export {onNewUser} from './onNewUser'
+
 import * as admin from "firebase-admin"
 
-admin.initializeApp(functions.config().firebase)
-
+admin.initializeApp();
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
 // export const helloWorld = functions.https.onRequest((request, response) => {
 //  response.send("Hello from Firebase!");
 // });
+
+export {onNewUser} from './onNewUser'
+export {onNewStore} from './onNewStore'

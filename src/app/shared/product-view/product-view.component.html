@@ -100,8 +100,9 @@
 
   <ng-template #ionItemOptions>
     <ion-item-options *ngIf="options.editable" slot="start" dir="ltr">
-      <ion-item-option color="primary" (click)="edit.emit(product.id)" slot="bottom" expandable="true">
-        <ion-icon name="create"></ion-icon>
+      <!-- <ion-item-option color="primary" (click)="edit.emit(product.id)" slot="bottom" expandable="true"> -->
+        <ion-item-option color="primary"  [routerLink]="'../EditProduct/'+product.id" slot="bottom" expandable="true">
+          <ion-icon name="create"></ion-icon>
         Edit
       </ion-item-option>
       <ion-item-option (click)="copy.emit(product)" color="primary">
