@@ -20,8 +20,8 @@ export class ImageEditorPage implements OnInit, AfterViewInit, AfterContentInit 
   @Input() imgInfo: ImageSaveInfo;
   cropbox: Cropper.CropBoxData;
 
-  @ViewChild('imageCropper') public imageCropper: ImageCropperComponent;
-  @ViewChild('container') public conatainer: IonContent;
+  @ViewChild('imageCropper', {static: false}) public imageCropper: ImageCropperComponent;
+  @ViewChild('container', {static: false}) public conatainer: IonContent;
   constructor(public modalController: ModalController,
     ) {
   }

@@ -22,7 +22,7 @@ import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
   ]
 })
 export class PhotoPickerComponent implements OnInit {
-  @ViewChild("fileInput") fileInput: ElementRef;
+  @ViewChild("fileInput", {static: false}) fileInput: ElementRef;
   imageSaveInfo: ImageSaveInfo;
 
   constructor(

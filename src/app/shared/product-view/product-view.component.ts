@@ -16,7 +16,7 @@ export interface ProductViewOptions {
 export class ProductViewComponent implements AfterViewInit {
   static default: ProductViewOptions =  {editable: true, view: "ITEM", showPrice: true, showNotes: true, photoOnly: false} ;
   _options:  ProductViewOptions = ProductViewComponent.default;
-  @ViewChild('fullImg') fullImg: any;
+  @ViewChild('fullImg', {static: false}) fullImg: any;
   @Input() product: Extended<Product>;
   @Input() set options(val) {
     this._options = {...ProductViewComponent.default, ...val};

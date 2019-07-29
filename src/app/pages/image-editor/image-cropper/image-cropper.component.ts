@@ -22,7 +22,7 @@ export interface ImageCropperResult {
 })
 export class ImageCropperComponent implements OnInit {
 
-    @ViewChild('image') image: ElementRef;
+    @ViewChild('image', {static: false}) image: ElementRef;
 
     @Input() imageUrl: any;
     @Input() settings: ImageCropperSetting;

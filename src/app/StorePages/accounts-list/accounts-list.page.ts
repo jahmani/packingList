@@ -24,7 +24,7 @@ export class AccountsListPage implements OnInit {
   searchControl: FormControl;
   totalBalanceObj: Observable<AccountBalance>;
   canSelect: any;
-  @ViewChild("dynamicList") dynamicList;
+  @ViewChild("dynamicList", {static: false}) dynamicList;
 
   constructor(
     public accountsDataService: AccountsDataService,
@@ -77,7 +77,7 @@ export class AccountsListPage implements OnInit {
             }
             return prev;
           },
-          { balance: 0, isDirty: false }
+          { balance: 0, isDirty: false as boolean }
         ) as AccountBalance;
       })
     );

@@ -59,8 +59,8 @@ export class ProductsListPage implements OnInit {
     "SLIDES": '/assets/svg/_ionicons_svg_md-arrow-forward.svg'
   };
   showSerach = false;
-  @ViewChild('slidingItem1') dynamicList1: IonList;
-  @ViewChild('slidingItem2') dynamicList2: IonList;
+  @ViewChild('slidingItem1', {static: false}) dynamicList1: IonList;
+  @ViewChild('slidingItem2', {static: false}) dynamicList2: IonList;
 
 
   slideIndex = 0;

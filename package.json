@@ -31,7 +31,7 @@
     "@ionic-native/status-bar": "5.10.0",
     "@ionic/angular": "^4.7.1",
     "compressorjs": "^1.0.5",
-    "core-js": "^3.1.4",
+    "core-js": "^2.5.0",
     "cropperjs": "^1.5.4",
     "exif-stripper": "0.0.5",
     "firebase": "^6.3.3",
@@ -69,7 +69,7 @@
     "protractor": "~5.4.2",
     "ts-node": "~8.3.0",
     "tslint": "~5.18.0",
-    "typescript": "3.5.3",
+    "typescript": "^3.4.5",
     "webpack-bundle-analyzer": "^3.3.2"
   },
   "description": "An Ionic project"

@@ -17,7 +17,7 @@ export class PhotoViewComponent implements OnInit {
   canDelete: boolean;
   canRemove: boolean;
   canSelect: boolean;
-  @ViewChild(IonSlides) slider: IonSlides;
+  @ViewChild(IonSlides, {static: false}) slider: IonSlides;
   deleteInProgress: boolean;
   constructor(
     // private navCtrl: NavController,

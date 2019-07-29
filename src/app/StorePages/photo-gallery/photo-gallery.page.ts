@@ -37,7 +37,7 @@ export class PhotoGalleryPage implements OnInit {
   @Input() canSelect; // = false;
   // canGoBack = true;
   // galleryType = "slides";
-  @ViewChild("fileInput") fileInput: ElementRef;
+  @ViewChild("fileInput", {static: false}) fileInput: ElementRef;
   // src;
   // testImage;
   // uploadedImageURL: any;

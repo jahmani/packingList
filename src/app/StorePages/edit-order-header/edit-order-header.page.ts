@@ -33,7 +33,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   sub: Subscription;
   newRowCtrol: FormControl;
   order: Extended<Order>;
-  @ViewChild('newRowComponent') newRowComponent: OrderRowEditorComponent;
+  @ViewChild('newRowComponent', {static: false}) newRowComponent: OrderRowEditorComponent;
 
   constructor(
     private route: ActivatedRoute,

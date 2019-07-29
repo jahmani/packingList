@@ -24,8 +24,8 @@ export class CatalogPage implements OnInit {
   showSlideDetails = true;
   filteredProducts: Observable<Extended<Product>[]>;
   view: "LIST" | "CARDS" | "SLIDES" = "SLIDES";
-  @ViewChild('slidingItem1') dynamicList1: IonList;
-  @ViewChild('slidingItem2') dynamicList2: IonList;
+  @ViewChild('slidingItem1', {static: false}) dynamicList1: IonList;
+  @ViewChild('slidingItem2', {static: false}) dynamicList2: IonList;
   get dynamicList(): IonList {
     return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
   }
