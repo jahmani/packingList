@@ -1,25 +1,22 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 
-import { Platform, ModalController } from "@ionic/angular";
+import { Platform } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AuthService } from "./providers/Auth/auth.service";
 import { ActiveStoreService } from "./providers/AppData/active-store.service";
-import { Observable, of, fromEvent } from "rxjs";
+import { Observable, of } from "rxjs";
 import { Extended, User, StoreInfo } from "./interfaces/data-models";
 import { UsersService } from "./providers/AppData/users.service";
-import { map } from "rxjs/internal/operators/map";
 import { switchMap, combineLatest, tap } from "rxjs/operators";
 import { StoreInfoService } from "./providers/AppData/store-info.service";
 import { Router } from "@angular/router";
-import { Location } from "@angular/common";
-// import firebase from "firebase";
 
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html"
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnDestroy {
   user$: Observable<Extended<User>>;
   activeStore$: Observable<Extended<StoreInfo>>;
   backbuttonSubscription: any;
@@ -34,19 +31,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private storesService: StoreInfoService,
     private activeStoreService: ActiveStoreService,
     private router: Router,
-    private location: Location,
-    private modalCtrl: ModalController
   ) {
     this.initializeApp();
 
     this.user$ = this.usersService.currentUser.pipe(tap(u => {
       console.log(u);
     }));
-    //  this.authService.user.pipe(
-    //   switchMap(u => {
-    //     return u ? this.usersService.get(u.uid) : of(null);
-    //   })
-    // );
+
     this.activeStore$ = this.activeStoreService.activeStoreKey$.pipe(
       switchMap(storeId => {
         if (storeId) {
@@ -71,16 +62,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.initialAppLoad = false;
       }
     });
-  }
-  ngOnInit() {
-    // const event = fromEvent(document, 'backbutton');
-    // this.backbuttonSubscription = event.subscribe(async () => {
-    //   const modal = await this.modalCtrl.getTop();
-    //   if (modal) {
-    //     modal.dismiss();
-    //   }
-    // });
-    // firebase.firestore.setLogLevel("debug");
   }
 
   ngOnDestroy() {
