@@ -9,9 +9,10 @@
 >
 <ion-item-sliding>
 
-  <app-order-row [orderRow]="orderRow"></app-order-row>
+  <app-order-row (click)="showEditOrderRowModal()" 
+  [orderRow]="orderRow"></app-order-row>
   
-  <ion-item-options slot="start" dir="ltr">
+  <ion-item-options slot="start" >
     <ion-item-option color="primary"  (click)="showEditOrderRowModal()"  expandable="true">
       <ion-icon name="create"></ion-icon>
       Edit

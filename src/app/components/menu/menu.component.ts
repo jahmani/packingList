@@ -13,10 +13,10 @@ export class MenuComponent implements OnInit {
     { path: "/EditStoreInfo", title: "EditStoreInfo" },
     { path: "/StoreBase/OrdersList", title: "Orders List" },
     { path: "/StoreBase/ProductsList", title: "Products List" },
-    { path: "/StoreBase", title: "Accounts List" },
+    { path: "/StoreBase/AccountsList", title: "Accounts List" },
     { path: "/StoreBase/PhotoGallery", title: "Photo Gallery" },
     { path: "/StoreBase/Packinglists", title: "Packinglists" },
-    { path: "/StoreBase/catalog", title: "CatalogPage" },
+    // { path: "/StoreBase/catalog", title: "CatalogPage" },
     { path: "/StoreBase/StoreUsers", title: "StoreUsers" },
   ];
   noUserLinks = [

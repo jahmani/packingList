@@ -26,7 +26,7 @@
     </ion-segment>
     <ng-container  *ngIf="searchBy === 'byPhone'; else byEmail">
     
-          <ion-item  dir="ltr" no-padding>
+          <ion-item  no-padding>
             <ion-icon slot="start" name="phone-portrait"></ion-icon>
             <ion-input [formControl]="phoneNumberCtrl" type="tel"></ion-input>
           </ion-item>
@@ -42,7 +42,7 @@
             </ng-container>
     
           <ng-template #byEmail>
-              <ion-item dir="ltr" no-padding *ngIf="searchBy === 'byEmail'">
+              <ion-item  no-padding *ngIf="searchBy === 'byEmail'">
                   <ion-icon slot="start" name="mail"></ion-icon>
                   <ion-input  [formControl]="emailCtrl" type="email"></ion-input>
                 </ion-item>  

@@ -1,32 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button
-        defaultHref="/StoreBase/OrderView/{{orderId}}"
-      ></ion-back-button>
-      <!--
-        <ion-menu-toggle menuToggle>
-          <ion-button>
-            <ion-icon slot="icon-only" name="menu"></ion-icon>
-          </ion-button>
-        </ion-menu-toggle>
-      -->
+    <ion-buttons slot="end">
+      <ion-button (click)="onSubmit(form)">
+        <div>
+        <ion-icon name="checkmark" slot="start"></ion-icon>
+        <label style="display: block">done</label>
+        </div>
+      </ion-button>
+      <ion-button (click)="delete()"><div>
+        <ion-icon name="trash" slot="start"></ion-icon>
+        <label style="display: block">delete</label>
+        </div>      </ion-button>
     </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-button (click)="onCancel()"><div>
+        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        <label style="display: block"></label>
+      </div>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title> Edit Order </ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <form
-    novalidate
-    *ngIf="(order$ | async) as p"
-    ng-submit="onSubmit()"
-    [formGroup]="form"
-  >
+  <form novalidate *ngIf="(order$ | async) as p" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
       <ion-item lines="none">
-        <app-account-picker
-          formControlName="accountId"
-        ></app-account-picker>
+        <app-account-picker formControlName="accountId"></app-account-picker>
         <ion-thumbnail slot="end">
           <app-photo-picker formControlName="imageUrl"></app-photo-picker>
         </ion-thumbnail>
@@ -34,46 +35,31 @@
       <ion-row no-padding>
         <ion-col>
 
-      <ion-item>
-        <ion-label>Ammount</ion-label>
-        <ion-input
-          class="text-end"
-          readonly
-          formControlName="ammount"
-          type="number"
-        ></ion-input>
-      </ion-item>  </ion-col> <ion-col> <ion-item>
-        <ion-label>Deposit</ion-label>
-        <ion-input
-          class="text-end"
-          formControlName="deposit"
-          type="number"
-        ></ion-input>
-      </ion-item>
-    </ion-col>  </ion-row>
+          <ion-item>
+            <ion-label>Ammount</ion-label>
+            <ion-input class="text-end" readonly formControlName="ammount" type="number"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>Deposit</ion-label>
+            <ion-input class="text-end" formControlName="deposit" type="number"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
       <ion-row no-padding>
         <ion-col>
           <ion-item>
             <ion-label>CBM</ion-label>
-            <ion-input
-              class="text-end"
-              formControlName="cbm"
-              type="number"
-            ></ion-input>
+            <ion-input class="text-end" formControlName="cbm" type="number"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
             <ion-label>packing List</ion-label>
-            <ion-select
-              interface="action-sheet"
-              formControlName="packingListId"
-            >
-              <ion-select-option
-                *ngFor="let pl of (packinglists | async)"
-                [value]="pl.id"
-                >{{ pl.data.name }}</ion-select-option
-              >
+            <ion-select interface="action-sheet" formControlName="packingListId">
+              <ion-select-option *ngFor="let pl of (packinglists | async)" [value]="pl.id">{{ pl.data.name }}
+              </ion-select-option>
             </ion-select>
           </ion-item>
         </ion-col>
@@ -88,9 +74,7 @@
         <ion-col>
           <ion-item>
             <ion-label>delivery</ion-label>
-            <ion-datetime
-              formControlName="deliveryDate"
-            ></ion-datetime>
+            <ion-datetime formControlName="deliveryDate"></ion-datetime>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -99,14 +83,10 @@
     <ion-list class="order-rows-list" formArrayName="rows">
       <div class="header-item">
         <ion-item no-padding>
-          <ion-thumbnail
-            style="height: auto "
-            class="thumbnail-placeholderr"
-            slot="start"
-          >
-          <ion-button (click)="showNewOrderRow()" expand="full">
-            <ion-icon name="add" slot="icon-only"></ion-icon>
-          </ion-button>
+          <ion-thumbnail style="height: auto " class="thumbnail-placeholderr" slot="start">
+            <ion-button (click)="showNewOrderRow()" expand="full">
+              <ion-icon name="add" slot="icon-only"></ion-icon>
+            </ion-button>
 
           </ion-thumbnail>
           <ion-label>
@@ -125,34 +105,25 @@
         </ion-item>
       </div>
 
-      <app-order-row-editor
-        *ngFor="let orderRowCtrl of orderRowsCtrl.controls; let i = index"
-        [formControlName]="i"
-        (remove)="removeOrderRow(i)"
-        (copy) = "showCopyOrderRow($event)"
-      ></app-order-row-editor>
-                
-      <app-order-row-editor style="display: none;"  [formControl]="newRowCtrol" #newRowComponent>
+      <app-order-row-editor *ngFor="let orderRowCtrl of orderRowsCtrl.controls; let i = index" [formControlName]="i"
+        (remove)="removeOrderRow(i)" (copy)="showCopyOrderRow($event)"></app-order-row-editor>
+
+      <app-order-row-editor style="display: none;" [formControl]="newRowCtrol" #newRowComponent>
       </app-order-row-editor>
     </ion-list>
   </form>
 </ion-content>
-<ion-footer no-padding>
+<!-- <ion-footer no-padding>
   <ion-row no-padding>
     <ion-col>
-      <ion-button type="button" expand="full" (click)="onCancel()" color="light"
-        >cancel</ion-button
-      >
+      <ion-button type="button" expand="full" (click)="onCancel()" color="light">cancel</ion-button>
     </ion-col>
     <ion-col>
-      <ion-button type="button" expand="full" (click)="delete()" color="light"
-        >delete</ion-button
-      >
+      <ion-button type="button" expand="full" (click)="delete()" color="light">delete</ion-button>
     </ion-col>
     <ion-col>
       <ion-button expand="full" (click)="onSubmit(form)" color="primary">
-        save</ion-button
-      >
+        save</ion-button>
     </ion-col>
   </ion-row>
-</ion-footer>
+</ion-footer> -->

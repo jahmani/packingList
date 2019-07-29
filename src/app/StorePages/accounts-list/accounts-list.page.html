@@ -5,8 +5,9 @@
             <ion-icon slot="icon-only" name="person-add"></ion-icon>
           </ion-button>
         </ion-buttons>    
-    <ion-buttons slot="start">
-      <ion-button *ngIf="canSelect" (click)="cancel()">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+            <ion-button *ngIf="canSelect" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
       <!-- <ion-menu-toggle  *ngIf="!canSelect"  menuToggle>
@@ -41,7 +42,7 @@
           <ion-spinner *ngIf="account.meta.hasPendingWrites" item-right name="bubbles"></ion-spinner>
         </h2>
       </ion-item>
-      <ion-item-options slot="start" dir="ltr">
+      <ion-item-options slot="start">
         <ion-item-option (click)="presentEditAccountModal(account.id)" expandable="true">
           <ion-icon name="create"></ion-icon>
           Edit

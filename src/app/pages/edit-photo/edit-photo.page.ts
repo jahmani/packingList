@@ -18,7 +18,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class EditPhotoPage {
 
 
-  @ViewChild("image", {static: false}) img: ElementRef;
+  @ViewChild("image", {static: true}) img: ElementRef;
   @ViewChild("fileInput", {static: false}) fileInput: ElementRef;
   @ViewChild("previewContainer", {static: false}) previewContainer: ElementRef;
 
