@@ -24,7 +24,9 @@ ion-badge
 
 }
 .thumb-badge{
-    float: left;
+   float: right;
+  //padding-inline-end: 1rem;
+  //margin-inline-end: 1px;
     opacity: 0.6;
 }
 .item-card-header{

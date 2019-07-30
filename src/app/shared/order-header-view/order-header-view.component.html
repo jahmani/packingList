@@ -18,7 +18,7 @@
   <ion-row>
     <ion-col style="font-weight: bold" size="auto">
       <span text-end style="display: inline-block; width: 75px;">
-        القيمة:
+        Ammount:
       </span>
       <span text-start>
         {{(order.data.ammount||0)| currency:'USD':'symbol':'2.2-2'}}
@@ -27,7 +27,7 @@
     </ion-col>
     <ion-col size="auto" >
       <span text-end style="display: inline-block; width: 75px;">
-        التسليم:
+        Delivery:
       </span>
       <span text-start>
         {{order.data.deliveryDate  | date: "dd-MM-yy" }}

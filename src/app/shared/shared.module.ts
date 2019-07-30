@@ -17,6 +17,7 @@ import { ImageEditorPage } from "../pages/image-editor/image-editor.page";
 import { ImageCropperComponent } from "../pages/image-editor/image-cropper/image-cropper.component";
 import { PhotoUploadComponent } from './photo-upload/photo-upload.component';
 import { EditPhotoPage } from "../pages/edit-photo/edit-photo.page";
+import { StoreCurrencyPipe } from './store-currency.pipe';
 
 @NgModule({
   imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
@@ -30,7 +31,7 @@ import { EditPhotoPage } from "../pages/edit-photo/edit-photo.page";
     ProductPickerComponent,
     PackingListComponent,
     OrderRowEditorComponent,
-  ProductViewComponent, ImageEditorPage, ImageCropperComponent, PhotoUploadComponent, EditPhotoPage
+  ProductViewComponent, ImageEditorPage, ImageCropperComponent, PhotoUploadComponent, EditPhotoPage, StoreCurrencyPipe
   ],
   entryComponents: [PhotoViewComponent, ImageEditorPage, PhotoUploadComponent, EditPhotoPage],
   exports: [

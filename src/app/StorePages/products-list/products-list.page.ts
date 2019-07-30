@@ -58,7 +58,7 @@ export class ProductsListPage implements OnInit {
     "LIST": '/assets/svg/card-thumbs.svg',
     "SLIDES": '/assets/svg/_ionicons_svg_md-arrow-forward.svg'
   };
-  showSerach = false;
+  showSearch = false;
   @ViewChild('slidingItem1', {static: false}) dynamicList1: IonList;
   @ViewChild('slidingItem2', {static: false}) dynamicList2: IonList;
 
@@ -169,7 +169,7 @@ export class ProductsListPage implements OnInit {
     if (this.searchControl) {
       this.searchControl.setValue("");
     }
-    this.showSerach = !this.showSerach;
+    this.showSearch = !this.showSearch;
   }
   async presentPopover(ev) {
     const popover = await this.popoverCtrl.create({

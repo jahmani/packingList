@@ -1,15 +1,30 @@
 <ion-header>
 
-  <ion-toolbar>
-    <!-- <ng-template #showTitle>    </ng-template> -->
 
+  <ion-toolbar *ngIf="!showSearch else showSearchBar">
     <ion-title>{{(userStore|async)?.data.storeInfo.name}}</ion-title>
     <ion-buttons slot="start">
-      <ion-button *ngIf="canSelect" (click)="cancel()">
+      <ion-button *ngIf="canSelect else showMenu" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
+      <ng-template #showMenu>
+          <ion-menu-toggle>
+              <ion-button>
+                <ion-icon name="menu" slot="icon-only">
+                </ion-icon>
+              </ion-button>
+            </ion-menu-toggle>
+      </ng-template>
     </ion-buttons>
     <ion-buttons slot="end">
+        <ion-button *ngIf='canSelect else normal' (click)="showNewProduct()">
+            <ion-icon slot="icon-only" name="add"></ion-icon>
+          </ion-button>
+          <ng-template #normal>
+            <ion-button [routerLink]="'/EditProduct/new'">
+              <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+          </ng-template>
       <ion-button (click)="backView()" *ngIf="toggleView; else toggleViewButton">
         <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
       </ion-button>
@@ -20,8 +35,32 @@
       </ng-template>
     </ion-buttons>
   </ion-toolbar>
-
-
+  <ng-template #showSearchBar>
+      <ion-toolbar>
+          <ion-buttons slot="start">
+              <ion-button *ngIf="canSelect else showMenu" (click)="cancel()">
+                <ion-icon slot="icon-only" name="close"></ion-icon>
+              </ion-button>
+              <ng-template #showMenu>
+                  <ion-menu-toggle>
+                      <ion-button>
+                        <ion-icon name="menu" slot="icon-only">
+                        </ion-icon>
+                      </ion-button>
+                    </ion-menu-toggle>
+              </ng-template>
+            </ion-buttons>
+                  <ion-searchbar *ngIf="showSearch" aria-label="search" [formControl]="searchControl" #searchBar>
+          </ion-searchbar>
+          <ion-buttons slot="primary">
+            <ion-button (click)="toggleSearch()">
+              <img [src]="showSearch ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      
+    </ng-template>
+  
 </ion-header>
 
 
@@ -95,38 +134,6 @@
     </div>
   </ng-template>
 
-
 </ion-content>
 <ion-footer>
-  <ion-toolbar>
-    <ion-searchbar *ngIf="showSerach" aria-label="search" [formControl]="searchControl" #searchBar>
-    </ion-searchbar>
-    <ion-buttons slot="primary">
-      <ion-button *ngIf='canSelect else normal' (click)="showNewProduct()">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
-      </ion-button>
-      <ng-template #normal>
-        <ion-button [routerLink]="'/EditProduct/new'">
-          <ion-icon slot="icon-only" name="add"></ion-icon>
-        </ion-button>
-      </ng-template>
-    </ion-buttons>
-
-    <ion-buttons slot="start">
-      <ion-button (click)="toggleSearch()">
-        <img [src]="showSerach ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
-      </ion-button>
-    </ion-buttons>
-    <ion-buttons slot="end">
-      <ion-menu-toggle>
-        <ion-button>
-          <ion-icon name="menu" slot="icon-only">
-          </ion-icon>
-        </ion-button>
-      </ion-menu-toggle>
-      <!-- <ion-button >
-            <ion-icon name="apps"></ion-icon>
-          </ion-button> -->
-    </ion-buttons>
-  </ion-toolbar>
 </ion-footer>

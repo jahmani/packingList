@@ -9,13 +9,18 @@ import { PopoverController } from '@ionic/angular';
 })
 export class ProductsPageSettingsComponent implements OnInit {
 
-  @Input() productsPage: any;
+  @Input() productsPage;
   constructor(
     private popoverController: PopoverController
   ) { }
   viewChanged(ev: CustomEvent) {
     console.log('Segment changed', ev.detail.value);
     this.productsPage.view = ev.detail.value;
+    this.popoverController.dismiss();
+  }
+  showFilter() {
+    console.log('showFilter changed');
+    this.productsPage.showSearch = true;
     this.popoverController.dismiss();
   }
   ngOnInit() {

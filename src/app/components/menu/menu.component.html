@@ -5,7 +5,7 @@
 </ion-header>
   <ion-list *ngIf="user && store  && store.data" padding>
     <ion-item-divider color="light">
-      <ion-button slot="end" fill="clear" routerLink="/EditStoreInfo">
+      <ion-button (click)="menu.close()"  slot="end" fill="clear" routerLink="/EditStoreInfo">
         <ion-icon slot="icon-only" name="settings"></ion-icon>
       </ion-button>
       {{store.data.name}}

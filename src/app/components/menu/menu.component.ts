@@ -10,7 +10,7 @@ import { IonMenu } from "@ionic/angular";
 })
 export class MenuComponent implements OnInit {
   storeLinks = [
-    { path: "/EditStoreInfo", title: "EditStoreInfo" },
+    // { path: "/EditStoreInfo", title: "EditStoreInfo" },
     { path: "/StoreBase/OrdersList", title: "Orders List" },
     { path: "/StoreBase/ProductsList", title: "Products List" },
     { path: "/StoreBase/AccountsList", title: "Accounts List" },

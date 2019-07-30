@@ -330,6 +330,7 @@ export interface StoreInfo extends Editable {
   code: string;
   users: string[];
   creatorId: string;
+  currency: string;
 }
 
 export enum ItemChangeState {
