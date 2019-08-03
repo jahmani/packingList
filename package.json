@@ -32,6 +32,7 @@
     "@ionic/angular": "^4.7.1",
     "compressorjs": "^1.0.5",
     "core-js": "^2.5.0",
+    "countries-list": "^2.4.3",
     "cropperjs": "^1.5.4",
     "exif-stripper": "0.0.5",
     "firebase": "^6.3.3",

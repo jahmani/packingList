@@ -31,18 +31,21 @@
         </ion-text>
       </ion-item>
 
-      <ion-item [class.invalid]="!currencyCtrl.valid && (nameCtrl.touched || submitAttempt)">
-        <ion-label floating>Currency</ion-label>
-        <ion-input formControlName="currency" type="text"></ion-input>
+   
+        <ion-item [class.invalid]="!currencyCtrl.valid && (nameCtrl.touched || submitAttempt)">  
+          <ion-label>Currency</ion-label>
+          <ion-select  interface="popover"  formControlName="currency" placeholder="Select Currency">
+            <ion-select-option *ngFor="let key of currencyKeys" [value]="key">{{key}} : ({{currencies[key]}})</ion-select-option>
+          </ion-select>
       </ion-item>
       <ion-item *ngIf="!currencyCtrl.valid && (currencyCtrl.touched || submitAttempt)">
-          <ion-text color="danger" class="form-error" *ngIf="currencyCtrl.hasError('required')" >
-          * currency is rquired
-        </ion-text>
-        <ion-text color="danger" class="form-error" *ngIf="currencyCtrl.hasError('maxlength')">
-          * currency must be at most 3 letters
-        </ion-text>
-      </ion-item>
+        <ion-text color="danger" class="form-error" *ngIf="currencyCtrl.hasError('required')" >
+        * currency is rquired
+      </ion-text>
+      <ion-text color="danger" class="form-error" *ngIf="currencyCtrl.hasError('maxlength')">
+        * currency must be at most 3 letters
+      </ion-text>
+    </ion-item>
     </ion-list>
   </form>
 </ion-content>

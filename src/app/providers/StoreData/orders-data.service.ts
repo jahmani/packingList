@@ -30,10 +30,7 @@ export class OrdersDataService extends StoreDataService<Order> {
     console.log("Hello TransactionsFsRepository Provider");
   }
   forAccount(accountKey: string) {
-    // const OrdersColl = this.afs.collection<Order>(
-    //   this.collection.ref.path,
-    //   ref => ref.where("accountId", "==", accountKey)
-    // );
+
     const ordersMap = this.path$.pipe(map(path => {
       const OrdersColl = this.afs.collection<Order>(
         path,

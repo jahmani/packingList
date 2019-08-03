@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, AfterViewInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
-import { Extended, Product } from '../../interfaces/data-models';
+import { Extended, Product, StoreInfo } from '../../interfaces/data-models';
 
 export interface ProductViewOptions {
   editable: boolean;
@@ -18,6 +18,7 @@ export class ProductViewComponent implements AfterViewInit {
   _options:  ProductViewOptions = ProductViewComponent.default;
   @ViewChild('fullImg', {static: false}) fullImg: any;
   @Input() product: Extended<Product>;
+  @Input() storeInfo: Extended<StoreInfo>;
   @Input() set options(val) {
     this._options = {...ProductViewComponent.default, ...val};
   }

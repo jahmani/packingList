@@ -1,6 +1,6 @@
 import { Component, OnInit, Optional, ViewChild } from "@angular/core";
 import { Observable, combineLatest } from "rxjs";
-import { Extended, Product, UserStore } from "../../interfaces/data-models";
+import { Extended, Product, UserStore, StoreInfo } from "../../interfaces/data-models";
 import { NavParams, AlertController, ModalController, IonItemSliding, IonList, PopoverController } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -13,14 +13,13 @@ import { ActiveStoreService } from "../../providers/AppData/active-store.service
 
 type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
 
-
 @Component({
   selector: "app-products-list",
   templateUrl: "./products-list.page.html",
   styleUrls: ["./products-list.page.scss"]
 })
 export class ProductsListPage implements OnInit {
-  userStore: Observable<Extended<UserStore>>;
+  userStore: Observable<Extended<StoreInfo>>;
   get dynamicList(): IonList {
     return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
   }
@@ -41,7 +40,7 @@ export class ProductsListPage implements OnInit {
       this.productsRep = productsFsRepository;
     }
   //  this.products = this.productsRep.FormatedList;
-  this.userStore = this.ass.getActiveStoreInfo();
+  this.userStore = this.ass.activeStoreInfo;
     this.products = this.productsRep.list;
     this.searchControl = new FormControl();
   }

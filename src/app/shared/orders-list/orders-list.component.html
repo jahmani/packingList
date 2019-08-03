@@ -1,0 +1,83 @@
+<ng-container *ngIf="activreStoreInfo|async as storeInfo">
+
+
+<div class="header-item, list-header" color="light">
+    <ion-item no-padding>
+        <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">
+            <span></span>
+        </ion-thumbnail>
+        <ion-label>
+            <ion-row>
+                <ion-col size="4" text-center>
+                    <span title="quantity">quantity</span>
+                </ion-col>
+                <ion-col size="4" text-center>
+                    <span title="price">CBM </span>
+                </ion-col>
+                <ion-col size="4" text-center>
+                    <span title="AMMOUNT">ammount</span>
+                </ion-col>
+            </ion-row>
+        </ion-label>
+    </ion-item>
+</div>
+
+<!-- <app-order-row *ngFor="let order of orders, let i=index" (plLineClicked)="onRowClicked(i)" 
+    [order]="order" [index]="i" [isActive]="i==activeLineIndex"></app-order-row> -->
+
+    <ion-item
+    no-padding
+    *ngFor="let order of orders, let i=index"
+    (click)="openOrder(order.id)"
+    [ngClass]="i % 2 == 1 ? 'odd-row' : 'even-row'"
+    [class.active]="i==activeLineIndex"
+  >
+    <ion-thumbnail slot="start"  no-margin>
+      <img [src]="order.data.imageUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';"/>
+    </ion-thumbnail>
+    <ion-label>
+      <ion-row>
+        <ion-col size="4" text-center>
+          <span title="qty">{{ order.data.deliveryDate | date : 'd/M' }}</span>
+        </ion-col>
+        <ion-col size="4" text-center>
+          <span title="CBM">{{ order.data.cbm || '---' }}</span>
+        </ion-col>
+        <ion-col size="4" class="ion-text-wrap">
+          <span title="ammount: ">{{ order.data.ammount  | storeCurrency : storeInfo }}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row text-wrap class="ion-justify-content-between">
+        <ion-col size="auto">
+          <span class="name-bold">{{ order.ext.account.data.name }}</span>
+        </ion-col>
+        <ion-col size="auto">
+          <ion-note *ngIf="order.data.date">
+            <ion-icon name="calendar"></ion-icon>  
+            {{ order.data.date | date}}</ion-note>
+        </ion-col>
+      </ion-row>
+    </ion-label>
+  </ion-item>
+<div *ngIf="totals" class="header-item">
+    <ion-item no-padding>
+        <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">
+            <span>Totals</span>
+        </ion-thumbnail>
+        <ion-label>
+            <ion-row>
+                <ion-col size="4" text-center>
+                    <span title="quantity">{{totals.qty}}</span>
+                </ion-col>
+                <ion-col size="4" text-center>
+                    <span title="price">{{totals.cbm}} </span>
+                </ion-col>
+                <ion-col size="4" text-center>
+                    <span title="AMMOUNT">{{totals.ammount  | storeCurrency : storeInfo}}</span>
+                </ion-col>
+            </ion-row>
+        </ion-label>
+    </ion-item>
+
+</div>
+</ng-container>

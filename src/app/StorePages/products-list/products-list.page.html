@@ -2,7 +2,7 @@
 
 
   <ion-toolbar *ngIf="!showSearch else showSearchBar">
-    <ion-title>{{(userStore|async)?.data.storeInfo.name}}</ion-title>
+    <ion-title>{{(userStore|async)?.data?.name}}</ion-title>
     <ion-buttons slot="start">
       <ion-button *ngIf="canSelect else showMenu" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
@@ -64,23 +64,16 @@
 </ion-header>
 
 
-<ion-content no-badding color="dark">
-
+<ion-content no-badding color="dark" *ngIf='userStore|async as _storeInfo'>
   <ion-list #slidingItem1 *ngIf="(view === 'LIST' || view === 'CARDS'); else slidesView">
     <app-product-view *ngFor="let product of filteredProducts|async; let i=index; trackBy: trackByFn"
       [product]="product" [options]="{view: view === 'LIST' ? 'ITEM' : 'CARD', editable:true}"
+      [storeInfo]= "_storeInfo"
       (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
-      (prodClick)="onProductClicked(product,i)"></app-product-view>
+      (prodClick)="onProductClicked(product,i)
+      "></app-product-view>
+      
   </ion-list>
-
-  <!-- 
-    <ion-list #slidingItem1 *ngIf="(view === 'LIST' || view === 'CARDS'); else slidesView">
-    <app-product-view *ngFor="let product of filteredProducts|async" [product]="product"
-      [options]="{view: view === 'LIST' ? 'ITEM' : 'CARD', editable:true}"
-      (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)"
-      (delete)="delete(product)"></app-product-view>
-  </ion-list>
- -->
 
 
   <ng-template #slidesView>
@@ -104,7 +97,8 @@
 
             </ion-fab>
             <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false}"
-              style="width: inherit; height: inherit;"></app-product-view>
+              style="width: inherit; height: inherit;"
+              [storeInfo]="_storeInfo"></app-product-view>
           </div>
         </ion-slide>
 
@@ -128,6 +122,7 @@
   <ng-template #gridView>
     <div class="images">
       <app-product-view class="one-image" *ngFor="let product of filteredProducts|async; let i=index"
+      [storeInfo]="_storeInfo"
         [product]="product" [options]="{view:'THUMB', editable:false}" (prodClick)="onProductClicked(product,i)">
       </app-product-view>
 

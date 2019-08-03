@@ -32,9 +32,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
-  <ion-card *ngFor="let order of orders|async, let i=index">
+  <app-orders-list [orders]='orders|async'></app-orders-list>
+  <!-- <ion-card *ngFor="let order of orders|async, let i=index">
     <app-order-header-view [order]="order" (click)="openOrder(order.id)">
     </app-order-header-view>
-  </ion-card>
+  </ion-card> -->
 
 </ion-content>

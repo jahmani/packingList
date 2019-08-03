@@ -49,9 +49,12 @@
     <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async">
     </app-order-rows-list>
     <div *ngSwitchCase="'orders'">
-      <ion-item *ngFor="let order of (plOrders | async)" (click)="openOrder(order.id)">
+      <app-orders-list [orders]="(plOrders | async)">
+
+      </app-orders-list>
+      <!-- <ion-item *ngFor="let order of (plOrders | async)" (click)="openOrder(order.id)">
         <app-order-header-view [order]="order"></app-order-header-view>
-      </ion-item>
+      </ion-item> -->
     </div>
   </ng-container>
 </ion-content>

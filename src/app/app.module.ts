@@ -26,6 +26,7 @@ import { EditAccountPageModule } from "./StorePages/edit-account/edit-account.mo
 import { ProductsPageSettingsComponent } from './products-page-settings/products-page-settings.component';
 import { CatigoryCtrlComponent } from './catigory-ctrl/catigory-ctrl.component';
 import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
+import { StoreCurrencyPipe } from "./shared/store-currency.pipe";
 
 @NgModule({
 
@@ -54,6 +55,7 @@ import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
   providers: [
     StatusBar,
     SplashScreen,
+    // StoreCurrencyPipe,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

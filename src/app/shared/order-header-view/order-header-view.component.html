@@ -1,11 +1,11 @@
 <!-- Generated template for the OrderHeaderViewComponent component -->
 <ion-card-header no-padding padding-horizontal>
   <ion-item lines="none">
-    <ion-icon name="person" slot='start'></ion-icon>
     <ion-label>
+      <ion-icon name="person"></ion-icon>
       {{order.ext.account?.data.name}}
       <ion-note *ngIf="order.ext.account?.data.city">
-        - {{order.ext.account?.data.city}}
+        @ {{order.ext.account?.data.city}}
       </ion-note>
     </ion-label>
 
@@ -15,17 +15,15 @@
   <ion-thumbnail *ngIf="order.data.imageUrl" (click)=" onImageClicked($event)" slot="end">
     <img [src]="order.data.imageUrl">
   </ion-thumbnail>
-  <ion-row>
+  <ion-row class="ion-justify-content-between">
     <ion-col style="font-weight: bold" size="auto">
-      <span text-end style="display: inline-block; width: 75px;">
-        Ammount:
-      </span>
-      <span text-start>
-        {{(order.data.ammount||0)| currency:'USD':'symbol':'2.2-2'}}
-      </span> 
-      <ion-note> deposit:  {{order.data.deposit| currency:'USD':'symbol':'2.2-2'}}</ion-note>
+      <span text-end>
+        Ammount: {{(order.data.ammount||0)| storeCurrency:storeInfo}}
+      </span></ion-col>
+    <ion-col size="auto">
+      <ion-note> deposit: {{order.data.deposit| storeCurrency:storeInfo}}</ion-note>
     </ion-col>
-    <ion-col size="auto" >
+    <ion-col size="auto">
       <span text-end style="display: inline-block; width: 75px;">
         Delivery:
       </span>
@@ -33,9 +31,9 @@
         {{order.data.deliveryDate  | date: "dd-MM-yy" }}
       </span>
     </ion-col>
-    <ion-col size="auto" >
+    <ion-col size="auto">
       <span text-end style="display: inline-block; width: 75px;">
-      CBM:
+        CBM:
       </span>
       <span text-start>
         {{order.data.cbm||0}}
@@ -46,10 +44,10 @@
 </ion-item>
 
 <ion-row>
-    <ion-col size="auto" *ngIf="order.data.date">
-        <ion-note class="date-small">
-          <ion-icon name="calendar"></ion-icon>
-          {{order.data.date  | date: "dd-MM-yy" }}
-        </ion-note>
-      </ion-col>
+  <ion-col size="auto" *ngIf="order.data.date">
+    <ion-note class="date-small">
+      <ion-icon name="calendar"></ion-icon>
+      {{order.data.date  | date: "dd-MM-yy" }}
+    </ion-note>
+  </ion-col>
 </ion-row>

@@ -9,7 +9,7 @@ import { tap } from "rxjs/operators";
 // import { OrderRowsService } from "../../providers/StoreData/order-rows.service";
 
 @Component({
-  selector: "app-orders-list",
+  selector: "app-orders-list-page",
   templateUrl: "./orders-list.page.html",
   styleUrls: ["./orders-list.page.scss"]
 })

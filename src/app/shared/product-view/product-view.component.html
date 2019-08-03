@@ -92,7 +92,8 @@
     <div class="thumb-text ">
       <ion-text>{{product.data.name}}</ion-text>
       <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="thumb-badge">
-        {{product.data.sPrice | currency: 'CNY' : 'symbol-narrow' :'1.0-2'}}</ion-badge>
+        <!-- {{product.data.sPrice | currency: 'CNY' : 'symbol-narrow' :'1.0-2'}}</ion-badge> -->
+        {{product.data.sPrice | storeCurrency : storeInfo}}</ion-badge>
     </div>
     <!-- <ng-container *ngTemplateOutlet="productDetails"></ng-container> -->
   </div>
@@ -138,7 +139,7 @@
     <span class="font-bold">{{product.data.name}}</span>
     <ion-row no-padding class="row-revers font-small">
         <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="font-bold">
-            {{product.data.sPrice}} JOD</ion-badge>
+            {{product.data.sPrice | storeCurrency : storeInfo}}</ion-badge>
             <ion-badge color="tertiary" *ngIf="product.data.size">size: {{product.data.size}}</ion-badge>
       <ion-badge color="secondary" *ngIf="product.data.style">
         model: {{product.data.style}}

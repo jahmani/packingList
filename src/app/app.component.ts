@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from "@angular/core";
 
-import { Platform } from "@ionic/angular";
+import { Platform, ToastController } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AuthService } from "./providers/Auth/auth.service";
@@ -11,6 +11,7 @@ import { UsersService } from "./providers/AppData/users.service";
 import { switchMap, combineLatest, tap } from "rxjs/operators";
 import { StoreInfoService } from "./providers/AppData/store-info.service";
 import { Router } from "@angular/router";
+import { SwUpdate } from "@angular/service-worker";
 
 @Component({
   selector: "app-root",
@@ -31,12 +32,18 @@ export class AppComponent implements OnDestroy {
     private storesService: StoreInfoService,
     private activeStoreService: ActiveStoreService,
     private router: Router,
+    private toastController: ToastController,
+    private swUpdate: SwUpdate
   ) {
     this.initializeApp();
 
     this.user$ = this.usersService.currentUser.pipe(tap(u => {
       console.log(u);
     }));
+    this.swUpdate.checkForUpdate();
+    this.swUpdate.available.subscribe(evt => {
+      this.presentToastWithOptions();
+    });
 
     this.activeStore$ = this.activeStoreService.activeStoreKey$.pipe(
       switchMap(storeId => {
@@ -53,8 +60,8 @@ export class AppComponent implements OnDestroy {
         // this.location.
         this.router.navigateByUrl("/login", { replaceUrl: true });
       } else if (store) {
+        // if (this.initialAppLoad) {
         if (true) {
-//        if (!this.initialAppLoad) { always start fro the productslist page
             this.router.navigateByUrl("StoreBase/ProductsList", { replaceUrl: true });
           this.initialAppLoad = false;
         }
@@ -64,7 +71,32 @@ export class AppComponent implements OnDestroy {
       }
     });
   }
-
+  async presentToastWithOptions() {
+    const toast = await this.toastController.create({
+      header: 'New Update',
+      message: 'Click to install Update',
+      position: 'top',
+     // duration: 1000,
+      buttons: [
+        {
+          side: 'start',
+          icon: 'star',
+          text: 'update',
+          handler: () => {
+            window.location.reload();
+            console.log('update clicked');
+          }
+        }, {
+          text: 'cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    toast.present();
+  }
   ngOnDestroy() {
     this.backbuttonSubscription.unsubscribe();
   }

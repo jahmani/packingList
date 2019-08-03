@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ModalController } from "@ionic/angular";
-import { Extended, Order } from "../../interfaces/data-models";
+import { Extended, Order, StoreInfo } from "../../interfaces/data-models";
 import { ImagesDataService } from "../../providers/StoreData/images-data.service";
 import { PhotoViewComponent } from "../photo-view/photo-view.component";
+import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 
 
 @Component({
@@ -13,11 +14,15 @@ import { PhotoViewComponent } from "../photo-view/photo-view.component";
 export class OrderHeaderViewComponent implements OnInit {
   @Input()
   order: Extended<Order>;
+  storeInfo: Extended<StoreInfo>;
 
   constructor(
     private imagesRep: ImagesDataService,
-    private modalCtrl: ModalController
-  ) {}
+    private modalCtrl: ModalController,
+    ass: ActiveStoreService
+  ) {
+    this.storeInfo = ass.activeStoreInfoValue;
+  }
   onImageClicked(event) {
     event.stopPropagation();
     this.imagesRep.getByUrl(this.order.data.imageUrl).then(extImage => {
