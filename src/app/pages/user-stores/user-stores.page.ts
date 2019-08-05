@@ -19,7 +19,7 @@ export class UserStoresPage {
     private userStoresFsRepository: UserStoresService,
     private activeStoreServise: ActiveStoreService
   ) {
-    this.userStores = this.userStoresFsRepository.list;
+    this.userStores = this.userStoresFsRepository.List;
   }
 
   async onStoreSelected(extStore: Extended<UserStore>) {

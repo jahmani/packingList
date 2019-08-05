@@ -56,13 +56,13 @@ export class OrdersDataService extends StoreDataService<Order> {
       return super.snapList(afColl.snapshotChanges());
     })));
 
-    return this.formateList(ordersList);
+    return this.extendList(ordersList);
   }
   getExtended(key): Observable<Extended<Order>> {
     return super.get(key).pipe(
       mergeMap(order => {
         return this.accountsRep.get(order.data.accountId).pipe(
-          combineLatest(this.productsDataService.dataMap),
+          combineLatest(this.productsDataService.DataMap),
           map(([extAccount, productsMap]) => {
             order.ext = order.ext || {};
             order.ext.account = extAccount;
@@ -74,7 +74,7 @@ export class OrdersDataService extends StoreDataService<Order> {
     );
   }
   get FormatedList(): Observable<Extended<Order>[]> {
-    return this.formateList(this.list);
+    return this.extendList(this.list);
   }
   private extendRows(
     order: Extended<Order>,
@@ -87,13 +87,13 @@ export class OrdersDataService extends StoreDataService<Order> {
       return extRow;
     });
   }
-  formateList(list: Observable<Extended<Order>[]>) {
-    return this.list.pipe(
+  extendList(list: Observable<Extended<Order>[]>) {
+    return list.pipe(
       /*  */
 
       combineLatest(
-        this.accountsRep.dataMap,
-        this.productsDataService.dataMap,
+        this.accountsRep.DataMap,
+        this.productsDataService.DataMap,
         (orders, accountsMap, productsMAp) => {
           orders.forEach(order => {
             order.ext = order.ext || ({} as ExtType);

@@ -21,7 +21,7 @@ export class ProductsDataService extends StoreDataService<Product> {
   }
   get FormatedList(): Observable<Extended<Product>[]> {
     return this.list.pipe(
-      combineLatest(this.imagesDataService.dataMap),
+      combineLatest(this.imagesDataService.DataMap),
       map(([productsArray, imgMap]) => {
         return productsArray.map((prod => this.extendImage(prod, imgMap))).sort((a, b) => {
           return compareTimeStamp(

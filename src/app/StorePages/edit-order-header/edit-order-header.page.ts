@@ -63,7 +63,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
       })
     );
     */
-    this.packinglists = this.plInfoDataService.list;
+    this.packinglists = this.plInfoDataService.List;
 
     this.order$ = this.route.paramMap.pipe(
       switchMap(paramMap => {

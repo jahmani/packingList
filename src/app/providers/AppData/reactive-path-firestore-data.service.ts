@@ -49,7 +49,8 @@ export class ReactivePathFirestoreData<T extends Editable> extends FireStoreData
       switchMap(path => {
         // this.path = path;
         this.collection = this.afs.collection(path);
-        return this.collection.snapshotChanges().pipe(startWith([]));
+        return this.collection.snapshotChanges().pipe();
+//        return this.collection.snapshotChanges().pipe(startWith([]));
       })
     );
     this.initData(snapshotChanges);

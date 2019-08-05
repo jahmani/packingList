@@ -41,7 +41,7 @@ export class ProductsListPage implements OnInit {
     }
   //  this.products = this.productsRep.FormatedList;
   this.userStore = this.ass.activeStoreInfo;
-    this.products = this.productsRep.list;
+    this.products = this.productsRep.List;
     this.searchControl = new FormControl();
   }
   canSelect: any;

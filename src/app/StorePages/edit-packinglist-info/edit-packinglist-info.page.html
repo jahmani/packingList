@@ -1,5 +1,16 @@
 <ion-header>
   <ion-toolbar>
+      <ion-buttons slot="end">
+
+          <ion-button color="primary" (click)="onSubmit(form)">
+            <div>
+    
+              <ion-icon name="checkmark" slot="end"></ion-icon>
+              <span style='display: block;'> done</span>
+            </div>
+          </ion-button>
+        </ion-buttons>
+
       <ion-buttons slot="start">
           <ion-back-button></ion-back-button>
 </ion-buttons>    
@@ -28,7 +39,7 @@
         <ion-datetime autofocus formControlName="deliveryDate" ></ion-datetime>
       </ion-item>
     </ion-list>
-    <ion-grid>
+    <!-- <ion-grid>
       <ion-row>
         <ion-col>
           <ion-button type="button"  expand="full" (click)="onCancel()" color="light">cancel</ion-button>
@@ -38,7 +49,7 @@
            (click)="onSubmit(form)" color="primary"> save</ion-button>
         </ion-col>
       </ion-row>
-    </ion-grid>
+    </ion-grid> -->
   </form>
   
 </ion-content>

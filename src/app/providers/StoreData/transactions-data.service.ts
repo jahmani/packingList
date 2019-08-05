@@ -41,7 +41,7 @@ export class TransactionsDataService extends StoreDataService<Transaction> {
   }
 
   extendedDataMap(transactionsMap: Observable<ExtMap<Extended<Transaction>>>): Observable<ExtMap<Extended<Transaction>>> {
-    const extendedTranses = combineLatest(transactionsMap, this.tCatFsRep.dataMap, this.imagesFsRepository.dataMap,
+    const extendedTranses = combineLatest(transactionsMap, this.tCatFsRep.DataMap, this.imagesFsRepository.DataMap,
       (transs, cats, images) => {
       transs.forEach((trans) => {
 

@@ -27,7 +27,7 @@ export class StoreUsersPage implements OnInit {
     private userStoresService: UserStoresService,
     private as: ActiveStoreService,
     private sinfoS: StoreInfoService) {
-    this.storeUsers = this.storeUsersDataService.list;
+    this.storeUsers = this.storeUsersDataService.List;
     this.phoneNumberCtrl = fb.control("", [Validators.required, Validators.minLength(5)]);
     this.emailCtrl = fb.control("", [Validators.required, Validators.email]);
   }

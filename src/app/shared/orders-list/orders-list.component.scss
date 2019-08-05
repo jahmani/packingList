@@ -21,7 +21,7 @@
 .packing-title{
     padding: 10px;
     font-weight: bolder;
-    background-color: rgba(46, 138, 243, 0.801);
+    --ion-background-color: rgba(46, 138, 243, 0.801);
     color: white;
 
 }
@@ -32,11 +32,11 @@
   
   
   .odd-row {
-    background-color: white;
+    --ion-background-color: white;
   }
   .even-row {
-    background: rgba(240, 240, 240, 1);
+    --ion-background-color: rgb(255, 255, 255);
   }
   .active {
-    background-color: rgb(215, 217, 245);
+    --ion-background-color: rgb(215, 217, 245);
   }

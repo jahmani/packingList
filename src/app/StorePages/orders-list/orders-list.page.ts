@@ -18,7 +18,6 @@ export class OrdersListPage implements OnInit {
 
   constructor(
     private ordersRep: OrdersDataService,
-    // private ordersRowsRep: OrderRowsService,
     public route: ActivatedRoute,
     private alertController: AlertController,
     private modalController: ModalController,

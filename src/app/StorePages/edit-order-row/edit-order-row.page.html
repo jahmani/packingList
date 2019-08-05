@@ -1,15 +1,21 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
+
       <ion-button (click)="onSubmit(form)">
-        done
-        <ion-icon name="checkmark" slot="start"></ion-icon>
+        <div>
+
+          <ion-icon name="checkmark" slot="start"></ion-icon>
+          <span style='display: block;'> done</span>
+        </div>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
       <ion-button (click)="onCancel()">
-        cancel
-        <ion-icon name="arrow-back" slot="start"></ion-icon>
+        <div>
+            <ion-icon name="arrow-back" slot="start"></ion-icon>
+            <span style='display: block;'> cancel</span>
+        </div>
       </ion-button>
     </ion-buttons>
     <ion-title>Edit Order Row</ion-title>
@@ -20,12 +26,10 @@
   <form novalidate *ngIf="orderRow" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
       <app-product-picker formControlName="productId"></app-product-picker>
-      <ion-item
-        *ngIf="
+      <ion-item *ngIf="
           (productIdControl.touched || submitAttempt) &&
           productIdControl.hasError('required')
-        "
-      >
+        ">
         <p class="err">* product is rquired</p>
       </ion-item>
       <ion-item>
@@ -38,13 +42,7 @@
       </ion-item>
       <ion-item>
         <ion-label>ammount</ion-label>
-        <ion-input
-          autofocus
-          type="number"
-          readonly
-          formControlName="ammount"
-          type="number"
-        >
+        <ion-input autofocus type="number" readonly formControlName="ammount" type="number">
         </ion-input>
       </ion-item>
     </ion-list>
@@ -63,11 +61,7 @@
         <ion-col class="text-center"> <span>Ctn. No.</span> </ion-col>
         <ion-col class="text-center"> <span>Shipping Mark</span> </ion-col>
       </ion-row>
-      <ion-row
-        align-items-center
-        *ngFor="let packingLine of packingLines.controls; let i = index"
-        [formGroupName]="i"
-      >
+      <ion-row align-items-center *ngFor="let packingLine of packingLines.controls; let i = index" [formGroupName]="i">
         <ion-col size="1">
           <span>{{ i + 1 }}</span>
         </ion-col>
@@ -77,38 +71,22 @@
 
         <ion-col>
           <ion-item no-padding>
-            <ion-input
-              class="input-small-padding"
-              type="number"
-              formControlName="ctns"
-            ></ion-input>
+            <ion-input class="input-small-padding" type="number" formControlName="ctns"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item no-padding>
-            <ion-input
-              class="input-small-padding"
-              type="number"
-              formControlName="packing"
-            ></ion-input>
+            <ion-input class="input-small-padding" type="number" formControlName="packing"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item no-padding>
-            <ion-input
-              class="input-small-padding"
-              type="text"
-              formControlName="ctnNo"
-            ></ion-input>
+            <ion-input class="input-small-padding" type="text" formControlName="ctnNo"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item text-wrap no-padding>
-            <ion-input
-              class="input-small-padding"
-              type="text"
-              formControlName="shippingMark"
-            ></ion-input>
+            <ion-input class="input-small-padding" type="text" formControlName="shippingMark"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>

@@ -13,17 +13,28 @@ import {
 } from "@angular/fire/firestore";
 import * as firebase from "firebase/app";
 import { compareTimeStamp } from "../../Util/compare-timetamp";
+ import { firestoreNetworkManagementService } from "../firestore-network-management.service";
 
 
 export class FireStoreData<T extends Editable> {
   get FormatedList(): Observable<Extended<T>[]> {
     return this.list;
   }
-  public list: Observable<Extended<T>[]>;
-  protected collection: AngularFirestoreCollection<T>;
-  dataMap: Observable<ExtMap<Extended<T>>>;
 
-  constructor(  ) {
+  protected list: Observable<Extended<T>[]>;
+  protected collection: AngularFirestoreCollection<T>;
+  protected dataMap: Observable<ExtMap<Extended<T>>>;
+  public get DataMap(): Observable<ExtMap<Extended<T>>> {
+   // firestoreNetworkManagementService().disableNetwork();
+    return this.dataMap;
+  }
+  get List(): Observable<Extended<T>[]> {
+    // firestoreNetworkManagementService().disableNetwork();
+    return this.list;
+  }
+
+  constructor(
+   ) {
   }
   protected initData(snapshotChanges: Observable<DocumentChangeAction<T>[]>) {
     this.list = this.snapList(snapshotChanges)
@@ -68,9 +79,7 @@ export class FireStoreData<T extends Editable> {
       })
     );
   }
-  List(): Observable<Extended<T>[]> {
-    return this.list;
-  }
+
 
   protected extractSnapshotData(snapshot: QueryDocumentSnapshot<T>) {
     const meta = snapshot.metadata;

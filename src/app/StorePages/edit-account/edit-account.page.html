@@ -2,11 +2,20 @@
     <ion-toolbar>
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
-            <ion-menu-toggle menuToggle>
-                <ion-button>
-                    <ion-icon slot="icon-only" name="menu"></ion-icon>
-                </ion-button>
-            </ion-menu-toggle>
+            <ion-button type="ion-button" expand="full" (click)="onCancel()" >
+                    <div>
+                            <ion-icon name="arrow-back"></ion-icon>
+                            <label style='display: block'>cancel</label>                    
+                            </div>
+                         </ion-button>
+        </ion-buttons>
+        <ion-buttons slot="end">
+            <ion-button type="submit" (click)="onSubmit(form)" color="primary"> 
+                <div>
+                <ion-icon name="checkmark"></ion-icon>
+                <label style='display: block'>save</label>                    
+                </div>
+            </ion-button>
         </ion-buttons>
         <ion-title>
             {{accountName}}
@@ -15,7 +24,7 @@
 </ion-header>
 
 <ion-content padding>
-    <form *ngIf="account$|async as account" novalidate ng-submit="onSubmit()" [formGroup]="form">
+    <form *ngIf="account$|async as account" novalidate (ngSubmit)="onSubmit()" [formGroup]="form">
         <ion-list>
             <ion-item [class.invalid]="!nameControl.valid && (nameControl.touched || submitAttempt)">
                 <ion-label floating>Name</ion-label>
@@ -39,16 +48,14 @@
 
     </form>
 </ion-content>
-<ion-footer>
+<!-- <ion-footer>
     <ion-grid>
         <ion-row>
-            <!--  <ion-col *ngIf="accountCopy.$key"><ion-button  full (click)="remove()" color="danger">remove</ion-button></ion-col> -->
             <ion-col>
                 <ion-button type="ion-button" expand="full" (click)="onCancel()" color="light">cancel</ion-button>
             </ion-col>
             <ion-col>
-                <ion-button type="submit" expand="full" (click)="onSubmit(form)" color="primary"> save</ion-button>
             </ion-col>
         </ion-row>
     </ion-grid>
-</ion-footer>
+</ion-footer> -->

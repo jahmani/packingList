@@ -60,8 +60,8 @@ export class AppComponent implements OnDestroy {
         // this.location.
         this.router.navigateByUrl("/login", { replaceUrl: true });
       } else if (store) {
-        // if (this.initialAppLoad) {
-        if (true) {
+        if (this.initialAppLoad) {
+        // if (false) {
             this.router.navigateByUrl("StoreBase/ProductsList", { replaceUrl: true });
           this.initialAppLoad = false;
         }
