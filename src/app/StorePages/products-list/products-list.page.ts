@@ -126,13 +126,13 @@ export class ProductsListPage implements OnInit {
       })
       .catch(console.log);
   }
-  getLineItemHeight(product?: Extended<Product>, i?){
+  getLineItemHeight(product?: Extended<Product>, i?) {
     if (product.data.notice) {
       return 141;
     } else {
       return 110;
     }
-  } getCardItemHeight(product?: Extended<Product>, i?){
+  } getCardItemHeight(product?: Extended<Product>, i?) {
     if (product.data.notice) {
       return 141;
     } else {
