@@ -10,6 +10,7 @@ import { EditProductPage } from "../edit-product/edit-product.page";
 import { ProductsPageSettingsComponent } from "../../products-page-settings/products-page-settings.component";
 import { StoreInfoService } from "../../providers/AppData/store-info.service";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
+import { ProductsListDataService } from "./products-list-data.service";
 
 type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
 
@@ -25,12 +26,13 @@ export class ProductsListPage implements OnInit {
   }
   constructor(
     public router: Router,
-    private rout: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     @Optional() private navParams: NavParams,
     private alertController: AlertController,
     private modalController: ModalController,
     private productsRep: ProductsDataService,
     private storesInfo: StoreInfoService,
+    private prodListServ: ProductsListDataService,
     private popoverCtrl: PopoverController,
     private ass: ActiveStoreService
   ) {
@@ -76,9 +78,9 @@ export class ProductsListPage implements OnInit {
     );
     // initializedValueChanges.subscribe(console.log);
 
-    this.filteredProducts = combineLatest(
+    this.filteredProducts = combineLatest([
       initializedValueChanges,
-      this.products
+      this.products]
     ).pipe(
       map(([searcTerm, extProducts]) => {
         if (!searcTerm || !searcTerm.length) {
@@ -96,6 +98,7 @@ export class ProductsListPage implements OnInit {
         });
       })
     );
+    this.prodListServ.filteredProducts = this.filteredProducts;
   }
 
   async delete(extProduct: Extended<Product>) {
@@ -123,13 +126,28 @@ export class ProductsListPage implements OnInit {
       })
       .catch(console.log);
   }
+  getLineItemHeight(product?: Extended<Product>, i?){
+    if (product.data.notice) {
+      return 141;
+    } else {
+      return 110;
+    }
+  } getCardItemHeight(product?: Extended<Product>, i?){
+    if (product.data.notice) {
+      return 141;
+    } else {
+      return 110;
+    }
+  }
   onProductClicked(product?: Extended<Product>, i?) {
     if (product && this.canSelect) {
       this.modalController.dismiss(product);
     } else if (product && i !== undefined) {
-      this.toggleView = this.view;
-      this.view = "SLIDES";
+    //  this.toggleView = this.view;
+    //  this.view = "SLIDES";
       this.slideIndex = i;
+      this.prodListServ.slideIndex = i;
+      this.router.navigate(['slideView'], {relativeTo: this.activatedRoute});
     }
   }
   cancel(product?: Extended<Product>) {
@@ -173,7 +191,6 @@ export class ProductsListPage implements OnInit {
   async presentPopover(ev) {
     const popover = await this.popoverCtrl.create({
       component: ProductsPageSettingsComponent,
-      // dynamic data to display
       componentProps: { productsPage: this },
       event: ev,
 

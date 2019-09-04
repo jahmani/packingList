@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{(userStore|async)?.data?.name}}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+
+      <ion-button [routerLink]="'/EditProduct/new'">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content no-badding color="dark">
+
+  <ion-slides style="height:100%;" [options]="{initialSlide:slideIndex}" #slids>
+    <ng-container *ngIf='(activeSlideIndex|async )+1 as activeIndexPlusOne  '>
+        <ion-slide  *ngFor="let product of filteredProducts|async, let i= index"
+         style=" height: 100%;" (click)="showSlideDetails = !showSlideDetails">
+         <!-- <div style='position: absolute; top: 0'>
+            i: {{i}}, activeIndexPlusOne-1 : {{activeIndexPlusOne-1}}
+
+         </div> -->
+          <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+          <div  *ngIf='i == activeIndexPlusOne-1  || i == activeIndexPlusOne   || i == activeIndexPlusOne-2 '
+           class="swiper-zoom-container">
+            <ion-fab vertical="top" horizontal="end" slot="fixed">
+              <ion-fab-button class="slideMoreFAB" size="small">
+                <ion-icon name="more"></ion-icon>
+              </ion-fab-button>
+              <ion-fab-list side="bottom">
+                <ion-fab-button [routerLink]="'/EditProduct/'+product.id">Edit</ion-fab-button>
+              </ion-fab-list>
+
+            </ion-fab>
+            <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false}"
+              style="width: inherit; height: inherit;"></app-product-view>
+          </div>
+        </ion-slide>
+    </ng-container>
+    <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+  </ion-slides>
+  <ng-container *ngIf="showSlideDetails">
+    <!-- [ngClass]="slids.el.dir ==='rtl' ? 'swiper-button-next' : 'swiper-button-prev'" 
+       *ngIf="!slids.isBeginning()" 
+      -->
+    <div class='swiper-button-next' (click)="slids.slidePrev()"></div>
+    <!--
+               [ngClass]="slids.el.dir !=='rtl' ? 'swiper-button-next' : 'swiper-button-prev'"
+             *ngIf="!slids.isEnd()"
+              -->
+    <div class='swiper-button-prev' (click)="slids.slideNext()"></div>
+  </ng-container>
+
+</ion-content>

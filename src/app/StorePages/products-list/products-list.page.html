@@ -63,8 +63,44 @@
   
 </ion-header>
 
-
 <ion-content no-badding color="dark" *ngIf='userStore|async as _storeInfo'>
+
+  <!--   
+  <ion-virtual-scroll [items]="items">
+    <ion-item *virtualItem="let item">
+      {{ item }}
+    </ion-item>
+  </ion-virtual-scroll>
+ -->
+
+ <ion-list *ngIf="(view === 'LIST' ); else cardsView">
+    <ion-virtual-scroll approxItemHeight="140px" [itemHeight]='getLineItemHeight' virtualTrackBy='trackByFn' [items]="filteredProducts|async" #slidingItem1 >
+      <div   *virtualItem="let product, let i=index" >
+      <app-product-view
+        [product]="product" [options]="{view: 'ITEM' , editable:true}"
+        [storeInfo]= "_storeInfo"
+        (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
+        (prodClick)="onProductClicked(product, i)
+        "></app-product-view>
+      </div>
+    </ion-virtual-scroll>
+  </ion-list>
+  <ng-template #cardsView>
+  <ion-list *ngIf="(view === 'CARDS'); else slidesView">
+   <ion-virtual-scroll approxItemHeight='540px' virtualTrackBy='trackByFn' [items]="filteredProducts|async" #slidingItem1 >
+     <div   *virtualItem="let product, let i=index" >
+     <app-product-view
+       [product]="product" [options]="{view: 'CARD' , editable:true}"
+       [storeInfo]= "_storeInfo"
+       (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
+       (prodClick)="onProductClicked(product, i)
+       "></app-product-view>
+     </div>
+   </ion-virtual-scroll>
+ </ion-list>
+</ng-template>
+
+<!-- 
   <ion-list #slidingItem1 *ngIf="(view === 'LIST' || view === 'CARDS'); else slidesView">
     <app-product-view *ngFor="let product of filteredProducts|async; let i=index; trackBy: trackByFn"
       [product]="product" [options]="{view: view === 'LIST' ? 'ITEM' : 'CARD', editable:true}"
@@ -73,7 +109,8 @@
       (prodClick)="onProductClicked(product,i)
       "></app-product-view>
       
-  </ion-list>
+  </ion-list> 
+-->
 
 
   <ng-template #slidesView>

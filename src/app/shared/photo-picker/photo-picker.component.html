@@ -1,11 +1,11 @@
 <ng-container *ngIf="imgFile; else noImageFile" >
 <img (click)="imageClicked($event)" [src]="imgFile.data.url" >
-
+<!-- 
 <ion-fab vertical="top" horizontal="end" slot="fixed">
     <ion-fab-button (click)="removeImage()" size="small" class="slideMoreFAB" >
         <ion-icon name="remove"></ion-icon>
     </ion-fab-button>
-</ion-fab>
+</ion-fab> -->
 </ng-container>
 <ng-template #noImageFile>
     <ng-container *ngIf="imageSaveInfo; else noImage">

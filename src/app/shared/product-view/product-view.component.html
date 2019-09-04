@@ -102,10 +102,11 @@
   <ng-template #ionItemOptions>
     <ion-item-options *ngIf="options.editable" slot="start" >
       <!-- <ion-item-option color="primary" (click)="edit.emit(product.id)" slot="bottom" expandable="true"> -->
-        <ion-item-option color="primary"  [routerLink]="'../EditProduct/'+product.id" expandable="true">
+        <ion-item-option color="primary"  [routerLink]="'/EditProduct/'+product.id" expandable="true">
           <ion-icon name="create"></ion-icon>
         Edit
       </ion-item-option>
+<!-- 
       <ion-item-option (click)="copy.emit(product)" color="primary">
         <ion-icon name="copy"></ion-icon>
         Copy
@@ -114,17 +115,13 @@
         <ion-icon name="trash"></ion-icon>
         Delete
       </ion-item-option>
+       -->
     </ion-item-options>
   </ng-template>
 
   <ng-template #productNotesRow>
     <ion-item *ngIf="options.showNotes && product.data.notice" no-padding lines="none">
       <ion-row no-padding>
-        <!-- <ion-row no-padding *ngIf="options.showNotes" class="row-revers font-small"> -->
-        <!-- <ion-col size="auto" *ngIf="product.data.code">
-      <span color="drafts"> mark :</span>
-      <ion-text color="drafts"> {{product.data.code}}</ion-text>
-    </ion-col> -->
 
         <ion-col size="auto">
           <ion-note class="font-small">{{product.data.notice}}</ion-note>

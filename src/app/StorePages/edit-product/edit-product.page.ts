@@ -2,11 +2,12 @@ import { Component, OnInit, Optional } from "@angular/core";
 import { Extended, Product } from "../../interfaces/data-models";
 import { Observable, of } from "rxjs";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { NavParams, ModalController } from "@ionic/angular";
+import { NavParams, ModalController, PopoverController, AlertController } from "@ionic/angular";
 import { tap } from "rxjs/operators";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
+import { EditOptionsPopoverComponent } from "../../shared/edit-options-popover/edit-options-popover.component";
 
 @Component({
   selector: "app-edit-product",
@@ -25,6 +26,8 @@ export class EditProductPage implements OnInit {
     private productsFsRep: ProductsDataService,
     @Optional() private navParams: NavParams,
     private modalControler: ModalController,
+    public popoverController: PopoverController,
+    private alertController: AlertController,
     activatedRoute: ActivatedRoute,
     private location: Location
   ) {
@@ -37,7 +40,7 @@ export class EditProductPage implements OnInit {
     // this.isModal = !!this.navParams; // .get("isModal");
     // this.productId = this.navParams.get("id");
 
-   // const copy = this.navParams.get("copy");
+    // const copy = this.navParams.get("copy");
 
     this.form = this.fb.group({
       name: [
@@ -81,12 +84,42 @@ export class EditProductPage implements OnInit {
     if (this.isModal) {
       return this.modalControler.dismiss();
     } else {
-    this.location.back();
+      this.location.back();
     }
   }
   onCancel() {
     return this.dismiss(null);
   }
+  async delete(product: Product) {
+    const extProduct = { data: product } as Extended<Product>;
+    if (this.productId && this.productId !== "new") {
+      extProduct.id = this.productId;
+      const modal = await this.alertController.create({
+        message: `Are you sure deleting product: ${extProduct.data.name}`,
+        header: `Deleteing Product`,
+        buttons: [
+          {
+            text: "Delete",
+            handler: () => {
+              this.productsFsRep.remove(extProduct);
+              this.dismiss(extProduct);
+            }
+          },
+          { text: "cancel", cssClass: "danger" }
+        ]
+      });
+      return await modal
+        .present()
+        .then(val => {
+          console.log("val", val);
+        })
+        .catch(console.log);
+    } else {
+      this.dismiss({});
+    }
+
+  }
+
   onSubmit({ value, valid }: { value: Product; valid: boolean }) {
     console.log(value, valid);
     this.submitAttempt = true;
@@ -95,7 +128,39 @@ export class EditProductPage implements OnInit {
     }
     // throw "please take care , invalid form"
   }
+  async omMoreClicked(ev) {
+    const popOver = await this.popoverController.create({
+      component: EditOptionsPopoverComponent,
+      event: ev,
+    });
+    await popOver.present();
+    popOver.onDidDismiss().then((val) => {
+      const action = val.role;
+      switch (action) {
+        case "SAVE":
+          this.onSubmit({ value: this.form.value, valid: this.form.valid });
+          break;
+        case "SAVECOPY":
+          this.saveCopy({ value: this.form.value, valid: this.form.valid });
+          break;
+        case "DELETE":
+          this.delete(this.form.value);
+          break;
 
+        default:
+          break;
+      }
+    });
+
+  }
+  saveCopy({ value, valid }: { value: Product; valid: boolean }) {
+    this.submitAttempt = true;
+    if (valid) {
+      const extProduct = { data: value } as Extended<Product>;
+      this.productsFsRep.saveNew(extProduct);
+      this.dismiss(extProduct);
+    }
+  }
   onSave(product: Product) {
     const extProduct = { data: product } as Extended<Product>;
     if (this.productId && this.productId !== "new") {
@@ -108,5 +173,5 @@ export class EditProductPage implements OnInit {
     this.dismiss(extProduct);
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 }

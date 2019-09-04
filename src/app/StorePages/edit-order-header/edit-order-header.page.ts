@@ -16,6 +16,7 @@ import { PackinglistInfoDataService } from "../../providers/StoreData/packinglis
 import { EditOrderRowPage } from "../edit-order-row/edit-order-row.page";
 import { ModalController } from "@ionic/angular";
 import { OrderRowEditorComponent } from "../../shared/order-row-editor/order-row-editor.component";
+import { datePickerObj } from "./date-picker-options";
 
 @Component({
   selector: "app-edit-order-header",
@@ -26,6 +27,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   packinglists: Observable<Extended<PackinglistInfo>[]>;
 
   // orderId$: Observable<string>;
+  v = datePickerObj;
   submitAttempt: boolean;
   orderId: string;
   order$: Observable<Extended<Order>>;
@@ -110,6 +112,9 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   }
   get orderRowsCtrl() {
     return this.form.get("rows") as FormArray;
+  }
+  get deliveryDateCtrl() {
+    return this.form.get("deliveryDate");
   }
   removeOrderRow(index: number) {
     this.orderRowsCtrl.removeAt(index);

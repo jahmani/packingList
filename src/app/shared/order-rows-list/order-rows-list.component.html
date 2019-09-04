@@ -3,7 +3,7 @@
         <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">
             <span></span>
         </ion-thumbnail>
-        <ion-label>
+        <ion-label class="ion-no-margin">
             <ion-row>
                 <ion-col size="4" text-center>
                     <span title="quantity">quantity</span>
@@ -21,7 +21,7 @@
 
 <app-order-row *ngFor="let orderRow of orderRows, let i=index" (plLineClicked)="onRowClicked(i)" 
     [orderRow]="orderRow" [index]="i" [isActive]="i==activeLineIndex"></app-order-row>
-<div *ngIf="totals" class="header-item">
+<div *ngIf="totals && showTotals" class="header-item">
     <ion-item no-padding>
         <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">
             <span>Totals</span>

@@ -55,7 +55,7 @@ export class PhotoPickerComponent implements OnInit {
       });
     }
   }
-  removeImage($event) {
+  private removeImage($event) {
     if (this.imgFile) {
       if (this.imgFile.id !== this.imgFileId) {
         this.imagesFsRepository.remove(this.imgFile);

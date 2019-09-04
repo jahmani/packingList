@@ -6,37 +6,43 @@
 
   <ion-col class="text-center"> <span>Shipping Mark</span> </ion-col>
 </ion-row>
-<div *ngFor="let orderRow of orderRows" class="packing-row">
-  <ion-row
-    *ngIf="orderRow.data.packingLines && orderRow.data.packingLines.length"
-  >
-    <ion-col>
-      <span>{{ orderRow.ext.Product.data.name }}</span>
-    </ion-col>
-  </ion-row>
+<ion-item class="ion-no-margin" class="ion-no-padding" class="ion-wrap" class="no-inner-padding">
+  <ion-label class="ion-no-margin" class="ion-no-padding" class="ion-wrap">
+    
+    <div *ngFor="let orderRow of orderRows" class="packing-row" color="tertiary">
+        <ion-row
+          *ngIf="orderRow.data.packingLines && orderRow.data.packingLines.length"
+        >
+          <ion-col>
+            <span>{{ orderRow.ext.Product.data.name }}</span>
+          </ion-col>
+        </ion-row>
+      
+        <ion-row
+          align-items-center
+          *ngFor="let packingLine of orderRow.data.packingLines; let i = index"
+        >
+          <ion-col class="text-center italic">
+            <span class="input-small-padding">{{ packingLine.ctnNo }}</span>
+          </ion-col>
+      
+          <ion-col class="text-center">
+            <span class="input-small-padding">{{ packingLine.ctns }}</span>
+          </ion-col>
+          <ion-col class="text-center">
+            <span class="input-small-padding">{{ packingLine.packing }}</span>
+          </ion-col>
+          <ion-col class="text-center">
+            <span class="input-small-padding">{{
+              packingLine.packing * packingLine.ctns
+            }}</span>
+          </ion-col>
+      
+          <ion-col text-wrap class="text-center italic">
+            <span class="input-small-padding">{{ packingLine.shippingMark }}</span>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-label>
 
-  <ion-row
-    align-items-center
-    *ngFor="let packingLine of orderRow.data.packingLines; let i = index"
-  >
-    <ion-col class="text-center italic">
-      <span class="input-small-padding">{{ packingLine.ctnNo }}</span>
-    </ion-col>
-
-    <ion-col class="text-center">
-      <span class="input-small-padding">{{ packingLine.ctns }}</span>
-    </ion-col>
-    <ion-col class="text-center">
-      <span class="input-small-padding">{{ packingLine.packing }}</span>
-    </ion-col>
-    <ion-col class="text-center">
-      <span class="input-small-padding">{{
-        packingLine.packing * packingLine.ctns
-      }}</span>
-    </ion-col>
-
-    <ion-col text-wrap class="text-center italic">
-      <span class="input-small-padding">{{ packingLine.shippingMark }}</span>
-    </ion-col>
-  </ion-row>
-</div>
+</ion-item>

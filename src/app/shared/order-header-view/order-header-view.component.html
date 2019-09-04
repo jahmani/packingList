@@ -12,7 +12,7 @@
   </ion-item>
 </ion-card-header>
 <ion-item lines="none">
-  <ion-thumbnail *ngIf="order.data.imageUrl" (click)=" onImageClicked($event)" slot="end">
+  <ion-thumbnail *ngIf="order.data.imageUrl" (click)=" onImageClicked($event)" slot="start">
     <img [src]="order.data.imageUrl">
   </ion-thumbnail>
   <ion-row class="ion-justify-content-between">

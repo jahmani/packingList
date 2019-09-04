@@ -20,6 +20,7 @@ export class OrdersListComponent implements OnInit {
     if (val) { this.computeTotal(); }
     console.log("linnnnes: ", val);
   }
+  @Input() showListHeader: boolean;
 
 
   constructor(private router: Router, ass: ActiveStoreService) {

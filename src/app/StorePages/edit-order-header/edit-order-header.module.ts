@@ -7,7 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EditOrderHeaderPage } from './edit-order-header.page';
 import { SharedModule } from '../../shared/shared.module';
-
+import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
 const routes: Routes = [
   {
     path: '',
@@ -20,6 +20,7 @@ const routes: Routes = [
     CommonModule,
     ReactiveFormsModule,
     IonicModule,
+    Ionic4DatepickerModule,
     RouterModule.forChild(routes),
 
     SharedModule,

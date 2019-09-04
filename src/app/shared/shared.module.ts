@@ -20,6 +20,10 @@ import { EditPhotoPage } from "../pages/edit-photo/edit-photo.page";
 import { StoreCurrencyPipe } from './store-currency.pipe';
 import { OrderHeaderBriefRowViewComponent } from './order-header-brief-row-view/order-header-brief-row-view.component';
 import { OrdersListComponent } from './orders-list/orders-list.component';
+import { OrderViewComponent } from './order-view/order-view.component';
+import { EditOptionsPopoverComponent } from './edit-options-popover/edit-options-popover.component';
+import { ExpandableComponent } from "./expandable/expandable.component";
+import { ProductLineViewComponent } from './product-line-view/product-line-view.component';
 
 @NgModule({
   imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
@@ -34,9 +38,11 @@ import { OrdersListComponent } from './orders-list/orders-list.component';
     PackingListComponent,
     OrderRowEditorComponent,
   ProductViewComponent, ImageEditorPage, ImageCropperComponent, PhotoUploadComponent,
-   EditPhotoPage, StoreCurrencyPipe, OrderHeaderBriefRowViewComponent, OrdersListComponent
+   EditPhotoPage, StoreCurrencyPipe, OrderHeaderBriefRowViewComponent, OrdersListComponent, OrderViewComponent, EditOptionsPopoverComponent,
+   ExpandableComponent,
+   ProductLineViewComponent
   ],
-  entryComponents: [PhotoViewComponent, ImageEditorPage, PhotoUploadComponent, EditPhotoPage],
+  entryComponents: [PhotoViewComponent, ImageEditorPage, PhotoUploadComponent, EditPhotoPage, EditOptionsPopoverComponent],
   providers: [StoreCurrencyPipe, CurrencyPipe],
   exports: [
     OrderHeaderViewComponent,
@@ -48,7 +54,10 @@ import { OrdersListComponent } from './orders-list/orders-list.component';
     PackingListComponent,
     OrderRowEditorComponent,
     ProductViewComponent,
-    StoreCurrencyPipe
+    StoreCurrencyPipe,
+    OrderViewComponent,
+    EditOptionsPopoverComponent,
+    ExpandableComponent
   ]
 })
 export class SharedModule {}

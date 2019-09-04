@@ -1,4 +1,4 @@
-<ng-container *ngIf="(order$ | async) as or">
+<ng-container  *ngIf="(order$ | async) as or">
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
@@ -22,15 +22,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content no-padding >
-    <app-order-header-view [order]="or"></app-order-header-view>
+  <app-order-view [order]='or' [fullView]='true'></app-order-view>
+    <!-- <app-order-header-view [order]="or"></app-order-header-view> -->
     <!-- <ion-fab *ngIf="showEditButton" vertical="top" horizontal="end" edge slot="fixed">
       <ion-fab-button mini [routerLink]="['EditOrderHeader', {id:or.id}]">
         <ion-icon name="create"></ion-icon>
       </ion-fab-button>
     </ion-fab> -->
-  <app-order-rows-list *ngIf="(orderPlLines$ | async) as lines; else: noLines" [rows]="lines">
+  <!-- <app-order-rows-list *ngIf="(orderPlLines$ | async) as lines; else: noLines" [rows]="lines">
   </app-order-rows-list>
-  <app-packing-list [orderRows]="orderPlLines$ | async"> </app-packing-list>
+  <app-packing-list [orderRows]="orderPlLines$ | async"> </app-packing-list> -->
   <ng-template #noLines> loading... </ng-template>
 </ion-content>
 </ng-container>

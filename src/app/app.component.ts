@@ -5,10 +5,10 @@ import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AuthService } from "./providers/Auth/auth.service";
 import { ActiveStoreService } from "./providers/AppData/active-store.service";
-import { Observable, of } from "rxjs";
+import { Observable, of, combineLatest } from "rxjs";
 import { Extended, User, StoreInfo } from "./interfaces/data-models";
 import { UsersService } from "./providers/AppData/users.service";
-import { switchMap, combineLatest, tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { StoreInfoService } from "./providers/AppData/store-info.service";
 import { Router } from "@angular/router";
 import { SwUpdate } from "@angular/service-worker";
@@ -55,13 +55,13 @@ export class AppComponent implements OnDestroy {
       })
     );
 
-    this.authService.user.pipe(combineLatest(this.activeStore$)).subscribe(([user, store]) => {
+    combineLatest([this.authService.user, this.activeStore$]).subscribe(([user, store]) => {
       if (!user) {
         // this.location.
         this.router.navigateByUrl("/login", { replaceUrl: true });
       } else if (store) {
-        if (this.initialAppLoad) {
-        // if (false) {
+      //  if (this.initialAppLoad) {
+         if (false) {
             this.router.navigateByUrl("StoreBase/ProductsList", { replaceUrl: true });
           this.initialAppLoad = false;
         }
@@ -79,8 +79,8 @@ export class AppComponent implements OnDestroy {
      // duration: 1000,
       buttons: [
         {
-          side: 'start',
-          icon: 'star',
+          side: 'end',
+          icon: 'refresh',
           text: 'update',
           handler: () => {
             window.location.reload();

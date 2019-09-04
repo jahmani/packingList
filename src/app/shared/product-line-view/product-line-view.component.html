@@ -1,0 +1,20 @@
+<!-- <ion-card class="itemView">
+    <ion-card-header class="item-card-header">
+      <ion-card-title>
+        <ion-item-sliding no-padding>
+          <ion-item (click)="prodClick.emit(product)" no-padding
+            [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
+            <ion-thumbnail class="item-thumb" slot="end" (click)="imgClick.emit($event, product)">
+              <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
+                onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
+            </ion-thumbnail>
+            <ion-label>
+              <ng-container *ngTemplateOutlet="productDetails"></ng-container>
+            </ion-label>
+          </ion-item>
+          <ng-container *ngTemplateOutlet="ionItemOptions"></ng-container>
+        </ion-item-sliding>
+        <ng-container *ngTemplateOutlet="productNotesRow"></ng-container>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card> -->

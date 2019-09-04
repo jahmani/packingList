@@ -1,12 +1,14 @@
 .text-end{
     text-align: end;
 }
-.thumbnail-placeholder{
-}
+
 .header-item{
     --ion-background-color: #329cec;
     ion-label{
         margin-top: 1px;
         margin-bottom: 1px;
     }
+}
+.long-input{
+    min-width: 10em;
 }

@@ -1,0 +1,10 @@
+<div #expandWrapper class='expand-wrapper' style='position: relative;' [class.collapsed]="!expanded">
+    <ng-content (click)="contentClick.emit()"></ng-content>
+    <div (click)="linkClick.emit($event)" class='bottom-bar blue-transparent ion-text-center '>
+        <ion-ripple-effect> </ion-ripple-effect>
+        <ion-text class="">
+            Expand
+            <ion-icon name="open"></ion-icon>
+        </ion-text>
+    </div>
+</div>

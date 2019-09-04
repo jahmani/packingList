@@ -7,12 +7,18 @@ import { IonicModule } from '@ionic/angular';
 import { ProductsListPage } from './products-list.page';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
+import { ProductsSlidesPage } from './products-slides.page';
+import { ProductsListDataService } from './products-list-data.service';
 
 
 const routes: Routes = [
   {
     path: '',
     component: ProductsListPage
+  },
+  {
+    path: 'slideView',
+    component: ProductsSlidesPage
   }
 ];
 
@@ -24,6 +30,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProductsListPage]
+  declarations: [ProductsListPage, ProductsSlidesPage],
+  providers: [ProductsListDataService]
 })
 export class ProductsListPageModule {}

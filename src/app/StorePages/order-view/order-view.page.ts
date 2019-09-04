@@ -14,7 +14,7 @@ import { OrdersDataService } from "../../providers/StoreData/orders-data.service
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  selector: "app-order-view",
+  selector: "app-order-view-page",
   templateUrl: "./order-view.page.html",
   styleUrls: ["./order-view.page.scss"]
 })

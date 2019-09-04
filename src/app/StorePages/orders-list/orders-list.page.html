@@ -7,7 +7,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-<!--  -->
+      <!--  -->
       <ion-button [routerLink]="['/StoreBase/EditOrderHeader',{id:'new'}]">
         <ion-icon slot="icon-only" name="add"></ion-icon>
       </ion-button>
@@ -16,12 +16,12 @@
         <ion-icon slot="icon-only" name="copy"></ion-icon>
       </ion-button>
       -->
-  </ion-buttons>
+    </ion-buttons>
 
     <ion-buttons slot="start">
-        <ion-back-button ></ion-back-button>
+      <ion-back-button></ion-back-button>
 
-     <!-- <ion-menu-toggle menuToggle>
+      <!-- <ion-menu-toggle menuToggle>
         <ion-button>
           <ion-icon slot="icon-only" name="menu"></ion-icon>
         </ion-button>
@@ -30,9 +30,37 @@
     <ion-title>Orders List</ion-title>
 
   </ion-toolbar>
+  <ion-toolbar>
+    <ion-title class="ion-no-padding">
+      <div class="header-item, list-header">
+        <!-- <ion-item no-padding>
+        <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">
+            <span></span>
+        </ion-thumbnail>
+        <ion-label> -->
+        <ion-row class="ion-no-padding">
+          <ion-col size="3" text-center>
+            <span title="quantity">No.</span>
+          </ion-col>
+          <ion-col size="3" text-center>
+            <span title="quantity">date</span>
+          </ion-col>
+          <ion-col size="2" text-center>
+            <span title="price">CBM </span>
+          </ion-col>
+          <ion-col size="4" text-center>
+            <span title="AMMOUNT">ammount</span>
+          </ion-col>
+        </ion-row>
+        <!-- </ion-label>
+    </ion-item> -->
+      </div>
+    </ion-title>
+
+  </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
-  <app-orders-list [orders]='orders|async'></app-orders-list>
+  <app-orders-list [showListHeader]='false' [orders]='orders|async'></app-orders-list>
   <!-- <ion-card *ngFor="let order of orders|async, let i=index">
     <app-order-header-view [order]="order" (click)="openOrder(order.id)">
     </app-order-header-view>

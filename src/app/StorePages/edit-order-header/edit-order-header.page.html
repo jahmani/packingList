@@ -3,20 +3,23 @@
     <ion-buttons slot="end">
       <ion-button (click)="onSubmit(form)">
         <div>
-        <ion-icon name="checkmark" slot="start"></ion-icon>
-        <label style="display: block">done</label>
+          <ion-icon name="checkmark" slot="start"></ion-icon>
+          <label style="display: block">done</label>
         </div>
       </ion-button>
-      <ion-button (click)="delete()"><div>
-        <ion-icon name="trash" slot="start"></ion-icon>
-        <label style="display: block">delete</label>
-        </div>      </ion-button>
+      <ion-button (click)="delete()">
+        <div>
+          <ion-icon name="trash" slot="start"></ion-icon>
+          <label style="display: block">delete</label>
+        </div>
+      </ion-button>
     </ion-buttons>
     <ion-buttons slot="start">
-      <ion-button (click)="onCancel()"><div>
-        <ion-icon name="arrow-back" slot="start"></ion-icon>
-        <label style="display: block"></label>
-      </div>
+      <ion-button (click)="onCancel()">
+        <div>
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          <label style="display: block"></label>
+        </div>
       </ion-button>
     </ion-buttons>
 
@@ -28,13 +31,12 @@
     <ion-list>
       <ion-item lines="none">
         <app-account-picker formControlName="accountId"></app-account-picker>
-        <ion-thumbnail slot="end">
+        <ion-thumbnail slot="start">
           <app-photo-picker formControlName="imageUrl"></app-photo-picker>
         </ion-thumbnail>
       </ion-item>
       <ion-row no-padding>
         <ion-col>
-
           <ion-item>
             <ion-label>Ammount</ion-label>
             <ion-input class="text-end" readonly formControlName="ammount" type="number"></ion-input>
@@ -68,15 +70,20 @@
         <ion-col>
           <ion-item>
             <ion-label>Date</ion-label>
-            <ion-datetime autofocus formControlName="date"></ion-datetime>
+            <!-- <ion-datetime autofocus min='2000' #dateCtrl formControlName="date"></ion-datetime> -->
+            <ion-input  [liIonic4Datepicker]="v" class='text-end long-input'   formControlName="date" ></ion-input>
+
           </ion-item>
         </ion-col>
-        <ion-col>
-          <ion-item>
-            <ion-label>delivery</ion-label>
-            <ion-datetime formControlName="deliveryDate"></ion-datetime>
-          </ion-item>
-        </ion-col>
+
+          <ion-col>
+            <ion-item>
+              <ion-label>delivery</ion-label>
+              <ion-input  [liIonic4Datepicker]="v" class='text-end long-input'   formControlName="deliveryDate" ></ion-input>
+              <!-- <ion-text (click)="ddateCtrl.open()">{{deliveryDateCtrl.value | date}}</ion-text> -->
+              <!-- <ion-datetime min=2000 formControlName="deliveryDate"></ion-datetime> -->
+            </ion-item>
+          </ion-col>
       </ion-row>
     </ion-list>
 

@@ -1,11 +1,12 @@
 <ion-item lines="none"  detail-push (click)="selectAccountInfo($event)">
-  <ion-icon name="person" item-start></ion-icon>
+  <ion-icon name="person" slot="start"></ion-icon>
   <ion-label>
   <span *ngIf="!account; else accountDetails">select Account</span>
   <ng-template #accountDetails>
     <span>{{account.data.name}}</span>
-    <ion-note>/{{account.data.city}}</ion-note>
+    <p>
+    <ion-note>{{account.data.city}}</ion-note></p>
   </ng-template>
 </ion-label>
-  <ion-icon name="arrow-dropdown" item-end></ion-icon>
+  <ion-icon name="arrow-dropdown" slot="end"></ion-icon>
 </ion-item>

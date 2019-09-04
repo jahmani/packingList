@@ -32,11 +32,11 @@
         Size: {{image.data.size}}, Dim : {{image.data.width + "x" + image.data.height}}
       </p>
       <div class="swiper-zoom-container">
-        <ion-fab vertical="top" horizontal="start" slot="fixed">
+        <!-- <ion-fab vertical="top" horizontal="start" slot="fixed">
           <ion-fab-button (click)="editImage(image)">
             <ion-icon name="create"></ion-icon>
           </ion-fab-button>
-        </ion-fab>
+        </ion-fab> -->
 
         <ng-container *ngIf="image.data.url; else noThumb">
           <!-- <ion-spinner name="lines" class="fixed" *ngIf="!image.ext.loaded || deleteInProgress"></ion-spinner>
