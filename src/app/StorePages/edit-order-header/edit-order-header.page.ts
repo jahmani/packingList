@@ -14,9 +14,10 @@ import {
 import { Location } from "@angular/common";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
 import { EditOrderRowPage } from "../edit-order-row/edit-order-row.page";
-import { ModalController } from "@ionic/angular";
+import { ModalController, PopoverController } from "@ionic/angular";
 import { OrderRowEditorComponent } from "../../shared/order-row-editor/order-row-editor.component";
 import { datePickerObj } from "./date-picker-options";
+import { EditOptionsPopoverComponent } from "../../shared/edit-options-popover/edit-options-popover.component";
 
 @Component({
   selector: "app-edit-order-header",
@@ -44,7 +45,8 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     private location: Location,
     private router: Router,
     private plInfoDataService: PackinglistInfoDataService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private popoverController: PopoverController
   ) {
     this.form = this.fb.group({
       date: "",
@@ -156,7 +158,31 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     return this.form.get("ammount");
   }
 
+  async omMoreClicked(ev) {
+    const popOver = await this.popoverController.create({
+      component: EditOptionsPopoverComponent,
+      event: ev,
+    });
+    await popOver.present();
+    popOver.onDidDismiss().then((val) => {
+      const action = val.role;
+      switch (action) {
+        case "SAVE":
+          this.onSubmit({ value: this.form.value, valid: this.form.valid });
+          break;
+        case "SAVECOPY":
+        //  this.saveCopy({ value: this.form.value, valid: this.form.valid });
+          break;
+        case "DELETE":
+          this.delete();
+          break;
 
+        default:
+          break;
+      }
+    });
+
+  }
   showNewOrderRow() {
     this.addNewOrderRow();
     // const newOrderRow: Extended<OrderRow2> = {
