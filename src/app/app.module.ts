@@ -23,15 +23,14 @@ import { ServiceWorkerModule } from "@angular/service-worker";
 import { EditOrderRowPageModule } from "./StorePages/edit-order-row/edit-order-row.module";
 import { EditProductPageModule } from "./StorePages/edit-product/edit-product.module";
 import { EditAccountPageModule } from "./StorePages/edit-account/edit-account.module";
-import { ProductsPageSettingsComponent } from './products-page-settings/products-page-settings.component';
 import { CatigoryCtrlComponent } from './catigory-ctrl/catigory-ctrl.component';
 import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
 
 @NgModule({
 
-  declarations: [AppComponent, MenuComponent, ProductsPageSettingsComponent, CatigoryCtrlComponent,
+  declarations: [AppComponent, MenuComponent, CatigoryCtrlComponent,
      ],
-  entryComponents: [AccountsListPage, ProductsPageSettingsComponent],
+  entryComponents: [AccountsListPage],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -55,7 +54,7 @@ import { InternationalPhoneNumberModule } from 'ngx-international-phone-number';
     StatusBar,
     SplashScreen,
     // StoreCurrencyPipe,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    // { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

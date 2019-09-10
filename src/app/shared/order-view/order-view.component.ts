@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Extended, Order } from '../../interfaces/data-models';
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Extended, Order, OrderRow2 } from '../../interfaces/data-models';
 import { StoreInfoService } from '../../providers/AppData/store-info.service';
 import { Router } from '@angular/router';
 
@@ -8,15 +8,16 @@ import { Router } from '@angular/router';
   templateUrl: './order-view.component.html',
   styleUrls: ['./order-view.component.scss']
 })
-export class OrderViewComponent implements OnInit {
+export class OrderViewComponent implements OnChanges {
 
   _expanded = false;
   showLines = false;
   @Input() order: Extended<Order>;
   @Input() storeInfo;
-  // @Input() ;
+  @Input() forProductId: string;
   @Input() fullView;
   @Input() showHeader;
+  rows: Extended<OrderRow2>[];
   @Input() set expanded(val: boolean) {
     this._expanded = val;
     if (val) {
@@ -29,8 +30,12 @@ export class OrderViewComponent implements OnInit {
 
   }
   constructor(private router: Router) { }
-
-  ngOnInit() {
+  ngOnChanges(changes: SimpleChanges) {
+    this.rows = this.order.ext.extRows;
+    if (this.forProductId) {
+      this.rows = this.rows.filter(row => row.data.productId === this.forProductId);
+      this.fullView = true;
+    }
   }
   openOrder(id: string, $event) {
     $event.stopPropagation();

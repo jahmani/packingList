@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -17,7 +16,7 @@
     ]
   },
   "angularCompilerOptions": {
-    "enableIvy": true
+
   },
   "exclude": [
     "node_modules"

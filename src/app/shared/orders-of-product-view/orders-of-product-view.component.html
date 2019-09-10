@@ -1,0 +1,59 @@
+<!-- <app-orders-list [forProductId]='productId' [showListHeader]='true' [orders]='orders|async'></app-orders-list> -->
+{{(orders|async)?.length}} orders found
+<ion-item color="primary">
+    <ion-label class="ion-no-padding">
+        <ion-row class="ion-no-padding" color="primary">
+            <ion-col size="2" class="ion-text-center">
+                <span title="ctns">ctns</span>
+            </ion-col>
+            <ion-col size="3" class="ion-text-center">
+                <span title="qty">qty</span>
+            </ion-col>
+
+            <ion-col size="3" class="ion-text-center">
+                <span title="price">price</span>
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+                <span title="ammount: ">ammount</span>
+            </ion-col>
+        </ion-row>
+    </ion-label>
+</ion-item>
+<ion-item *ngFor='let order of orders|async' class="ion-no-padding">
+    <ion-label class="ion-no-padding">
+        <ion-row *ngFor='let orderRow of order.ext.rowsOfProduct[productId]; let index' class="ion-no-padding"
+            [ngClass]="index % 2 == 1 ? 'odd-row' : 'even-row'">
+            <ion-col size="2" class="ion-text-center">
+                <span title="ctns">{{ orderRow.ext.ctns }}</span>
+            </ion-col>
+            <ion-col size="3" class="ion-text-center">
+                <span title="qty">{{ orderRow.data.qty }}</span>
+            </ion-col>
+
+            <ion-col size="3" class="ion-text-center">
+                <span title="price">{{ orderRow.data.price  | storeCurrency : storeInfo}}</span>
+            </ion-col>
+            <ion-col size="4" class="ion-text-center">
+                <span title="ammount: ">{{ orderRow.data.ammount  | storeCurrency : storeInfo }}</span>
+            </ion-col>
+        </ion-row>
+        <ion-ripple-effect type="bounded"></ion-ripple-effect>
+        <ion-row [routerLink]='["/StoreBase/OrderView/", order.id]' class="ion-justify-content-between" >
+            <ion-col size="8" >
+                <ion-text class="font-bold">
+                    {{ order.ext.account.data.name }}
+                </ion-text>
+                <ion-note *ngIf="order.ext.account.data.city">- {{ order.ext.account.data.city }}</ion-note>
+            </ion-col>
+            <ion-col size="4">
+                <ion-text color="tertiary" >
+                        <ion-icon name="calendar"></ion-icon>
+
+                   {{order.data.date | date : 'dd/MM'}}
+                </ion-text>
+                <ion-icon  name="open"></ion-icon>
+
+            </ion-col>
+        </ion-row>
+    </ion-label>
+</ion-item>

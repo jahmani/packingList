@@ -11,8 +11,8 @@ export class OrderRowsListComponent implements OnInit {
   totals: { qty: number; ammount: number; productName: string };
   activeLineIndex: number;
   @Input() showTotals = true;
-  @Input("rows")
-  set _rows(val: Extended<OrderRow2>[]) {
+
+  @Input("rows") set _rows(val: Extended<OrderRow2>[]) {
     this.orderRows = val;
     if (val) { this.computeTotal(); }
     console.log("linnnnes: ", val);

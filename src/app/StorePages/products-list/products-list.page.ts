@@ -7,12 +7,10 @@ import { Router, ActivatedRoute } from "@angular/router";
 import { FormControl } from "@angular/forms";
 import { debounceTime, map, startWith, tap } from "rxjs/operators";
 import { EditProductPage } from "../edit-product/edit-product.page";
-import { ProductsPageSettingsComponent } from "../../products-page-settings/products-page-settings.component";
-import { StoreInfoService } from "../../providers/AppData/store-info.service";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 import { ProductsListDataService } from "./products-list-data.service";
+import { PageActions, ViewType } from "../../shared/edit-options-popover/edit-options-popover.component";
 
-type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
 
 @Component({
   selector: "app-products-list",
@@ -20,7 +18,10 @@ type ViewType = "LIST" | "CARDS" | "SLIDES" | "GRID";
   styleUrls: ["./products-list.page.scss"]
 })
 export class ProductsListPage implements OnInit {
+  ViewType = ViewType;
   userStore: Observable<Extended<StoreInfo>>;
+  views = [ViewType.GRID, ViewType.LIST, ViewType.CARDS];
+  actions = [PageActions.FILTER, PageActions.ADDNEW];
   get dynamicList(): IonList {
     return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
   }
@@ -31,9 +32,7 @@ export class ProductsListPage implements OnInit {
     private alertController: AlertController,
     private modalController: ModalController,
     private productsRep: ProductsDataService,
-    private storesInfo: StoreInfoService,
     private prodListServ: ProductsListDataService,
-    private popoverCtrl: PopoverController,
     private ass: ActiveStoreService
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
@@ -41,8 +40,8 @@ export class ProductsListPage implements OnInit {
     if (productsFsRepository) {
       this.productsRep = productsFsRepository;
     }
-  //  this.products = this.productsRep.FormatedList;
-  this.userStore = this.ass.activeStoreInfo;
+    //  this.products = this.productsRep.FormatedList;
+    this.userStore = this.ass.activeStoreInfo;
     this.products = this.productsRep.List;
     this.searchControl = new FormControl();
   }
@@ -51,17 +50,11 @@ export class ProductsListPage implements OnInit {
   searchControl: FormControl;
   showSlideDetails = true;
   filteredProducts: Observable<Extended<Product>[]>;
-  view: ViewType = "GRID";
-  toggleView: ViewType;
-  iconMap: { [id in ViewType]: string } = {
-    "CARDS": '/assets/svg/thumbnails.svg',
-    "GRID": '/assets/svg/list.svg',
-    "LIST": '/assets/svg/card-thumbs.svg',
-    "SLIDES": '/assets/svg/_ionicons_svg_md-arrow-forward.svg'
-  };
+  view: ViewType = this.getView();
+
   showSearch = false;
-  @ViewChild('slidingItem1', {static: false}) dynamicList1: IonList;
-  @ViewChild('slidingItem2', {static: false}) dynamicList2: IonList;
+  @ViewChild('slidingItem1', { static: false }) dynamicList1: IonList;
+  @ViewChild('slidingItem2', { static: false }) dynamicList2: IonList;
 
 
   slideIndex = 0;
@@ -74,9 +67,7 @@ export class ProductsListPage implements OnInit {
       debounceTime(700),
       map(v => (v + "").trim()),
       startWith(""),
-      //  tap(console.log)
     );
-    // initializedValueChanges.subscribe(console.log);
 
     this.filteredProducts = combineLatest([
       initializedValueChanges,
@@ -132,7 +123,8 @@ export class ProductsListPage implements OnInit {
     } else {
       return 110;
     }
-  } getCardItemHeight(product?: Extended<Product>, i?) {
+  }
+  getCardItemHeight(product?: Extended<Product>, i?) {
     if (product.data.notice) {
       return 141;
     } else {
@@ -143,40 +135,22 @@ export class ProductsListPage implements OnInit {
     if (product && this.canSelect) {
       this.modalController.dismiss(product);
     } else if (product && i !== undefined) {
-    //  this.toggleView = this.view;
-    //  this.view = "SLIDES";
       this.slideIndex = i;
       this.prodListServ.slideIndex = i;
-      this.router.navigate(['slideView'], {relativeTo: this.activatedRoute});
+      this.router.navigate(['slideView'], { relativeTo: this.activatedRoute });
     }
   }
   cancel(product?: Extended<Product>) {
     this.modalController.dismiss();
   }
-  backView() {
-    this.view = this.toggleView;
-    this.toggleView = undefined;
-  }
-  switchView() {
-    if (this.dynamicList) {
-      this.dynamicList.closeSlidingItems();
-    }
-    // this.view = this.view === 'LIST' ? 'CARDS' : 'LIST';
-    switch (this.view) {
-      case "LIST":
-        this.view = "CARDS";
-        this.toggleView = "CARDS";
+
+  onAction(action) {
+    switch (action) {
+      case PageActions.FILTER:
+        this.toggleSearch();
         break;
-      case "CARDS":
-        this.view = "GRID";
-        this.toggleView = "GRID";
-        break;
-      case "SLIDES":
-        this.view = this.toggleView;
-        break;
-      case "GRID":
-        this.view = "LIST";
-        this.toggleView = "LIST";
+      case PageActions.ADDNEW:
+        this.showNewProduct();
         break;
       default:
         break;
@@ -188,54 +162,18 @@ export class ProductsListPage implements OnInit {
     }
     this.showSearch = !this.showSearch;
   }
-  async presentPopover(ev) {
-    const popover = await this.popoverCtrl.create({
-      component: ProductsPageSettingsComponent,
-      componentProps: { productsPage: this },
-      event: ev,
 
-      // class to force positioning
-      cssClass: 'my-class'
-    });
-    return await popover.present();
+  onViewChange(view) {
+    this.setView(view);
   }
-
-  // onImageClicked(event, productSnapshot: Extended<Product>) {
-  //   event.stopPropagation();
-  //   if (productSnapshot.data.thumbUrl) {
-  //     this.imageDataService
-  //       .getByUrl(productSnapshot.data.thumbUrl)
-  //       .then(extImage => {
-  //         this.openPhoto(0, [extImage]);
-  //       });
-  //   }
-
-  // }
-  // async openPhoto(index, images) {
-  //   const modal = await this.modalController.create({
-  //     component: PhotoViewComponent, componentProps: {
-  //       photo_index: index,
-  //       canSelect: false,
-  //       images
-  //     }
-  //   });
-  //   modal.present();
-  // }
-
-
-  // async showProductImage(productSnapshot: Extended<Product>) {
-  //   if (productSnapshot.ext.imageFile) {
-  //     const modal = await this.modalController.create({
-  //       component: PhotoViewComponent,
-  //       componentProps: {
-  //         canDelete: false,
-  //         canSelect: false,
-  //         images: [productSnapshot.data.thumbUrl]
-  //       }
-  //     });
-  //     return modal.present();
-  //   }
-  // }
+  private setView(view) {
+    this.view = view;
+    window.localStorage.setItem('product-view', view);
+  }
+  private getView() {
+    const view = window.localStorage.getItem('product-view');
+    return (view || ViewType.GRID) as ViewType;
+  }
 
   async showEditProduct(id, slidingItem?: IonItemSliding) {
     if (slidingItem) {
@@ -264,10 +202,7 @@ export class ProductsListPage implements OnInit {
       }
     });
   }
-  async showCopyProduct(product: Extended<Product>) {
 
-    return this.presentEditProduct("new", product.data);
-  }
   trackByFn(index, product: Extended<Product>) {
     if (product) {
       return product.id;

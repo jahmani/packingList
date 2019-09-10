@@ -1,3 +1,5 @@
+
+
 .font-small{
     font-size: small;
     font-weight: lighter;
@@ -23,12 +25,10 @@ ion-badge
     margin-inline-end: 1px;
 
 }
-.thumb-badge{
-   float: right;
-  //padding-inline-end: 1rem;
-  //margin-inline-end: 1px;
-    opacity: 0.6;
-}
+
+ .semi-transparent{
+     opacity: 0.6;
+ }
 .item-card-header{
     -webkit-padding-end: 0px;
     padding-inline-end: 0px;

@@ -14,7 +14,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
+            "aot": false,
 
             "progress": false,
             "outputPath": "www",
@@ -53,6 +53,12 @@
                 "input": "src/global.scss"
               }
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/@ionic/core/dist/collection/themes",
+                "node_modules/ionic-angular/themes/ionic.mixins.scss"
+              ]
+              },
             "scripts": []
           },
           "configurations": {

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, AfterViewInit, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { Extended, Product, StoreInfo } from '../../interfaces/data-models';
+import { ActiveStoreService } from '../../providers/AppData/active-store.service';
 
 export interface ProductViewOptions {
   editable: boolean;
@@ -7,6 +8,7 @@ export interface ProductViewOptions {
   showPrice: boolean;
   showNotes: boolean;
   photoOnly: boolean;
+  showSlideDetails: boolean;
 }
 @Component({
   selector: 'app-product-view',
@@ -14,11 +16,14 @@ export interface ProductViewOptions {
   styleUrls: ['./product-view.component.scss']
 })
 export class ProductViewComponent implements AfterViewInit {
-  static default: ProductViewOptions =  {editable: true, view: "ITEM", showPrice: true, showNotes: true, photoOnly: false} ;
+  static default: ProductViewOptions =  {editable: true, view: "ITEM", showPrice: true,
+  showNotes: true, photoOnly: false, showSlideDetails: true} ;
   _options:  ProductViewOptions = ProductViewComponent.default;
+  _expanded = false;
   @ViewChild('fullImg', {static: false}) fullImg: any;
   @Input() product: Extended<Product>;
-  @Input() storeInfo: Extended<StoreInfo>;
+  storeInfo: Extended<StoreInfo>;
+  // @Input() storeInfo: Extended<StoreInfo>;
   @Input() set options(val) {
     this._options = {...ProductViewComponent.default, ...val};
   }
@@ -31,7 +36,12 @@ export class ProductViewComponent implements AfterViewInit {
   @Output() delete = new EventEmitter();
   @Output() prodClick = new EventEmitter();
   @Output() imgClick = new EventEmitter();
-  constructor() { }
+  constructor(
+    private ass: ActiveStoreService
+
+  ) {
+    this.storeInfo = ass.activeStoreInfoValue;
+   }
 
   ngAfterViewInit() {
 

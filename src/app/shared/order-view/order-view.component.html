@@ -110,11 +110,11 @@
 </ion-item>
 <ng-container *ngIf='fullView; else expandable'>
 
-    <app-order-rows-list [showTotals]="true" *ngIf="(order.ext.extRows) as lines;" [rows]="lines">
+    <app-order-rows-list [showTotals]="true" *ngIf="rows" [rows]="rows">
     </app-order-rows-list>
     <ion-item-divider>
     </ion-item-divider>
-    <app-packing-list class="ion-padding-top" *ngIf="(order.ext.extRows) as lines;" [orderRows]="lines">
+    <app-packing-list class="ion-padding-top" *ngIf="rows;" [orderRows]="rows">
     </app-packing-list>
 
 </ng-container>

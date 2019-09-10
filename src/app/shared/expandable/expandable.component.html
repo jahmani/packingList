@@ -1,5 +1,5 @@
-<div #expandWrapper class='expand-wrapper' style='position: relative;' [class.collapsed]="!expanded">
-    <ng-content (click)="contentClick.emit()"></ng-content>
+<div #expandWrapper class='expand-wrapper' style='position: relative;' [class.collapsed]="!_expanded">
+    <ng-content *ngIf='renderContent' (click)="  $event.stopPropagation(); contentClick.emit($event);"></ng-content>
     <div (click)="linkClick.emit($event)" class='bottom-bar blue-transparent ion-text-center '>
         <ion-ripple-effect> </ion-ripple-effect>
         <ion-text class="">

@@ -24,6 +24,8 @@ import { OrderViewComponent } from './order-view/order-view.component';
 import { EditOptionsPopoverComponent } from './edit-options-popover/edit-options-popover.component';
 import { ExpandableComponent } from "./expandable/expandable.component";
 import { ProductLineViewComponent } from './product-line-view/product-line-view.component';
+import { OrdersOfProductViewComponent } from './orders-of-product-view/orders-of-product-view.component';
+import { MorePopOverDirective } from './more-pop-over.directive';
 
 @NgModule({
   imports: [CommonModule, IonicModule, ReactiveFormsModule, RouterModule],
@@ -40,11 +42,15 @@ import { ProductLineViewComponent } from './product-line-view/product-line-view.
   ProductViewComponent, ImageEditorPage, ImageCropperComponent, PhotoUploadComponent,
    EditPhotoPage, StoreCurrencyPipe, OrderHeaderBriefRowViewComponent, OrdersListComponent, OrderViewComponent, EditOptionsPopoverComponent,
    ExpandableComponent,
-   ProductLineViewComponent
+   ProductLineViewComponent,
+   OrdersOfProductViewComponent,
+   MorePopOverDirective
   ],
-  entryComponents: [PhotoViewComponent, ImageEditorPage, PhotoUploadComponent, EditPhotoPage, EditOptionsPopoverComponent],
+  entryComponents: [PhotoViewComponent, ImageEditorPage, PhotoUploadComponent,
+    EditPhotoPage, EditOptionsPopoverComponent, MorePopOverDirective],
   providers: [StoreCurrencyPipe, CurrencyPipe],
   exports: [
+    MorePopOverDirective,
     OrderHeaderViewComponent,
     PhotoPickerComponent,
     AccountPickerComponent,

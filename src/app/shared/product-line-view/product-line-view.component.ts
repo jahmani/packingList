@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductViewComponent } from '../product-view/product-view.component';
+import { ActiveStoreService } from '../../providers/AppData/active-store.service';
 
 @Component({
   selector: 'app-product-line-view',
@@ -8,8 +9,8 @@ import { ProductViewComponent } from '../product-view/product-view.component';
 })
 export class ProductLineViewComponent extends ProductViewComponent {
 
-  constructor() {
-    super();
+  constructor(ass: ActiveStoreService) {
+    super(ass);
    }
 
 

@@ -7,7 +7,7 @@ import { tap } from "rxjs/operators";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { ActivatedRoute } from "@angular/router";
 import { Location } from "@angular/common";
-import { EditOptionsPopoverComponent } from "../../shared/edit-options-popover/edit-options-popover.component";
+import { PageActions } from "../../shared/edit-options-popover/edit-options-popover.component";
 
 @Component({
   selector: "app-edit-product",
@@ -15,6 +15,8 @@ import { EditOptionsPopoverComponent } from "../../shared/edit-options-popover/e
   styleUrls: ["./edit-product.page.scss"]
 })
 export class EditProductPage implements OnInit {
+  actions = [PageActions.SAVE, PageActions.SAVECOPY, PageActions.DELETE];
+
   submitAttempt: boolean;
   product$: Observable<Extended<Product>>;
   form: FormGroup;
@@ -26,7 +28,7 @@ export class EditProductPage implements OnInit {
     private productsFsRep: ProductsDataService,
     @Optional() private navParams: NavParams,
     private modalControler: ModalController,
-    public popoverController: PopoverController,
+    // public popoverController: PopoverController,
     private alertController: AlertController,
     activatedRoute: ActivatedRoute,
     private location: Location
@@ -128,31 +130,49 @@ export class EditProductPage implements OnInit {
     }
     // throw "please take care , invalid form"
   }
-  async omMoreClicked(ev) {
-    const popOver = await this.popoverController.create({
-      component: EditOptionsPopoverComponent,
-      event: ev,
-    });
-    await popOver.present();
-    popOver.onDidDismiss().then((val) => {
-      const action = val.role;
-      switch (action) {
-        case "SAVE":
-          this.onSubmit({ value: this.form.value, valid: this.form.valid });
-          break;
-        case "SAVECOPY":
-          this.saveCopy({ value: this.form.value, valid: this.form.valid });
-          break;
-        case "DELETE":
-          this.delete(this.form.value);
-          break;
+  onAction(action) {
+    switch (action) {
+      case PageActions.SAVE:
+        this.onSubmit({ value: this.form.value, valid: this.form.valid });
+        break;
+      case PageActions.SAVECOPY:
+        this.saveCopy({ value: this.form.value, valid: this.form.valid });
+        break;
+      case PageActions.DELETE:
+        this.delete(this.form.value);
+        break;
 
-        default:
-          break;
-      }
-    });
-
+      default:
+        break;
+    }
   }
+  // async omMoreClicked(ev) {
+  //   const popOver = await this.popoverController.create({
+  //     component: EditOptionsPopoverComponent,
+  //     componentProps: {
+  //     },
+  //     event: ev,
+  //   });
+  //   await popOver.present();
+  //   popOver.onDidDismiss().then((val) => {
+  //     const action = val.role as unknown as PageActions;
+  //     switch (action) {
+  //       case PageActions.SAVE:
+  //         this.onSubmit({ value: this.form.value, valid: this.form.valid });
+  //         break;
+  //       case PageActions.SAVECOPY:
+  //         this.saveCopy({ value: this.form.value, valid: this.form.valid });
+  //         break;
+  //       case PageActions.DELETE:
+  //         this.delete(this.form.value);
+  //         break;
+
+  //       default:
+  //         break;
+  //     }
+  //   });
+
+  // }
   saveCopy({ value, valid }: { value: Product; valid: boolean }) {
     this.submitAttempt = true;
     if (valid) {

@@ -14,6 +14,7 @@ export class OrdersListComponent implements OnInit {
   totals: { qty: number; ammount: number; cbm: number,  productName: string };
   activeLineIndex: number;
   activreStoreInfo: Observable<Extended<StoreInfo>>;
+  @Input() forProductId: string;
   @Input("orders")
   set _orders(val: Extended<Order>[]) {
     this.orders = val;

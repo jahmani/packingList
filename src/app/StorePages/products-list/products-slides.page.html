@@ -4,10 +4,16 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-buttons slot="end">
-
-      <ion-button [routerLink]="'/EditProduct/new'">
-        <ion-icon slot="icon-only" name="add"></ion-icon>
+    <ion-buttons slot="end"> 
+<!-- 
+      <ion-button  (click)="onEdit()">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button>    
+      <ion-button  (click)="downloadImage() ">
+        <ion-icon slot="icon-only" name="download"></ion-icon>
+      </ion-button> -->
+      <ion-button appMorePopOver [actions]='actions' (action)='onAction($event)' >
+        <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -18,16 +24,17 @@
 
   <ion-slides style="height:100%;" [options]="{initialSlide:slideIndex}" #slids>
     <ng-container *ngIf='(activeSlideIndex|async )+1 as activeIndexPlusOne  '>
-        <ion-slide  *ngFor="let product of filteredProducts|async, let i= index"
-         style=" height: 100%;" (click)="showSlideDetails = !showSlideDetails">
-         <!-- <div style='position: absolute; top: 0'>
-            i: {{i}}, activeIndexPlusOne-1 : {{activeIndexPlusOne-1}}
+      <ion-slide *ngFor="let product of filteredProducts|async, let i= index" style=" height: 100%;"
+        (click)="showSlideDetails = !showSlideDetails">
+        <!-- <div style='position: absolute; top: 0'>
+          i: {{i}}, activeIndexPlusOne : {{activeIndexPlusOne}}
 
          </div> -->
-          <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
-          <div  *ngIf='i == activeIndexPlusOne-1  || i == activeIndexPlusOne   || i == activeIndexPlusOne-2 '
-           class="swiper-zoom-container">
-            <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+        <div class="swiper-zoom-container">
+          <ng-container
+            *ngIf='i == activeIndexPlusOne-1  || i == activeIndexPlusOne   || i == activeIndexPlusOne-2 '>
+            <!-- <ion-fab vertical="top" horizontal="end" slot="fixed">
               <ion-fab-button class="slideMoreFAB" size="small">
                 <ion-icon name="more"></ion-icon>
               </ion-fab-button>
@@ -35,11 +42,13 @@
                 <ion-fab-button [routerLink]="'/EditProduct/'+product.id">Edit</ion-fab-button>
               </ion-fab-list>
 
-            </ion-fab>
-            <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false}"
+            </ion-fab> -->
+            <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false, showSlideDetails:showSlideDetails}"
               style="width: inherit; height: inherit;"></app-product-view>
-          </div>
-        </ion-slide>
+          </ng-container>
+
+        </div>
+      </ion-slide>
     </ng-container>
     <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
   </ion-slides>
@@ -47,12 +56,12 @@
     <!-- [ngClass]="slids.el.dir ==='rtl' ? 'swiper-button-next' : 'swiper-button-prev'" 
        *ngIf="!slids.isBeginning()" 
       -->
-    <div class='swiper-button-next' (click)="slids.slidePrev()"></div>
+    <div class='swiper-button-next' (click)="slids.slideNext()"></div>
     <!--
                [ngClass]="slids.el.dir !=='rtl' ? 'swiper-button-next' : 'swiper-button-prev'"
              *ngIf="!slids.isEnd()"
               -->
-    <div class='swiper-button-prev' (click)="slids.slideNext()"></div>
+    <div class='swiper-button-prev' (click)="slids.slidePrev()"></div>
   </ng-container>
 
 </ion-content>

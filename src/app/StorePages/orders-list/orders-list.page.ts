@@ -17,7 +17,7 @@ export class OrdersListPage implements OnInit {
   orders: Observable<Extended<Order>[]>;
 
   constructor(
-    private ordersRep: OrdersDataService,
+    public ordersRep: OrdersDataService,
     public route: ActivatedRoute,
     private alertController: AlertController,
     private modalController: ModalController,
@@ -39,6 +39,9 @@ export class OrdersListPage implements OnInit {
       console.log(orders)
     }))
     */
+  }
+  fix() {
+    this.ordersRep.fixOrderProducts();
   }
   copyRows() {
     //  return this.ordersRowsRep.copyOrderRows();

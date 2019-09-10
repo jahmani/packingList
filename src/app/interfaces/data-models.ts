@@ -71,6 +71,7 @@ export interface InviteExt {
 export interface OrderExt {
   account?: Extended<AccountInfo>;
   extRows?: Extended<OrderRow2>[];
+  rowsOfProduct?: { [productId: string]: Extended<OrderRow2>[]; };
 }
 export interface ImageExt {
   loaded?: boolean;
@@ -80,6 +81,7 @@ export interface ImageExt {
 export interface OrderRowExt {
   Product?: Extended<Product>;
   state?: "EMPTY" | "NEW" | "EDITED" | "ADDED" | "DELETED" | "NONE";
+  ctns?: number;
 }
 
 export type ExtType = CatTreeNodeExtension &
@@ -138,7 +140,7 @@ export interface Product extends Editable {
   name: string;
   customProperties: {
     [propName: string]: string | number;
-    batch: string  ;
+    batch: string;
     source: string;
   };
   translatedName: {
@@ -238,6 +240,7 @@ export interface Order extends Editable, Delteable {
   deposit: number;
   currency: string;
   cbm: number;
+  products: string[];
   rows: OrderRow2[];
   packingListId: string;
 }

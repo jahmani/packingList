@@ -10,11 +10,28 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+@import "node_modules/ionic-angular/themes/ionic.mixins.scss";
+
+
+
 ion-thumbnail{
     width: 70px;
     height: 70px;
 }
+ $app-direction : multi;
 
+
+.float-end{
+  @include ltr() {
+      // Custom ltr style goes here
+      float: right;
+  }
+
+  @include rtl() {
+      // Custom rtl style goes here
+      float: left;
+  } 
+}
 // ion-icon {
 //     color: red;
 // }

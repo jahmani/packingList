@@ -17,22 +17,27 @@
       </ng-template>
     </ion-buttons>
     <ion-buttons slot="end">
-        <ion-button *ngIf='canSelect else normal' (click)="showNewProduct()">
+        <!-- <ion-button *ngIf='canSelect else normal' (click)="showNewProduct()">
             <ion-icon slot="icon-only" name="add"></ion-icon>
           </ion-button>
           <ng-template #normal>
             <ion-button [routerLink]="'/EditProduct/new'">
               <ion-icon slot="icon-only" name="add"></ion-icon>
             </ion-button>
-          </ng-template>
-      <ion-button (click)="backView()" *ngIf="toggleView; else toggleViewButton">
+          </ng-template> -->
+      <!-- <ion-button (click)="backView()" *ngIf="toggleView; else toggleViewButton">
         <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
-      </ion-button>
-      <ng-template #toggleViewButton>
+      </ion-button> -->
+      <ion-button appMorePopOver [view]='view' [views]='views' [actions]='actions'
+      (action)='onAction($event)'
+       (viewChange)='onViewChange($event)' >
+          <ion-icon slot="icon-only" name="more"></ion-icon>
+        </ion-button>
+      <!-- <ng-template #toggleViewButton>
         <ion-button (click)="presentPopover($event)">
           <ion-icon slot="icon-only" name="more"></ion-icon>
         </ion-button>
-      </ng-template>
+      </ng-template> -->
     </ion-buttons>
   </ion-toolbar>
   <ng-template #showSearchBar>
@@ -64,21 +69,11 @@
 </ion-header>
 
 <ion-content no-badding color="dark" *ngIf='userStore|async as _storeInfo'>
-
-  <!--   
-  <ion-virtual-scroll [items]="items">
-    <ion-item *virtualItem="let item">
-      {{ item }}
-    </ion-item>
-  </ion-virtual-scroll>
- -->
-
- <ion-list *ngIf="(view === 'LIST' ); else cardsView">
-    <ion-virtual-scroll approxItemHeight="140px" [itemHeight]='getLineItemHeight' virtualTrackBy='trackByFn' [items]="filteredProducts|async" #slidingItem1 >
+ <ion-list  #slidingItem1 *ngIf="view == ViewType.LIST ; else cardsView">
+    <ion-virtual-scroll approxItemHeight="140px" [itemHeight]='getLineItemHeight' virtualTrackBy='trackByFn' [items]="filteredProducts|async" >
       <div   *virtualItem="let product, let i=index" >
       <app-product-view
         [product]="product" [options]="{view: 'ITEM' , editable:true}"
-        [storeInfo]= "_storeInfo"
         (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
         (prodClick)="onProductClicked(product, i)
         "></app-product-view>
@@ -86,12 +81,11 @@
     </ion-virtual-scroll>
   </ion-list>
   <ng-template #cardsView>
-  <ion-list *ngIf="(view === 'CARDS'); else slidesView">
-   <ion-virtual-scroll approxItemHeight='540px' virtualTrackBy='trackByFn' [items]="filteredProducts|async" #slidingItem1 >
+  <ion-list  #slidingItem1 *ngIf="(view == ViewType.CARDS); else gridView">
+   <ion-virtual-scroll approxItemHeight='540px' virtualTrackBy='trackByFn' [items]="filteredProducts|async" >
      <div   *virtualItem="let product, let i=index" >
      <app-product-view
        [product]="product" [options]="{view: 'CARD' , editable:true}"
-       [storeInfo]= "_storeInfo"
        (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
        (prodClick)="onProductClicked(product, i)
        "></app-product-view>
@@ -112,54 +106,9 @@
   </ion-list> 
 -->
 
-
-  <ng-template #slidesView>
-    <ng-container *ngIf="view === 'SLIDES'; else gridView" #slids>
-
-      <ion-slides style="height:100%;" [options]="{initialSlide:slideIndex}">
-        <ion-slide *ngFor="let product of filteredProducts|async" style=" height: 100%;"
-          (click)="showSlideDetails = !showSlideDetails">
-          <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
-          <div class="swiper-zoom-container">
-            <ion-fab vertical="top" horizontal="end" slot="fixed">
-              <ion-fab-button class="slideMoreFAB" size="small">
-                <ion-icon name="more"></ion-icon>
-              </ion-fab-button>
-              <ion-fab-list side="bottom">
-                <!-- <ion-fab-button (click)="showEditProduct(product.id)">Edit</ion-fab-button> -->
-                <ion-fab-button [routerLink]="'/EditProduct/'+product.id">Edit</ion-fab-button>
-                <ion-fab-button (click)="showCopyProduct(product)">Copy</ion-fab-button>
-                <ion-fab-button (click)="delete(product)">Delete</ion-fab-button>
-              </ion-fab-list>
-
-            </ion-fab>
-            <app-product-view [product]="product" [options]="{view: 'SLIDE', editable:false}"
-              style="width: inherit; height: inherit;"
-              [storeInfo]="_storeInfo"></app-product-view>
-          </div>
-        </ion-slide>
-
-        <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
-      </ion-slides>
-      <ng-container *ngIf="showSlideDetails">
-        <!-- [ngClass]="slids.el.dir ==='rtl' ? 'swiper-button-next' : 'swiper-button-prev'" 
-       *ngIf="!slids.isBeginning()" 
-      -->
-        <div class='swiper-button-next' (click)="slids.slidePrev()"></div>
-        <!--
-               [ngClass]="slids.el.dir !=='rtl' ? 'swiper-button-next' : 'swiper-button-prev'"
-             *ngIf="!slids.isEnd()"
-              -->
-        <div class='swiper-button-prev' (click)="slids.slideNext()"></div>
-      </ng-container>
-    </ng-container>
-
-  </ng-template>
-
   <ng-template #gridView>
     <div class="images">
       <app-product-view class="one-image" *ngFor="let product of filteredProducts|async; let i=index"
-      [storeInfo]="_storeInfo"
         [product]="product" [options]="{view:'THUMB', editable:false}" (prodClick)="onProductClicked(product,i)">
       </app-product-view>
 

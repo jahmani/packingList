@@ -11,8 +11,8 @@ import {
 import { AngularFirestore } from "@angular/fire/firestore";
 import { ActiveStoreService } from "../AppData/active-store.service";
 import { StorePathConfig } from "../../interfaces/StorePathConfig";
-import { Observable } from "rxjs";
-import { mergeMap, map, combineLatest, share, flatMap } from "rxjs/operators";
+import { Observable, combineLatest } from "rxjs";
+import { mergeMap, map, share, flatMap, take } from "rxjs/operators";
 import { AccountsDataService } from "./accounts-data.service";
 import { ProductsDataService } from "./products-data.service";
 
@@ -29,6 +29,32 @@ export class OrdersDataService extends StoreDataService<Order> {
     super(afs, activeStoreService, StorePathConfig.Orders);
     console.log("Hello TransactionsFsRepository Provider");
   }
+  fixOrderProducts() {
+    this.list.pipe(take(1)).subscribe((orders) => {
+      orders.forEach((order) => {
+        const productIds = order.data.rows.map(row => row.productId);
+        console.log("order products ", productIds);
+         order.data.products = productIds;
+          this.saveOld(order);
+      });
+    });
+  }
+
+  fixOrderProducts1(order: Extended<Order>) {
+        const productIds = order.data.rows.map(row => row.productId);
+        console.log("order products ", productIds);
+         order.data.products = productIds;
+         return order;
+        //  this.saveOld(order);
+  }
+  saveNew(order: Extended<Order>, key?) {
+    order = this.fixOrderProducts1(order);
+    return super.saveNew(order, key);
+  }
+  saveOld(order: Extended<Order>) {
+    order = this.fixOrderProducts1(order);
+    return super.saveOld(order);
+  }
   forAccount(accountKey: string) {
 
     const ordersMap = this.path$.pipe(map(path => {
@@ -40,10 +66,22 @@ export class OrdersDataService extends StoreDataService<Order> {
     }), flatMap((afColl => {
       return super.snapList(afColl.snapshotChanges());
     })));
-    // const transactionsList = super.snapList(transactionsColl);
-   // const ordersMap = super.snapshotMap(OrdersColl.snapshotChanges());
-    // return transactionsMap
+
     return ordersMap;
+  }
+  forProduct(productId: string) {
+    const ordersMap = this.path$.pipe(map(path => {
+      const OrdersColl = this.afs.collection<Order>(
+        path,
+        ref => ref.where("products", "array-contains", productId)
+      );
+      return OrdersColl;
+    }), flatMap((afColl => {
+      return super.snapList(afColl.snapshotChanges());
+    })));
+
+    // return ordersMap;
+    return this.extendList(ordersMap);
   }
   forPackingList(plId: string) {
     const ordersList = this.path$.pipe(map(path => {
@@ -59,14 +97,14 @@ export class OrdersDataService extends StoreDataService<Order> {
     return this.extendList(ordersList);
   }
   getExtended(key): Observable<Extended<Order>> {
+    const self = this;
     return super.get(key).pipe(
       mergeMap(order => {
-        return this.accountsRep.get(order.data.accountId).pipe(
-          combineLatest(this.productsDataService.DataMap),
+        return combineLatest([this.accountsRep.get(order.data.accountId), this.productsDataService.DataMap]).pipe(
           map(([extAccount, productsMap]) => {
             order.ext = order.ext || {};
             order.ext.account = extAccount;
-            order.ext.extRows = this.extendRows(order, productsMap);
+            order.ext.extRows = self.extendRows(order, productsMap);
             return order;
           })
         );
@@ -88,29 +126,17 @@ export class OrdersDataService extends StoreDataService<Order> {
     });
   }
   extendList(list: Observable<Extended<Order>[]>) {
-    return list.pipe(
-      /*  */
-
-      combineLatest(
-        this.accountsRep.DataMap,
-        this.productsDataService.DataMap,
-        (orders, accountsMap, productsMAp) => {
-          orders.forEach(order => {
-            order.ext = order.ext || ({} as ExtType);
-            order.ext.account = accountsMap.get(order.data.accountId);
-            order.ext.extRows = this.extendRows(order, productsMAp);
-          });
-          return orders;
-        }
+    return combineLatest([list,
+      this.accountsRep.DataMap,
+      this.productsDataService.DataMap]).pipe(map(([orders, accountsMap, productsMAp]) => {
+        orders.forEach(order => {
+          order.ext = order.ext || ({} as ExtType);
+          order.ext.account = accountsMap.get(order.data.accountId);
+          order.ext.extRows = this.extendRows(order, productsMAp);
+        });
+        return orders;
+      }
       ),
-      // map(ordersArray => {
-      //   return ordersArray.sort((a, b) => {
-      //     return compareTimeStamp(
-      //       a.ext.$computedLastEditedOn,
-      //       b.ext.$computedLastEditedOn
-      //     );
-      //   });
-      // })
-    );
+      );
   }
 }

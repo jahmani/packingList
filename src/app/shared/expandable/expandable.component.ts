@@ -9,7 +9,18 @@ import { link } from 'fs';
 export class ExpandableComponent implements AfterViewInit {
 
   @ViewChild("expandWrapper", { read: ElementRef, static: true }) expandWrapper: ElementRef;
-  @Input() expanded = false;
+  _expanded;
+  renderContent = false;
+  @Input()  set expanded(val: boolean) {
+    this._expanded = val;
+    if (val) {
+      this.renderContent = true;
+    } else {
+      setTimeout(() => {
+        this.renderContent = false;
+      }, 400);
+    }
+  }
   @Input() expandHeight = "150px";
   // @Input() link: string;
   @Output() linkClick = new  EventEmitter();
