@@ -15,7 +15,7 @@ import { PageActions } from "../../shared/edit-options-popover/edit-options-popo
   styleUrls: ["./edit-product.page.scss"]
 })
 export class EditProductPage implements OnInit {
-  actions = [PageActions.SAVE, PageActions.SAVECOPY, PageActions.DELETE];
+  actions = [PageActions.SAVE, PageActions.DELETE];
 
   submitAttempt: boolean;
   product$: Observable<Extended<Product>>;
@@ -33,9 +33,11 @@ export class EditProductPage implements OnInit {
     activatedRoute: ActivatedRoute,
     private location: Location
   ) {
+    let copy: Extended<Product> = { data: {}, id: null, ext: {} } as Extended<Product>;
     if (this.navParams) {
       this.isModal = !!this.navParams; // .get("isModal");
       this.productId = this.navParams.get("id");
+       copy = this.navParams.get('copy') || copy;
     } else {
       this.productId = activatedRoute.snapshot.paramMap.get("id");
     }
@@ -57,14 +59,14 @@ export class EditProductPage implements OnInit {
       style: "",
       notice: "",
       thumbUrl: "",
-      price: "",
-      sPrice: "",
+      price: [0, Validators.min(0)],
+      sPrice: [0, Validators.min(0)],
       size: "",
       unit: ["pcs", Validators.maxLength(5)]
     });
     if (this.productId === "new") {
-      const newProduct: Product = {} as Product;
-      this.product$ = of({ data: newProduct, id: null } as Extended<Product>);
+     // const newProduct: Product = {} as Product;
+      this.product$ = of(copy);
     } else {
       this.product$ = this.productsFsRep.get(this.productId);
     }

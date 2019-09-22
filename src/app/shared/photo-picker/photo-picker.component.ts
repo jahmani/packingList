@@ -7,7 +7,6 @@ import { PhotoViewComponent } from "../photo-view/photo-view.component";
 import { NG_VALUE_ACCESSOR } from "@angular/forms";
 import { PhotoGalleryPage } from "../../StorePages/photo-gallery/photo-gallery.page";
 import { EditPhotoPage } from "../../pages/edit-photo/edit-photo.page";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 @Component({
   selector: "app-photo-picker",

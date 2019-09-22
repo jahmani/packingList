@@ -86,6 +86,11 @@ const routes: Routes = [
         loadChildren:
           "./packinglist/packinglist.module#PackinglistPageModule"
       },
+      {
+        path: "Packinglist",
+        loadChildren:
+          "./packinglist/packinglist.module#PackinglistPageModule"
+      },
       { path: 'StoreUsers', loadChildren: './store-users/store-users.module#StoreUsersPageModule' },
 
     ]

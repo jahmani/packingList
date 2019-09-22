@@ -3,12 +3,14 @@
     (click)="onPlLineClicked()"
     [ngClass]="index % 2 == 1 ? 'odd-row' : 'even-row'"
     [class.active]="isActive"
+    *ngIf='orderRow.ext.Product'
   >
-    <ion-thumbnail class='small-thumb ' slot="start" (click)="onImageClicked($event)" no-margin>
+    <ion-thumbnail  class='small-thumb ' slot="start" (click)="onImageClicked($event)" no-margin>
       <!-- onerror="this.src='../assets/img/6.jpg'" -->
+
       <img [src]="orderRow.ext.Product.data.thumbUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';"/>
     </ion-thumbnail>
-    <ion-label>
+    <ion-label  (click)="_expanded = !_expanded">
       <ion-row>
         <ion-col size="4" text-center>
           <span title="qty">{{ orderRow.data.qty }}</span>
@@ -30,3 +32,12 @@
       </ion-row>
     </ion-label>
   </ion-item>
+  <app-expandable *ngIf="_expandable" expandHeight="150px" [expanded]="_expanded"  (contentClick)='_expanded=false'>
+  <ng-container>
+    <app-order-view [showNotes]='false' [order]='orderRow.ext.order'></app-order-view>
+      <app-packing-list class="ion-padding-top"  [orderRows]="[orderRow]">
+      </app-packing-list>
+  </ng-container>
+
+
+</app-expandable>

@@ -12,11 +12,14 @@ export class OrderViewComponent implements OnChanges {
 
   _expanded = false;
   showLines = false;
+  _showNotes = true;
   @Input() order: Extended<Order>;
   @Input() storeInfo;
   @Input() forProductId: string;
   @Input() fullView;
-  @Input() showHeader;
+  @Input() set showNotes (val: boolean) {
+    this._showNotes = val;
+  }
   rows: Extended<OrderRow2>[];
   @Input() set expanded(val: boolean) {
     this._expanded = val;

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 export enum PageActions {
-  SAVE, SAVECOPY, DELETE, EDIT, DOWNLOADIMAGE, FILTER, ADDNEW
+  NONE, SAVE, SAVECOPY, DELETE, EDIT, DOWNLOADIMAGE, FILTER, ADDNEW
 }
 export enum ViewType {
   GRID, LIST, CARDS

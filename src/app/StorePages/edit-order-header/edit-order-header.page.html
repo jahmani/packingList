@@ -7,7 +7,7 @@
           <label style="display: block">done</label>
         </div>
       </ion-button>
-      <ion-button (click)="omMoreClicked($event)">
+      <ion-button appMorePopOver [actions]='actions' (action)='onAction($event)'>
         <ion-icon slot="icon-only" name="more"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -35,24 +35,43 @@
       <ion-row no-padding>
         <ion-col>
           <ion-item>
-            <ion-label>Ammount</ion-label>
+            <ion-label position="stacked">Order No.</ion-label>
+            <ion-input formControlName='orderNo' type="text">
+
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Ammount</ion-label>
             <ion-input class="text-end" readonly formControlName="ammount" type="number"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col>
           <ion-item>
-            <ion-label>Deposit</ion-label>
+            <ion-label position="stacked">Deposit</ion-label>
             <ion-input class="text-end" formControlName="deposit" type="number"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">CBM</ion-label>
+            <ion-input class="text-end" formControlName="cbm" type="number"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>is Delivered</ion-label>
+            <ion-toggle formControlName="isDelivered" slot="end"></ion-toggle>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>is Paid</ion-label>
+            <ion-toggle formControlName="isPaid" slot="end"></ion-toggle>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row no-padding>
-        <ion-col>
-          <ion-item>
-            <ion-label>CBM</ion-label>
-            <ion-input class="text-end" formControlName="cbm" type="number"></ion-input>
-          </ion-item>
-        </ion-col>
+
         <ion-col>
           <ion-item>
             <ion-label>packing List</ion-label>
@@ -68,19 +87,19 @@
           <ion-item>
             <ion-label>Date</ion-label>
             <!-- <ion-datetime autofocus min='2000' #dateCtrl formControlName="date"></ion-datetime> -->
-            <ion-input  [liIonic4Datepicker]="v" class='text-end long-input'   formControlName="date" ></ion-input>
+            <ion-input [liIonic4Datepicker]="v" class='text-end long-input' formControlName="date"></ion-input>
 
           </ion-item>
         </ion-col>
 
-          <ion-col>
-            <ion-item>
-              <ion-label>delivery</ion-label>
-              <ion-input  [liIonic4Datepicker]="v" class='text-end long-input'   formControlName="deliveryDate" ></ion-input>
-              <!-- <ion-text (click)="ddateCtrl.open()">{{deliveryDateCtrl.value | date}}</ion-text> -->
-              <!-- <ion-datetime min=2000 formControlName="deliveryDate"></ion-datetime> -->
-            </ion-item>
-          </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>delivery</ion-label>
+            <ion-input [liIonic4Datepicker]="v" class='text-end long-input' formControlName="deliveryDate"></ion-input>
+            <!-- <ion-text (click)="ddateCtrl.open()">{{deliveryDateCtrl.value | date}}</ion-text> -->
+            <!-- <ion-datetime min=2000 formControlName="deliveryDate"></ion-datetime> -->
+          </ion-item>
+        </ion-col>
       </ion-row>
     </ion-list>
 

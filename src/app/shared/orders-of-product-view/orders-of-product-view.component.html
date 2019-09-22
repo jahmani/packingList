@@ -1,5 +1,7 @@
 <!-- <app-orders-list [forProductId]='productId' [showListHeader]='true' [orders]='orders|async'></app-orders-list> -->
-{{(orders|async)?.length}} orders found
+{{(orders|async)?.length}} orders found, <ion-text [routerLink]="['/StoreBase/EditOrderHeader',{productId: productId}]" color="primary">
+    <span>create new</span>
+</ion-text>
 <ion-item color="primary">
     <ion-label class="ion-no-padding">
         <ion-row class="ion-no-padding" color="primary">
@@ -51,7 +53,7 @@
 
                    {{order.data.date | date : 'dd/MM'}}
                 </ion-text>
-                <ion-icon  name="open"></ion-icon>
+                <ion-icon  name="open" ></ion-icon>
 
             </ion-col>
         </ion-row>

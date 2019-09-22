@@ -1,30 +1,29 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-        <ion-button [routerLink]="['/StoreBase/EditPackingListInfo','new']">
-          <ion-icon slot="icon-only" name="add"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-
-      <ion-buttons slot="start">
-          <ion-back-button></ion-back-button>
-         <!-- <ion-menu-toggle menuToggle>
-        <ion-button>
-          <ion-icon slot="icon-only" name="menu"></ion-icon>
-        </ion-button>
-      </ion-menu-toggle> -->
+      <ion-button [routerLink]="['/StoreBase/EditPackingListInfo','new']">
+        <ion-icon slot="icon-only" name="add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title>Packing List</ion-title>
 
   </ion-toolbar>
 </ion-header>
 <ion-content no-padding>
-  <ion-item *ngFor="let pl of packinglists|async, let i=index" (click)="open(pl.id)">
-    <h1>
-      {{pl.data.name}}
-    </h1>
-    <ion-note>
-      lloading in {{pl.data.date | date: "dd-MM-yy" }} in {{pl.data.deliveryAdress}}
-    </ion-note>
-  </ion-item>
+  <ng-container *ngIf="{pLists: packinglists|async, activePlistId: activePlistId|async} as data">
+    <ion-item *ngFor="let pl of data.pLists, let i=index" (click)="open(pl.id)">
+      <ion-icon slot="end" name="checkmark" *ngIf='data.activePlistId == pl.id'></ion-icon>
+      <ion-label>
+        <ion-text color="primary">
+          <p>{{pl.data.name}}</p>
+        </ion-text>
+        <ion-note>
+          lloading in {{pl.data.date | date: "dd-MM-yy" }} in {{pl.data.deliveryAdress}}
+        </ion-note>
+      </ion-label>
+    </ion-item>
+  </ng-container>
 </ion-content>

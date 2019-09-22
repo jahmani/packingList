@@ -21,7 +21,7 @@
     <ion-label class="ion-no-margin"> -->
 
 
-
+<!-- 
 <ion-row *ngIf='showHeader'>
     <ion-col text-center size="3">
         <span>No.</span>
@@ -49,21 +49,18 @@
     <ion-col size="4" text-center>
         <span title="ammount: ">{{ order.data.ammount  | storeCurrency : storeInfo }}</span>
     </ion-col>
-</ion-row>
+</ion-row> -->
 <!-- </ion-label>
 
 </ion-item> -->
-<ion-item lines="full" no-padding>
-    <ion-thumbnail  class=' ion-no-margin small-thumb'  slot="start"  >
+<ion-item lines="none" no-padding  >
+    <ion-thumbnail [appThumbExpand]='[order.data.imageUrl]' class=' ion-no-margin small-thumb' slot="start">
         <img [src]="order.data.imageUrl" onerror="this.src='assets/img/no-image.jpg';this.onerror='';" />
         <!-- <div class="thumb-text ">
               <ion-text>test</ion-text>
             </div> -->
     </ion-thumbnail>
-
-
-
-    <ion-label class="ion-no-margin">
+    <ion-label [routerLink]='["/StoreBase/OrderView/", order.id]' class="ion-no-margin">
         <!-- <ion-row>
             <ion-col size="3" text-center>
                 <span title="delivery Date">delivery</span>
@@ -86,29 +83,67 @@
                 <span title="ammount: ">{{ order.data.ammount  | storeCurrency : storeInfo }}</span>
             </ion-col>
         </ion-row> -->
-        <ion-row class="ion-justify-content-between">
-
-            <ion-col size="auto">
+        <ion-row class="ion-justify-content-between" class="ion-no-padding">
+            <ion-col size="8">
                 <span class="name-bold">{{ order.ext.account.data.name }}</span>
                 <ion-note *ngIf='order.ext.account.data.city'> / {{ order.ext.account.data.city }}</ion-note>
             </ion-col>
-        </ion-row>
-        <ion-row class="ion-justify-content-between">
-
-            <ion-col size="auto">
-                <ion-note>
-                    <span *ngIf='order.data.cbm'>CBM: {{ order.data.cbm }} |</span>
-                    <span *ngIf='order.data.deliveryDate'>delivery: {{ order.data.deliveryDate | date : 'd/M' }}
-                        |</span>
-                    <span *ngIf='order.data.deposit'>Deposit: {{ order.data.deposit | storeCurrency : storeInfo}}
-                        |</span>
+            <ion-col class="ion-text-end" size="4">
+                <ion-note color="primary">
+                    <ion-icon slot="icon-only" name="calendar"></ion-icon>
+                    <span>{{ order.data.date | date : 'd/M/y' }}</span>
                 </ion-note>
+
             </ion-col>
         </ion-row>
-
+        <ion-row class="ion-justify-content-between">
+            <ion-col size="6">
+                <ion-text>
+                    <span style="font-style: italic">No.</span>
+                    <span> {{ order.data.orderNo || '####' }}</span>
+                </ion-text>
+            </ion-col>
+            <ion-col class="ion-text-end" size="6">
+                <span class="name-bold">{{ order.data.ammount  | storeCurrency : storeInfo }}</span>
+            </ion-col>
+        </ion-row>
     </ion-label>
 </ion-item>
-<ng-container *ngIf='fullView; else expandable'>
+<ion-item *ngIf="_showNotes" lines="full" class="ion-no-padding ion-no-margin narrow-item">
+    <ion-label class="ion-no-margin ion-no-padding">
+        <ion-row class="ion-no-padding" class="ion-justify-content-between">
+            <ion-col size="auto" class="ion-no-padding" class="ion-padding-horizontal">
+                <ion-note>
+                    <span *ngIf='order.data.cbm'>CBM: {{ order.data.cbm }} | </span>
+                    <span *ngIf='order.data.deliveryDate'>delivery:{{ order.data.deliveryDate | date : 'd/M' }} |
+                    </span>
+                    <span *ngIf='order.data.deposit'>deposit: {{ order.data.deposit | storeCurrency : storeInfo}} \
+                    </span>
+                    <ion-text *ngIf='order.data.isDelivered' color="success">
+                        <span color="primary">
+                            <ion-icon name="checkmark"></ion-icon>delivered
+                        </span> |
+                    </ion-text>
+                    <ion-text *ngIf='order.data.isPaid' color="warning">
+                        <span color="primary">
+                            <ion-icon name="cash"></ion-icon>paid
+                        </span>
+                    </ion-text>
+                </ion-note>
+
+            </ion-col>
+            <!-- <ion-col size="auto" class="ion-no-padding" class="ion-padding-horizontal" >
+
+                    <ion-chip class="ion-no-margin ion-no-padding ion-padding-horizontal" *ngIf='order.data.isDelivered'>
+                            <ion-icon name="checkmark"></ion-icon>
+                            <ion-label>delivered</ion-label>
+                        </ion-chip>
+            </ion-col> -->
+        </ion-row>
+    </ion-label>
+</ion-item>
+
+<ng-container *ngIf='fullView'>
 
     <app-order-rows-list [showTotals]="true" *ngIf="rows" [rows]="rows">
     </app-order-rows-list>
@@ -119,9 +154,6 @@
 
 </ng-container>
 <ng-template #expandable>
-
-
-
     <app-expandable expandHeight="150px" [expanded]="_expanded" (linkClick)='openOrder(order.id, $event)'
         (contentClick)='_expanded=false'>
         <ng-container *ngIf='showLines'>

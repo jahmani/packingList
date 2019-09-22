@@ -1,7 +1,7 @@
 <ng-container *ngIf="activreStoreInfo|async as storeInfo">
 
 
-  <div *ngIf='showListHeader' class="header-item, list-header" color="light">
+  <!-- <div *ngIf='showListHeader' class="header-item, list-header" color="light">
 
     <ion-row>
       <ion-col size="3" text-center>
@@ -17,9 +17,16 @@
         <span title="AMMOUNT">ammount</span>
       </ion-col>
     </ion-row>
-  </div>
-
+  </div> -->
+  <ion-item color="secondary">
+      <ion-label>
+        <div class="header-item, list-header">
+          found {{orders.length}} order/s
+        </div>
+      </ion-label>
+    </ion-item>
   <ng-container *ngFor="let order of orders, let i=index">
+
     <app-order-view [forProductId]='forProductId' [showHeader]='false' [order]=order [storeInfo]='storeInfo'
       [expanded]='i==activeLineIndex' (click)="toggleActiveOrder(i)"></app-order-view>
   </ng-container>

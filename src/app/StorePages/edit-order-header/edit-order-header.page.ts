@@ -1,8 +1,8 @@
-import { Component, OnInit, OnChanges, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnChanges, OnDestroy, ViewChild, AfterViewInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable, of, Subscription } from "rxjs";
 import { map, take, tap, switchMap, first } from "rxjs/operators";
-import { FormBuilder, FormGroup, FormArray, FormControl } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
 import { OrdersDataService } from "../../providers/StoreData/orders-data.service";
 import {
   Extended,
@@ -17,16 +17,16 @@ import { EditOrderRowPage } from "../edit-order-row/edit-order-row.page";
 import { ModalController, PopoverController } from "@ionic/angular";
 import { OrderRowEditorComponent } from "../../shared/order-row-editor/order-row-editor.component";
 import { datePickerObj } from "./date-picker-options";
-import { EditOptionsPopoverComponent } from "../../shared/edit-options-popover/edit-options-popover.component";
+import { EditOptionsPopoverComponent, PageActions } from "../../shared/edit-options-popover/edit-options-popover.component";
 
 @Component({
   selector: "app-edit-order-header",
   templateUrl: "./edit-order-header.page.html",
   styleUrls: ["./edit-order-header.page.scss"]
 })
-export class EditOrderHeaderPage implements OnInit, OnDestroy {
+export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit {
   packinglists: Observable<Extended<PackinglistInfo>[]>;
-
+  actions = [PageActions.SAVE, PageActions.SAVECOPY, PageActions.DELETE];
   // orderId$: Observable<string>;
   v = datePickerObj;
   submitAttempt: boolean;
@@ -36,7 +36,8 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   sub: Subscription;
   newRowCtrol: FormControl;
   order: Extended<Order>;
-  @ViewChild('newRowComponent', {static: false}) newRowComponent: OrderRowEditorComponent;
+  forProductId: string;
+  @ViewChild('newRowComponent', { static: false }) newRowComponent: OrderRowEditorComponent;
 
   constructor(
     private route: ActivatedRoute,
@@ -50,14 +51,17 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   ) {
     this.form = this.fb.group({
       date: "",
+      orderNo: "",
       deliveryDate: "",
       notice: "",
       imageUrl: "",
-      accountId: "",
-      ammount: "",
-      deposit: "",
-      cbm: "",
-      packingListId: "",
+      accountId: ['', Validators.required],
+      ammount: [0,  Validators.compose([Validators.required, Validators.min(0)])],
+      deposit:  [0,  Validators.min(0)],
+      cbm: [0,  Validators.min(0)],
+      isDelivered: false,
+      isPaid: false,
+      packingListId: ['', Validators.required],
       rows: this.fb.array([])
     });
     /*
@@ -68,13 +72,18 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     );
     */
     this.packinglists = this.plInfoDataService.List;
-
     this.order$ = this.route.paramMap.pipe(
       switchMap(paramMap => {
-        const orderId = paramMap.get("id");
+        let orderId = paramMap.get("id");
+        const isForCopy = paramMap.get("copy") === 'copy';
+
         const packingListId = paramMap.get("plId");
+        this.forProductId = paramMap.get("productId");
         const accountId = paramMap.get("accountId");
-        if (orderId === "new") {
+        if (orderId === "new" || !orderId) {
+          if (packingListId || accountId || this.forProductId) {
+            orderId = 'new';
+          }
           const newOrder: Order = {
             date: new Date().toISOString(),
             deliveryDate: new Date().toISOString(),
@@ -87,7 +96,20 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
             ext: { extRows: [] }
           } as Extended<Order>);
         } else {
-          return this.ordersFsRep.getExtended(orderId);
+          const originalOrder = this.ordersFsRep.getExtended(orderId);
+          if (isForCopy) {
+            const CopyOrder = originalOrder.pipe(take(1), map(extOrder => {
+              const orderDataCopy = JSON.parse(JSON.stringify(extOrder.data));
+              const orderCopy = {
+                ...extOrder, id: null,
+                data: orderDataCopy
+              };
+              return orderCopy;
+            }));
+            return CopyOrder;
+          } else {
+            return originalOrder;
+          }
         }
       }),
       take(1),
@@ -97,6 +119,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
         this.form.patchValue({ ...order.data, rows: [] });
         this.patchOrderRows(order.ext.extRows);
         this.newRowCtrol = this.fb.control(null);
+
       })
     );
     this.sub = this.orderRowsCtrl.valueChanges.subscribe(
@@ -133,6 +156,13 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     });
   }
 
+  addNewOrderRowForProduct(productId: string) {
+    const newOrderRow: Extended<OrderRow2> = {
+      data: { sequence: 0, productId },
+      ext: { state: "EMPTY" }
+    } as Extended<OrderRow2>;
+    return this.addNewOrderRow(newOrderRow);
+  }
   addNewOrderRow(copy?: Extended<OrderRow2>) {
     const newOrderRow: Extended<OrderRow2> = copy || {
       data: { sequence: 0 },
@@ -158,38 +188,25 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
     return this.form.get("ammount");
   }
 
-  async omMoreClicked(ev) {
-    const popOver = await this.popoverController.create({
-      component: EditOptionsPopoverComponent,
-      event: ev,
-    });
-    await popOver.present();
-    popOver.onDidDismiss().then((val) => {
-      const action = val.role;
-      switch (action) {
-        case "SAVE":
-          this.onSubmit({ value: this.form.value, valid: this.form.valid });
-          break;
-        case "SAVECOPY":
-        //  this.saveCopy({ value: this.form.value, valid: this.form.valid });
-          break;
-        case "DELETE":
-          this.delete();
-          break;
-
-        default:
-          break;
-      }
-    });
-
+  onAction(action) {
+    switch (action) {
+      case PageActions.SAVE:
+        this.onSubmit(this.form);
+        break;
+      case PageActions.SAVECOPY:
+        break;
+      case PageActions.DELETE:
+        this.delete();
+        break;
+      default:
+        break;
+    }
   }
+
+
+
   showNewOrderRow() {
     this.addNewOrderRow();
-    // const newOrderRow: Extended<OrderRow2> = {
-    //   data: { sequence: 0 },
-    //   ext: { state: "EMPTY" }
-    // } as Extended<OrderRow2>;
-    // return this.presentEditOrderRowModal(newOrderRow);
   }
 
   showCopyOrderRow(orderRow: Extended<OrderRow2>) {
@@ -200,8 +217,11 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   }
 
   dismiss(data: Extended<Order>, isDelete = false) {
-    if (data.data.packingListId && isDelete) {
-      this.router.navigate(["/StoreBase/Packinglist", data.data.packingListId]);
+    // if (data.data.packingListId && isDelete) {
+    //   this.router.navigate(["/StoreBase/Packinglist", data.data.packingListId]);
+    // }
+    if (isDelete) {
+      window.history.go(-2);
     } else {
       this.location.back();
     }
@@ -252,6 +272,11 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     // throw new Error("Method not implemented.");
+  }
+  ngAfterViewInit(): void {
+    if (this.forProductId) {
+      this.addNewOrderRowForProduct(this.forProductId);
+    }
   }
   ngOnDestroy(): void {
     if (this.sub) {

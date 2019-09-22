@@ -2,37 +2,47 @@
 
 
   <ion-toolbar *ngIf="!showSearch else showSearchBar">
-    <ion-title>{{(userStore|async)?.data?.name}}</ion-title>
+    <ion-title>
+      <span>{{( userStore|async)?.data?.name}}</span>
+      <ng-container *ngIf='activePList|async as pList'>
+        <p  [routerLink]="['/StoreBase/Packinglists']" class="ion-no-margin" style="font-size: smaller" *ngIf="pList.data">pList: {{pList.data.name}}</p>
+      </ng-container>
+    </ion-title>
     <ion-buttons slot="start">
       <ion-button *ngIf="canSelect else showMenu" (click)="cancel()">
         <ion-icon slot="icon-only" name="close"></ion-icon>
       </ion-button>
       <ng-template #showMenu>
-          <ion-menu-toggle>
-              <ion-button>
-                <ion-icon name="menu" slot="icon-only">
-                </ion-icon>
-              </ion-button>
-            </ion-menu-toggle>
+        <ion-menu-toggle>
+          <ion-button>
+            <ion-icon name="menu" slot="icon-only">
+            </ion-icon>
+          </ion-button>
+        </ion-menu-toggle>
       </ng-template>
     </ion-buttons>
     <ion-buttons slot="end">
-        <!-- <ion-button *ngIf='canSelect else normal' (click)="showNewProduct()">
-            <ion-icon slot="icon-only" name="add"></ion-icon>
-          </ion-button>
-          <ng-template #normal>
-            <ion-button [routerLink]="'/EditProduct/new'">
-              <ion-icon slot="icon-only" name="add"></ion-icon>
-            </ion-button>
-          </ng-template> -->
+      <ng-container *ngIf='canSelect; else normal'>
+        <ion-button (click)="showNewProduct()">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+        <!-- <ion-button (click)="toggleSearch()">
+          <ion-icon slot="icon-only" name="search"></ion-icon>
+        </ion-button> -->
+      </ng-container>
+
+      <ng-template #normal>
+        <ion-button [routerLink]="['/StoreBase/Packinglist']">
+          <ion-icon slot="icon-only" name="list-box"></ion-icon>
+        </ion-button>
+      </ng-template>
       <!-- <ion-button (click)="backView()" *ngIf="toggleView; else toggleViewButton">
         <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
       </ion-button> -->
-      <ion-button appMorePopOver [view]='view' [views]='views' [actions]='actions'
-      (action)='onAction($event)'
-       (viewChange)='onViewChange($event)' >
-          <ion-icon slot="icon-only" name="more"></ion-icon>
-        </ion-button>
+      <ion-button appMorePopOver [view]='view' [views]='views' [actions]='actions' (action)='onAction($event)'
+        (viewChange)='onViewChange($event)'>
+        <ion-icon slot="icon-only" name="more"></ion-icon>
+      </ion-button>
       <!-- <ng-template #toggleViewButton>
         <ion-button (click)="presentPopover($event)">
           <ion-icon slot="icon-only" name="more"></ion-icon>
@@ -41,60 +51,61 @@
     </ion-buttons>
   </ion-toolbar>
   <ng-template #showSearchBar>
-      <ion-toolbar>
-          <ion-buttons slot="start">
-              <ion-button *ngIf="canSelect else showMenu" (click)="cancel()">
-                <ion-icon slot="icon-only" name="close"></ion-icon>
-              </ion-button>
-              <ng-template #showMenu>
-                  <ion-menu-toggle>
-                      <ion-button>
-                        <ion-icon name="menu" slot="icon-only">
-                        </ion-icon>
-                      </ion-button>
-                    </ion-menu-toggle>
-              </ng-template>
-            </ion-buttons>
-                  <ion-searchbar *ngIf="showSearch" aria-label="search" [formControl]="searchControl" #searchBar>
-          </ion-searchbar>
-          <ion-buttons slot="primary">
-            <ion-button (click)="toggleSearch()">
-              <img [src]="showSearch ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button *ngIf="canSelect else showMenu" (click)="cancel()">
+          <ion-icon slot="icon-only" name="close"></ion-icon>
+        </ion-button>
+        <ng-template #showMenu>
+          <ion-menu-toggle>
+            <ion-button>
+              <ion-icon name="menu" slot="icon-only">
+              </ion-icon>
             </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      
-    </ng-template>
-  
+          </ion-menu-toggle>
+        </ng-template>
+      </ion-buttons>
+      <ion-searchbar *ngIf="showSearch" aria-label="search" [formControl]="searchControl" #searchBar>
+      </ion-searchbar>
+      <ion-buttons slot="primary">
+        <ion-button (click)="toggleSearch()">
+          <img [src]="showSearch ? '/assets/svg/search-close.svg' : '/assets/svg/search.svg'" />
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+
+  </ng-template>
+  <ion-toolbar color="primary" class="ion-no-margin" class="ion-no-padding" *ngIf="canSelect" >
+    <ion-title>Select Product...</ion-title>
+  </ion-toolbar>
+
 </ion-header>
 
 <ion-content no-badding color="dark" *ngIf='userStore|async as _storeInfo'>
- <ion-list  #slidingItem1 *ngIf="view == ViewType.LIST ; else cardsView">
-    <ion-virtual-scroll approxItemHeight="140px" [itemHeight]='getLineItemHeight' virtualTrackBy='trackByFn' [items]="filteredProducts|async" >
-      <div   *virtualItem="let product, let i=index" >
-      <app-product-view
-        [product]="product" [options]="{view: 'ITEM' , editable:true}"
-        (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
-        (prodClick)="onProductClicked(product, i)
+  <ion-list #slidingItem1 *ngIf="view == ViewType.LIST ; else cardsView">
+    <ion-virtual-scroll approxItemHeight="126px" [itemHeight]='getLineItemHeight' virtualTrackBy='trackByFn'
+      [items]="filteredProducts|async">
+      <div *virtualItem="let product, let i=index">
+        <app-product-view [product]="product" [options]="{view: 'ITEM' , editable:true}"
+          (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)" (prodClick)="onProductClicked(product, i)
         "></app-product-view>
       </div>
     </ion-virtual-scroll>
   </ion-list>
   <ng-template #cardsView>
-  <ion-list  #slidingItem1 *ngIf="(view == ViewType.CARDS); else gridView">
-   <ion-virtual-scroll approxItemHeight='540px' virtualTrackBy='trackByFn' [items]="filteredProducts|async" >
-     <div   *virtualItem="let product, let i=index" >
-     <app-product-view
-       [product]="product" [options]="{view: 'CARD' , editable:true}"
-       (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
-       (prodClick)="onProductClicked(product, i)
+    <ion-list #slidingItem1 *ngIf="(view == ViewType.CARDS); else gridView">
+      <ion-virtual-scroll virtualTrackBy='trackByFn' [items]="filteredProducts|async">
+        <div *virtualItem="let product, let i=index">
+          <app-product-view [product]="product" [options]="{view: 'CARD' , editable:true}"
+            (copy)="showCopyProduct(product)" (edit)="showEditProduct(product.id)" (delete)="delete(product)"
+            (prodClick)="onProductClicked(product, i)
        "></app-product-view>
-     </div>
-   </ion-virtual-scroll>
- </ion-list>
-</ng-template>
+        </div>
+      </ion-virtual-scroll>
+    </ion-list>
+  </ng-template>
 
-<!-- 
+  <!-- 
   <ion-list #slidingItem1 *ngIf="(view === 'LIST' || view === 'CARDS'); else slidesView">
     <app-product-view *ngFor="let product of filteredProducts|async; let i=index; trackBy: trackByFn"
       [product]="product" [options]="{view: view === 'LIST' ? 'ITEM' : 'CARD', editable:true}"

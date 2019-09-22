@@ -81,6 +81,7 @@ export interface ImageExt {
 export interface OrderRowExt {
   Product?: Extended<Product>;
   state?: "EMPTY" | "NEW" | "EDITED" | "ADDED" | "DELETED" | "NONE";
+  order?: Extended<Order>;
   ctns?: number;
 }
 
@@ -231,6 +232,7 @@ export interface Transaction extends Editable, Delteable {
   catigoryId: string;
 }
 export interface Order extends Editable, Delteable {
+  orderNo: string;
   accountId: string;
   date: string;
   deliveryDate: string;
@@ -243,6 +245,8 @@ export interface Order extends Editable, Delteable {
   products: string[];
   rows: OrderRow2[];
   packingListId: string;
+  isDelivered: boolean;
+  isPaid: boolean;
 }
 
 export interface PackinglistInfo extends Editable, Delteable {

@@ -122,6 +122,7 @@ export class OrdersDataService extends StoreDataService<Order> {
       const extRow: Extended<OrderRow2> = { ext: {} } as Extended<OrderRow2>;
       extRow.data = row;
       extRow.ext.Product = productsMAp.get(extRow.data.productId);
+      extRow.ext.order = order;
       return extRow;
     });
   }

@@ -31,9 +31,6 @@ const routes: Routes = [
   { path: 'Share', loadChildren: './pages/share/share.module#SharePageModule' },
 
 
-  // { path: 'ImageEditor', loadChildren: './pages/image-editor/image-editor.module#ImageEditorPageModule' },
-  // { path: 'EditPhoto', loadChildren: './pages/edit-photo/edit-photo.module#EditPhotoPageModule' },
-
 
 
 

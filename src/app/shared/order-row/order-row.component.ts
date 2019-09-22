@@ -10,6 +10,12 @@ import { PhotoViewComponent } from '../photo-view/photo-view.component';
   styleUrls: ['./order-row.component.scss'],
 })
 export class OrderRowComponent implements OnInit {
+  _expandable = false;
+  @Input() set expandable(val: boolean){
+    this._expandable = val;
+  }
+  _expanded = false;
+
   @Input()
   orderRow: Extended<OrderRow>;
   @Input()
@@ -18,7 +24,6 @@ export class OrderRowComponent implements OnInit {
   isActive: Boolean;
   @Output()
   plLineClicked: EventEmitter<number> = new EventEmitter();
-
   constructor(
     private modalCtrl: ModalController,
     private imagesRep: ImagesDataService

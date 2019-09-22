@@ -8,7 +8,13 @@
             <label style="display: block">edit</label>
             </div>
           </ion-button>
-    
+          <ion-button [routerLink]="['EditOrderHeader', {id:or.id, copy:'copy'}]">
+              <div>
+              <ion-icon name="copy" slot="start"></ion-icon>
+              <label style="display: block">copy</label>
+              </div>
+            </ion-button>
+      
     </ion-buttons>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>

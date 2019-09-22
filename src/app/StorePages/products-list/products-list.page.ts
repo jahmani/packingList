@@ -1,15 +1,17 @@
 import { Component, OnInit, Optional, ViewChild } from "@angular/core";
-import { Observable, combineLatest } from "rxjs";
-import { Extended, Product, UserStore, StoreInfo } from "../../interfaces/data-models";
+import { Observable, combineLatest, merge } from "rxjs";
+import { Extended, Product, UserStore, StoreInfo, PackinglistInfo } from "../../interfaces/data-models";
 import { NavParams, AlertController, ModalController, IonItemSliding, IonList, PopoverController } from "@ionic/angular";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import { Router, ActivatedRoute } from "@angular/router";
 import { FormControl } from "@angular/forms";
-import { debounceTime, map, startWith, tap } from "rxjs/operators";
+import { debounceTime, map, startWith, tap, flatMap, shareReplay, filter } from "rxjs/operators";
 import { EditProductPage } from "../edit-product/edit-product.page";
 import { ActiveStoreService } from "../../providers/AppData/active-store.service";
 import { ProductsListDataService } from "./products-list-data.service";
 import { PageActions, ViewType } from "../../shared/edit-options-popover/edit-options-popover.component";
+import { ActivePListService } from "../../providers/StoreData/active-plist.service";
+import { SeoService } from "../../seo.service";
 
 
 @Component({
@@ -22,6 +24,7 @@ export class ProductsListPage implements OnInit {
   userStore: Observable<Extended<StoreInfo>>;
   views = [ViewType.GRID, ViewType.LIST, ViewType.CARDS];
   actions = [PageActions.FILTER, PageActions.ADDNEW];
+  activePList: Observable<Extended<PackinglistInfo>>;
   get dynamicList(): IonList {
     return this.dynamicList1 ? this.dynamicList1 : this.dynamicList2;
   }
@@ -29,22 +32,30 @@ export class ProductsListPage implements OnInit {
     public router: Router,
     private activatedRoute: ActivatedRoute,
     @Optional() private navParams: NavParams,
-    private alertController: AlertController,
     private modalController: ModalController,
     private productsRep: ProductsDataService,
     private prodListServ: ProductsListDataService,
-    private ass: ActiveStoreService
+    private ass: ActiveStoreService,
+    private apls: ActivePListService,
+    private seos: SeoService
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
-    const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
-    if (productsFsRepository) {
-      this.productsRep = productsFsRepository;
+    // const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
+    if (this.navParams) {
+      this.products = this.productsRep.List;
+    } else {
+      this.products = this.apls.activePlistProducts;
+
     }
-    //  this.products = this.productsRep.FormatedList;
+    
     this.userStore = this.ass.activeStoreInfo;
-    this.products = this.productsRep.List;
+    // const allProducts = this.apls.activePlistId.pipe(filter((id, index) => !id), flatMap(() => this.productsRep.List));
+    // this.products = merge(allProducts, this.apls.activePlistProducts ).pipe(shareReplay(1));
     this.searchControl = new FormControl();
+
+    this.activePList = this.apls.activePlist;
   }
+
   canSelect: any;
   products: Observable<Extended<Product>[]>;
   searchControl: FormControl;
@@ -92,31 +103,6 @@ export class ProductsListPage implements OnInit {
     this.prodListServ.filteredProducts = this.filteredProducts;
   }
 
-  async delete(extProduct: Extended<Product>) {
-    if (this.dynamicList) {
-      await this.dynamicList.closeSlidingItems();
-    }
-
-    const modal = await this.alertController.create({
-      message: `Are you sure deleting product: ${extProduct.data.name}`,
-      header: `Deleteing Product`,
-      buttons: [
-        {
-          text: "Delete",
-          handler: () => {
-            this.productsRep.remove(extProduct);
-          }
-        },
-        { text: "cancel", cssClass: "danger" }
-      ]
-    });
-    return await modal
-      .present()
-      .then(val => {
-        console.log("val", val);
-      })
-      .catch(console.log);
-  }
   getLineItemHeight(product?: Extended<Product>, i?) {
     if (product.data.notice) {
       return 141;
@@ -208,11 +194,16 @@ export class ProductsListPage implements OnInit {
       return product.id;
     }
   }
+  ionViewDidEnter(){
+    this.seos.generateTags({ title: "Products List" });
+
+  }
   ngOnInit() {
     if (this.navParams) {
       this.canSelect = this.navParams.get("canSelect");
     }
     this.ionViewDidLoad();
+
 
   }
 }

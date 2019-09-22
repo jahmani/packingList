@@ -15,7 +15,8 @@ export class MenuComponent implements OnInit {
     { path: "/StoreBase/ProductsList", title: "Products List" },
     { path: "/StoreBase/AccountsList", title: "Accounts List" },
     { path: "/StoreBase/PhotoGallery", title: "Photo Gallery" },
-    { path: "/StoreBase/Packinglists", title: "Packinglists" },
+    { path: "/StoreBase/Packinglist", title: "packings" },
+    { path: "/StoreBase/Packinglists", title: "Change PList" },
     // { path: "/StoreBase/catalog", title: "CatalogPage" },
     { path: "/StoreBase/StoreUsers", title: "StoreUsers" },
   ];
