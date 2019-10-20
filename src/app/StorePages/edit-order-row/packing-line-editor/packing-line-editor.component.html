@@ -1,0 +1,50 @@
+<form [formGroup]="packingLineForm">
+    <div>
+        <ion-row>
+            <ion-col>
+                <ion-item no-padding>
+                    <ion-label position="stacked" class="ion-text-center">ctns</ion-label>
+
+                    <ion-input class="input-small-padding" type="number" formControlName="ctns"></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-text class="ion-align-self-center ion-no-padding" color="primary">
+                x
+            </ion-text>
+
+            <ion-col>
+                <ion-item no-padding>
+                    <ion-label position="stacked">packing</ion-label>
+                    <ion-input class="input-small-padding" type="number" formControlName="packing"></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-text class="ion-align-self-center ion-no-padding" color="primary">
+                =
+            </ion-text>
+            <ion-col>
+                <ion-item no-padding>
+                    <ion-label position="stacked">quantity</ion-label>
+                    <ion-input readonly (ionChange)='quantityChanged.emit($event)' [value]='ctns*packing' class="input-small-padding" type="number"></ion-input>
+                </ion-item>
+            </ion-col>
+
+        </ion-row>
+        <ion-row align-items-center>
+            <ion-col>
+                <ion-item no-padding>
+                    <ion-label position="stacked">ctn. No.</ion-label>
+                    <ion-input class="input-small-padding" type="text" formControlName="ctnNo"></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-col>
+                <ion-item text-wrap no-padding>
+                    <ion-label position="stacked">ship Mark</ion-label>
+                    <ion-input class="input-small-padding" type="text" formControlName="shippingMark"></ion-input>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+        <ion-fab vertical="bottom" horizontal="end">
+
+        </ion-fab>
+    </div>
+</form>

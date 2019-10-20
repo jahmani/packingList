@@ -11,3 +11,4 @@ admin.initializeApp();
 
 export {onNewUser} from './onNewUser'
 export {onNewStore} from './onNewStore'
+export {onNewUserStoreChange} from './onUserStoreChange'

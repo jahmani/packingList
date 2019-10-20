@@ -62,7 +62,8 @@ export class EditProductPage implements OnInit {
       price: [0, Validators.min(0)],
       sPrice: [0, Validators.min(0)],
       size: "",
-      unit: ["pcs", Validators.maxLength(5)]
+      unit: ["pcs", Validators.maxLength(5)],
+      ctnNo: '',
     });
     if (this.productId === "new") {
      // const newProduct: Product = {} as Product;
@@ -137,7 +138,7 @@ export class EditProductPage implements OnInit {
       case PageActions.SAVE:
         this.onSubmit({ value: this.form.value, valid: this.form.valid });
         break;
-      case PageActions.SAVECOPY:
+      case PageActions.COPY:
         this.saveCopy({ value: this.form.value, valid: this.form.valid });
         break;
       case PageActions.DELETE:

@@ -42,7 +42,6 @@ export class ActivePListService {
     this.activePlistId.subscribe(h => {
       console.log("HHHHHHHHHHHH : ", h);
     });
-  
     this.activePlist = this.activePlistId.pipe(flatMap(id => this.pListService.get(id)), shareReplay(1));
     const filteredOrders = this.activePlistId.pipe(
       filter((id, i) => !!id),
@@ -52,7 +51,7 @@ export class ActivePListService {
       filter((id, i) => !id),
       flatMap(id => this.ordersService.FormatedList),
       shareReplay(1));
-    this.activePlistOrders = merge(filteredOrders, allOrders);
+    this.activePlistOrders = merge(filteredOrders, allOrders).pipe(shareReplay(1));
     this.activePlistOrderRows = this.activePlistOrders.pipe(
       map(extOrders => {
         const temp = [].concat(

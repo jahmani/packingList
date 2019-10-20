@@ -13,8 +13,8 @@
     <ion-buttons slot="start">
       <ion-button (click)="onCancel()">
         <div>
-            <ion-icon name="arrow-back" slot="start"></ion-icon>
-            <span style='display: block;'> cancel</span>
+          <ion-icon name="arrow-back" slot="start"></ion-icon>
+          <span style='display: block;'> cancel</span>
         </div>
       </ion-button>
     </ion-buttons>
@@ -47,55 +47,85 @@
       </ion-item>
     </ion-list>
     <ion-list class="order-rows-list" formArrayName="packingLines">
-      <ion-row class="packing-title" justify-content-center>
-        <span>PackingLines</span>
-      </ion-row>
-      <ion-row class="packing-header" align-items-end>
-        <!-- <ion-col size="1">
+      <ion-item color="primary">
+        <ion-label>PackingLines</ion-label>
+        <ion-icon slot="end" name="reorder" (click)="reorder= !reorder"></ion-icon>
+      </ion-item>
+
+      <!-- <ion-row class="packing-header" align-items-end> -->
+      <!-- <ion-col size="1">
           <ion-button expand="full" (click)="addPackingLine()">
             <ion-icon name="add"></ion-icon>
           </ion-button>
         </ion-col> -->
-        <ion-col class="text-center"> <span>ctns</span> </ion-col>
+      <!-- <ion-col class="text-center"> <span>ctns</span> </ion-col>
         <ion-col class="text-center"> <span>packing</span> </ion-col>
         <ion-col class="text-center"> <span>Ctn. No.</span> </ion-col>
         <ion-col class="text-center"> <span>Shipping Mark</span> </ion-col>
-      </ion-row>
-      <ion-row align-items-center *ngFor="let packingLine of packingLines.controls; let i = index" [formGroupName]="i">
-        <!-- <ion-col size="1">
-          <span>{{ i + 1 }}</span>
-        </ion-col> -->
-        <!-- <ion-col size="1">
-          <ion-icon (click)="deletePackingLine(i)" name="trash"></ion-icon>
-        </ion-col> -->
+      </ion-row> -->
+      <ion-list lines='none'>
+          <ion-reorder-group [disabled]="!reorder">
 
-        <ion-col>
-          <ion-item no-padding>
-            <ion-input class="input-small-padding" type="number" formControlName="ctns"></ion-input>
+        <ion-item-sliding #list *ngFor="let packingLine of packingLines.controls; let i = index" >
+          <ion-fab vertical="top" horizontal="start" slot="fixed" style="top: 0px; left: 0px;">
+
+            <ion-badge color="light" mode="ios">{{i}}</ion-badge>
+          </ion-fab>
+
+          <ion-item class="ion-no-padding ion-no-margin item-no-padding">
+
+            <ion-card>
+
+              <app-packing-line-editor (quantityChanged)='quantityChanged($event)' [packingLineForm]='packingLine' [index]='i'>
+              </app-packing-line-editor>
+
+            </ion-card>
+
           </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-item no-padding>
-            <ion-input class="input-small-padding" type="number" formControlName="packing"></ion-input>
+          <ion-item *ngIf="reorder">
+              <ion-reorder slot="end"></ion-reorder>
           </ion-item>
-        </ion-col>
+          <ion-item-options side="end">
+            <ion-item-option (click)="list.close(); copyPackingLine(i)" class="ion-text-center">
+              <div>
+                <ion-icon name="copy" slot="start"></ion-icon>
+                <label style="display: block">copy</label>
+              </div>
+            </ion-item-option>
+            <ion-item-option color="primary" (click)="list.close(); removePackingLine(i)" class="ion-text-center">
+              <div>
+                <ion-icon name="trash" slot="start"></ion-icon>
+                <label style="display: block">remove</label>
+              </div>
+            </ion-item-option>
+          </ion-item-options>
+
+          <ion-item-options side="start">
+            <ion-item-option (click)="unread(item)">Unread</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+        </ion-reorder-group>
+      </ion-list>
+      <!-- <div style="position: relative" *ngFor="let packingLine of packingLines.controls; let i = index"
+        [formGroupName]="i">
+
+        <ion-item class="ion-no-padding ion-no-margin item-no-padding">
+          <ion-card>
+
+            <app-packing-line-editor [packingLineForm]='packingLine' (remove)='deletePackingLine(i)' [index]='i'>
+            </app-packing-line-editor>
+
+          </ion-card>
+        </ion-item>
+      </div> -->
+
+      <ion-row class="packing-header" align-items-end>
         <ion-col>
-          <ion-item no-padding>
-            <ion-input class="input-small-padding" type="text" formControlName="ctnNo"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-item text-wrap no-padding>
-            <ion-input class="input-small-padding" type="text" formControlName="shippingMark"></ion-input>
-          </ion-item>
+          <ion-button expand="full" (click)="addPackingLine()">
+            <ion-icon name="add"></ion-icon>
+          </ion-button>
         </ion-col>
       </ion-row>
-      <ion-row class="packing-header" align-items-end>
-          <ion-col>
-            <ion-button expand="full" (click)="addPackingLine()">
-              <ion-icon name="add"></ion-icon>
-            </ion-button>
-          </ion-col></ion-row>
     </ion-list>
     <ion-item *ngIf="submitAttempt">
       <p *ngIf="!form.valid" class="err">* {{ form.errors | json }}</p>

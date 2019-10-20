@@ -152,6 +152,7 @@ export interface Product extends Editable {
   price: number;
   sPrice: number;
   unit: string;
+  ctnNo: string;
 
   code: string;
   style: string;
@@ -258,6 +259,7 @@ export interface PackinglistInfo extends Editable, Delteable {
   ammount: number;
   ctns: number;
   cbm: number;
+  manualOrder: string[];
 }
 export interface OrderRow2 {
   // orderId: string;

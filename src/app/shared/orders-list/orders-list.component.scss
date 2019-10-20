@@ -15,6 +15,13 @@
   max-height: 320px;
 
 }
+.expanded-reorder{
+  position: absolute; top: 0px; left: 0px; 
+}
+.opacity-reorder{
+  opacity: 0.5; background-color: bisque;
+  font-size: 3rem;
+}
 
 .transparent{
   opacity: 0.8;

@@ -106,5 +106,6 @@ export class AppComponent implements OnDestroy {
       this.splashScreen.hide();
     });
   }
+// active hardware back button
 
 }

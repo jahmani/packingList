@@ -10,6 +10,10 @@ export class OrderRowsListComponent implements OnInit {
   orderRows: Extended<OrderRow2>[];
   totals: { qty: number; ammount: number; productName: string };
   activeLineIndex: number;
+  _expandable = false;
+  @Input() set expandable(val: boolean){
+    this._expandable = val;
+  }
   @Input() showTotals = true;
 
   @Input("rows") set _rows(val: Extended<OrderRow2>[]) {

@@ -46,16 +46,16 @@ export class ProductPickerComponent implements OnInit {
     const self = this;
 
     // callback...
-    const myCallbackFunction = function(extProduct) {
-      return new Promise((resolve, reject) => {
-        if (extProduct) {
-          self.product = extProduct;
-          self.productId = extProduct.id;
-          self.srcChangeFunction(extProduct.id);
-        }
-        resolve();
-      });
-    };
+    // const myCallbackFunction = function(extProduct) {
+    //   return new Promise((resolve, reject) => {
+    //     if (extProduct) {
+    //       self.product = extProduct;
+    //       self.productId = extProduct.id;
+    //       self.srcChangeFunction(extProduct.id);
+    //     }
+    //     resolve();
+    //   });
+    // };
 
     // push page...
     /*

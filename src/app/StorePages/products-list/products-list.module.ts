@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { ProductsSlidesPage } from './products-slides.page';
 import { ProductsListDataService } from './products-list-data.service';
+import { ProductsListModalContainerComponent } from './products-list-modal-container/products-list-modal-container.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ProductsListPage, ProductsSlidesPage],
+  declarations: [ProductsListPage, ProductsSlidesPage, ProductsListModalContainerComponent],
   providers: [ProductsListDataService]
 })
 export class ProductsListPageModule {}

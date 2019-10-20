@@ -26,7 +26,7 @@ import { EditOptionsPopoverComponent, PageActions } from "../../shared/edit-opti
 })
 export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit {
   packinglists: Observable<Extended<PackinglistInfo>[]>;
-  actions = [PageActions.SAVE, PageActions.SAVECOPY, PageActions.DELETE];
+  actions = [PageActions.SAVE, PageActions.COPY, PageActions.DELETE];
   // orderId$: Observable<string>;
   v = datePickerObj;
   submitAttempt: boolean;
@@ -193,7 +193,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit {
       case PageActions.SAVE:
         this.onSubmit(this.form);
         break;
-      case PageActions.SAVECOPY:
+      case PageActions.COPY:
         break;
       case PageActions.DELETE:
         this.delete();

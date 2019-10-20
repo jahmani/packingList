@@ -1,8 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="end">
-      <ion-button [routerLink]="['/StoreBase/ProductsList']">
-        <ion-icon slot="icon-only" name="shirt"></ion-icon>
+        <ion-button appMorePopOver [actions]='pageActions' (action)='onAction($event)'>
+          <ion-icon slot="icon-only" name="more"></ion-icon>
+        </ion-button>
+        <ion-button [routerLink]="['/StoreBase/ProductsList']">
+          <ion-icon slot="icon-only" name="shirt"></ion-icon>
+        </ion-button>
+      <ion-button [routerLink]="['/StoreBase/OrdersSlides', {index:1}]">
+        <ion-icon slot="icon-only" name="albums"></ion-icon>
       </ion-button>
       <ion-button [routerLink]="['/StoreBase/EditOrderHeader',{id:'new', plId:plId|async}]">
         <ion-icon slot="icon-only" name="add"></ion-icon>
@@ -26,17 +32,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-no-padding">
+<ion-content class="ion-no-padding" *ngIf="{pList: plInfo | async} as data">
     <!-- <ng-container *ngIf="(plId | async) as pl; else selectPL"> -->
-        <ng-container >
-            <ion-row *ngIf="(plInfo | async) as pl" [routerLink]="['/StoreBase/EditPackingListInfo', pl.id]"
+        <ng-container *ngIf="data.pList">
+            <ion-row  [routerLink]="['/StoreBase/EditPackingListInfo', data.pList.id]"
       style="background-color: #f3fbfd;">
       <ion-col>
         <ion-text color="primary">
-          <h1>{{ pl.data.name }}</h1>
+          <h1>{{ data.pList.data.name }}</h1>
         </ion-text>
-        <ion-note>loading in </ion-note> {{ pl.data.date | date: "d/M/y" }} <ion-note> in</ion-note>
-        {{ pl.data.deliveryAdress }}
+        <ion-note>loading in </ion-note> {{ data.pList.data.date | date: "d/M/y" }} <ion-note> in</ion-note>
+        {{ data.pList.data.deliveryAdress }}
       </ion-col>
     </ion-row>
     <ng-container *ngIf=" totals$ | async as totals">
@@ -72,10 +78,10 @@
     <ng-container [ngSwitch]="displayMode.value">
       <app-packing-list *ngSwitchCase="'lines'" [orderRows]="plOrdersRows | async">
       </app-packing-list>
-      <app-order-rows-list *ngSwitchCase="'rows'" [rows]="plOrdersRows | async">
+      <app-order-rows-list [expandable]='true' *ngSwitchCase="'rows'" [rows]="plOrdersRows | async">
       </app-order-rows-list>
       <div *ngSwitchCase="'orders'">
-        <app-orders-list [orders]="(plOrders | async)">
+        <app-orders-list [orders]="(plOrders | async)" [manualOrder]="data.pList.data.manualOrder" (ReorderFinish)='onReorderFinsh($event, data.pList)'>
 
         </app-orders-list>
         <!-- <ion-item *ngFor="let order of (plOrders | async)" (click)="openOrder(order.id)">

@@ -23,6 +23,7 @@ import {
 import { ActivePListService } from "../../providers/StoreData/active-plist.service";
 import { SeoService } from "../../seo.service";
 import { FormControl } from "@angular/forms";
+import { PageActions } from "../../shared/edit-options-popover/edit-options-popover.component";
 interface Totals {
   ammount: number;
   pieces: number;
@@ -36,20 +37,22 @@ interface Totals {
   styleUrls: ["./packinglist.page.scss"]
 })
 export class PackinglistPage {
+  pageActions: PageActions[] = [PageActions.ADDNEW, PageActions.REORDER, PageActions.FILTER];
   plId: Observable<string>;
   plInfo: Observable<Extended<PackinglistInfo>>;
   plOrders: Observable<Extended<Order>[]>;
   plOrdersRows: Observable<Extended<OrderRow2>[]>;
   // plOrdersLines: Observable<Extended<PackingLine>[]>;
+  reorderOrders = false;
   display: "orders" | "lines" | "rows" = "orders";
   // totals: Totals;
   public show = new FormControl('ALL');
 
   productList: Observable<Extended<Product>[]>;
   totals$: Observable<Totals>;
+  plIdInstance: string;
 
   constructor(
-    private ordersFsRep: OrdersDataService,
     private packinglistInfoDataService: PackinglistInfoDataService,
     private apli: ActivePListService,
     //  private pLLinesFsRepository: OrderRowsService,
@@ -62,11 +65,14 @@ export class PackinglistPage {
     this.show.valueChanges.subscribe(console.log);
 
     this.plId = this.apli.activePlistId;
-    this.plInfo = this.plId.pipe(
+    this.plInfo = this.plId.pipe( tap(id => {
+      this.plIdInstance = id;
+    }),
       switchMap(id => {
         return this.packinglistInfoDataService.get(id);
       })
     );
+
     // this.totals = { ammount: 0, pieces: 0, ctns: 0, cbm: 0, deposit: 0 };
     // this.plOrders = this.plId.pipe(
     //   switchMap(plId => {
@@ -163,7 +169,7 @@ export class PackinglistPage {
 
     return temp;
   }
-    computOrderTotal(extOrders: Extended<Order>[], intial: Totals) {
+  computOrderTotal(extOrders: Extended<Order>[], intial: Totals) {
     // let subTotal = { cbm: 0, deposit: 0 };
     return extOrders.reduce<Totals>((accum, curr) => {
       accum.cbm += Number(curr.data.cbm);
@@ -190,8 +196,27 @@ export class PackinglistPage {
   openOrder(id: string) {
     this.router.navigateByUrl(this.router.url + "/OrderView/" + id);
   }
+  newOrder() {
+    this.router.navigate(['/StoreBase/EditOrderHeader/new', {  plId: this.plIdInstance }]);
+  }
 
+  onReorderFinsh($event: string[], plist: Extended<PackinglistInfo>) {
+    plist.data.manualOrder = $event;
+    this.packinglistInfoDataService.saveOld(plist);
+  }
   ionViewDidEnter() {
     this.seos.generateTags({ title: "Packing List" });
+  }
+  onAction(action: PageActions) {
+    switch (action) {
+      case PageActions.REORDER:
+        this.reorderOrders = !this.reorderOrders;
+        break;
+      case PageActions.ADDNEW:
+        this.newOrder();
+        break;
+      default:
+        break;
+    }
   }
 }

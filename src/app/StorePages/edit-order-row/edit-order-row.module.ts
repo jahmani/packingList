@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { EditOrderRowPage } from './edit-order-row.page';
 import { SharedModule } from '../../shared/shared.module';
+import { PackingLineEditorComponent } from './packing-line-editor/packing-line-editor.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedModule
   ],
-  declarations: [EditOrderRowPage]
+  declarations: [EditOrderRowPage, PackingLineEditorComponent]
 })
 export class EditOrderRowPageModule {}

@@ -19,7 +19,7 @@
     </ion-item>
 </div>
 
-<app-order-row [expandable]='false' *ngFor="let orderRow of orderRows, let i=index" (plLineClicked)="onRowClicked(i)" 
+<app-order-row [expandable]='_expandable' *ngFor="let orderRow of orderRows, let i=index" (plLineClicked)="onRowClicked(i)" 
     [orderRow]="orderRow" [index]="i" [isActive]="i==activeLineIndex"></app-order-row>
 <div *ngIf="totals && showTotals" class="header-item">
     <ion-item no-padding>

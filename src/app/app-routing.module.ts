@@ -28,7 +28,8 @@ const routes: Routes = [
   // { path: 'phonenumberlogin', loadChildren: './phone-number-login/phone-number-login.module#PhoneNumberLoginPageModule' },
   { path: 'UserProfile', loadChildren: './pages/user-profile/user-profile.module#UserProfilePageModule', canActivate: [AuthGuard]  },
   { path: 'EditStoreUser', loadChildren: './StorePages/edit-store-user/edit-store-user.module#EditStoreUserPageModule' },
-  { path: 'Share', loadChildren: './pages/share/share.module#SharePageModule' },
+  { path: 'Share', loadChildren: './pages/share/share.module#SharePageModule' },  { path: 'ProductsListModalContainer', loadChildren: './StorePages/products-list/products-list-modal-container/products-list-modal-container.module#ProductsListModalContainerPageModule' },
+
 
 
 

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+<ion-buttons slot="start">
+  <ion-back-button></ion-back-button>
+</ion-buttons>
+    <ion-title>OrdersSlides</ion-title>
+    <ion-buttons slot="end">
+
+      <ion-button appMorePopOver [actions]='actions' (action)='onAction($event)'>
+        <ion-icon slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content no-badding color="dark">
+
+  <ion-slides style="height:100%;" [options]="{initialSlide:slideIndex}" #slids>
+    <ng-container *ngIf='(activeSlideIndex|async )+1 as activeIndexPlusOne  '>
+      <ion-slide *ngFor="let or of ordersList|async, let i= index" style=" height: 100%;"
+        (click)="showSlideDetails = !showSlideDetails">
+
+        <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+        <div class="swiper-zoom-container">
+          <ng-container *ngIf='i == activeIndexPlusOne-1  || i == activeIndexPlusOne   || i == activeIndexPlusOne-2 '>
+            <app-order-view style="max-width: 100%; max-height: 100%;" [order]='or' [fullView]='true'></app-order-view>
+
+          </ng-container>
+
+        </div>
+      </ion-slide>
+    </ng-container>
+    <!-- https://css-tricks.com/almanac/properties/o/object-fit/ -->
+  </ion-slides>
+  <ng-container *ngIf="showSlideDetails">
+    <!-- [ngClass]="slids.el.dir ==='rtl' ? 'swiper-button-next' : 'swiper-button-prev'" 
+         *ngIf="!slids.isBeginning()" 
+        -->
+    <div class='swiper-button-next' (click)="slids.slideNext()"></div>
+    <!--
+                 [ngClass]="slids.el.dir !=='rtl' ? 'swiper-button-next' : 'swiper-button-prev'"
+               *ngIf="!slids.isEnd()"
+                -->
+    <div class='swiper-button-prev' (click)="slids.slidePrev()"></div>
+  </ng-container>
+
+</ion-content>

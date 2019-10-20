@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { PackinglistInfoDataService } from "../../providers/StoreData/packinglist-info-data.service";
 import { Location } from "@angular/common";
 import { ActivatedRoute, Router } from "@angular/router";
-import { FormBuilder, FormGroup } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Observable, of } from "rxjs";
 import { PackinglistInfo, Extended } from "../../interfaces/data-models";
 import { map, switchMap, tap } from "rxjs/operators";
@@ -29,7 +29,7 @@ export class EditPackinglistInfoPage implements OnInit {
       date: "",
       deliveryDate: "",
       notice: "",
-      name: "",
+      name: ['', Validators.required],
       deliveryAdress: ""
     });
     this.packinglistId$ = this.route.paramMap.pipe(

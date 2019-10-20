@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { Component, OnInit, ViewChild, AfterViewInit, HostListener } from "@angular/core";
 import { FormBuilder, Validators, FormGroup, FormArray } from "@angular/forms";
 import { ProductsDataService } from "../../providers/StoreData/products-data.service";
 import {
@@ -22,7 +22,7 @@ import { ProductPickerComponent } from "../../shared/product-picker/product-pick
   styleUrls: ["./edit-order-row.page.scss"]
 })
 export class EditOrderRowPage implements OnInit, AfterViewInit {
-
+  reorder = false;
   product: Extended<Product>;
   submitAttempt: boolean;
   pLLine: Extended<OrderRow>;
@@ -45,7 +45,7 @@ export class EditOrderRowPage implements OnInit, AfterViewInit {
       productId: ["", Validators.required],
       qty: ["", [Validators.required, Validators.min(0)]],
       price: ["", [Validators.required, Validators.min(0)]],
-      ammount: ["", [ Validators.required, Validators.min(0)]],
+      ammount: ["", [Validators.required, Validators.min(0)]],
       packingLines: this.fb.array([]),
       notice: ""
     });
@@ -92,7 +92,19 @@ export class EditOrderRowPage implements OnInit, AfterViewInit {
       }
     });
   }
-
+  quantityChanged($event) {
+    console.log($event.detail.value);
+    this.computeTotalQty();
+  }
+  computeTotalQty() {
+    const vals = this.packingLines.value as { ctns: number, packing }[];
+    const totQty = vals.reduce((prev, curr) => {
+      prev += curr.ctns * curr.packing;
+      return prev;
+    }, 0);
+    this.qtyControl.setValue(totQty);
+    console.log(vals);
+  }
   createPackingLine(): FormGroup {
     let shippingMark = "";
     if (this.product) {
@@ -117,9 +129,18 @@ export class EditOrderRowPage implements OnInit, AfterViewInit {
   }
   addPackingLine() {
     this.packingLines.push(this.createPackingLine());
+    this.computeTotalQty();
   }
-  deletePackingLine(i: number) {
+  removePackingLine(i: number) {
     this.packingLines.removeAt(i);
+    this.computeTotalQty();
+  }
+  copyPackingLine(i: number) {
+    const copy = { ...this.packingLines.get([i]).value };
+    const fg = this.createPackingLine();
+    fg.patchValue(copy);
+    this.packingLines.insert(i, fg);
+    this.computeTotalQty();
   }
   get packingLines() {
     return this.form.get("packingLines") as FormArray;
@@ -166,6 +187,10 @@ export class EditOrderRowPage implements OnInit, AfterViewInit {
 
   onCancel() {
     return this.dismiss(null, "cancel");
+  }
+  @HostListener('document:ionBackButton', ['$event'])
+  private async overrideHardwareBackAction($event: any) {
+      await this.onCancel();
   }
   onSubmit({ value, valid }: { value: OrderRow2; valid: boolean }) {
     console.log(value, valid);

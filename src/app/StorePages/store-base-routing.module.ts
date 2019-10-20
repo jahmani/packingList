@@ -34,6 +34,10 @@ const routes: Routes = [
         loadChildren: "./orders-list/orders-list.module#OrdersListPageModule"
       },
       {
+        path: "OrdersSlides",
+        loadChildren: "./orders-slides/orders-slides.module#OrdersSlidesPageModule"
+      },
+      {
         path: "ProductsList",
         loadChildren:
           "./products-list/products-list.module#ProductsListPageModule"
@@ -44,7 +48,7 @@ const routes: Routes = [
           "./catalog/catalog2.module#CatalogPageModule"
       },
       {
-        path: "EditOrderHeader",
+        path: "EditOrderHeader/:id",
         loadChildren:
           "./edit-order-header/edit-order-header.module#EditOrderHeaderPageModule"
       },
@@ -94,7 +98,9 @@ const routes: Routes = [
       { path: 'StoreUsers', loadChildren: './store-users/store-users.module#StoreUsersPageModule' },
 
     ]
-  }
+  },
+  { path: 'OrdersSlides', loadChildren: '../Storepages/orders-slides/orders-slides.module#OrdersSlidesPageModule' }
+
 ];
 
 @NgModule({

@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
-import { Extended, Order, OrderRow2 } from '../../interfaces/data-models';
+import { Extended, Order, OrderRow2, StoreInfo } from '../../interfaces/data-models';
 import { StoreInfoService } from '../../providers/AppData/store-info.service';
 import { Router } from '@angular/router';
+import { ActiveStoreService } from '../../providers/AppData/active-store.service';
 
 @Component({
   selector: 'app-order-view',
@@ -14,7 +15,7 @@ export class OrderViewComponent implements OnChanges {
   showLines = false;
   _showNotes = true;
   @Input() order: Extended<Order>;
-  @Input() storeInfo;
+  storeInfo: Extended<StoreInfo>;
   @Input() forProductId: string;
   @Input() fullView;
   @Input() set showNotes (val: boolean) {
@@ -32,7 +33,9 @@ export class OrderViewComponent implements OnChanges {
     }
 
   }
-  constructor(private router: Router) { }
+  constructor(private router: Router, private activeStoreService: ActiveStoreService) {
+    this.storeInfo = activeStoreService.activeStoreInfoValue;
+  }
   ngOnChanges(changes: SimpleChanges) {
     this.rows = this.order.ext.extRows;
     if (this.forProductId) {

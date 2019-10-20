@@ -47,7 +47,7 @@ export class ProductsListPage implements OnInit {
       this.products = this.apls.activePlistProducts;
 
     }
-    
+
     this.userStore = this.ass.activeStoreInfo;
     // const allProducts = this.apls.activePlistId.pipe(filter((id, index) => !id), flatMap(() => this.productsRep.List));
     // this.products = merge(allProducts, this.apls.activePlistProducts ).pipe(shareReplay(1));
@@ -194,7 +194,7 @@ export class ProductsListPage implements OnInit {
       return product.id;
     }
   }
-  ionViewDidEnter(){
+  ionViewDidEnter() {
     this.seos.generateTags({ title: "Products List" });
 
   }

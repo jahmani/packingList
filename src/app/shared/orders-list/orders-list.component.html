@@ -19,17 +19,26 @@
     </ion-row>
   </div> -->
   <ion-item color="secondary">
-      <ion-label>
-        <div class="header-item, list-header">
-          found {{orders.length}} order/s
-        </div>
-      </ion-label>
-    </ion-item>
-  <ng-container *ngFor="let order of orders, let i=index">
+    <ion-label>
+      <div class="header-item, list-header">
+        found {{orders && orders.length}} order/s
+      </div>
+    </ion-label>
+    <ion-icon slot="end" name="reorder" (click)="toggleReorder()"></ion-icon>
+  </ion-item>
 
-    <app-order-view [forProductId]='forProductId' [showHeader]='false' [order]=order [storeInfo]='storeInfo'
-      [expanded]='i==activeLineIndex' (click)="toggleActiveOrder(i)"></app-order-view>
-  </ng-container>
+  <ion-reorder-group (ionItemReorder)="doReorder($event)" [disabled]="!reorderGroupEnabled">
+
+    <div style="position: relative;" *ngFor="let order of orders, let i=index">
+
+      <app-order-view [forProductId]='forProductId' [order]=order></app-order-view>
+          <ion-reorder *ngIf="reorderGroupEnabled" class="ion-text-center expanded-reorder opacity-reorder"   >
+              <ion-icon name="reorder"></ion-icon>
+            </ion-reorder>
+     
+
+    </div>
+  </ion-reorder-group>
   <div *ngIf="totals" class="header-item">
     <ion-item no-padding>
       <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">

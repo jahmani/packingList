@@ -10,6 +10,9 @@
       <ion-button appMorePopOver [actions]='actions' (action)='onAction($event)' >
           <ion-icon slot="icon-only" name="more"></ion-icon>
         </ion-button>
+      <!-- <ion-button (click)="omMoreClicked($event)">
+        <ion-icon slot="icon-only" name="create"></ion-icon>
+      </ion-button> -->
     </ion-buttons>
     <ion-title>EditProduct</ion-title>
   </ion-toolbar>
@@ -72,10 +75,6 @@
       <ion-item>
         <ion-label>price</ion-label>
         <ion-input formControlName="price" type="number"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>CtnNo.</ion-label>
-        <ion-input formControlName="ctnNo" type="text"></ion-input>
       </ion-item>
     </ion-list>
   
