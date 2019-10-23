@@ -12,6 +12,7 @@ import { ProductsListDataService } from "./products-list-data.service";
 import { PageActions, ViewType } from "../../shared/edit-options-popover/edit-options-popover.component";
 import { ActivePListService } from "../../providers/StoreData/active-plist.service";
 import { SeoService } from "../../seo.service";
+import { CanComponentDeactivate } from "../../providers/routGuards/can-deactivate.guard";
 
 
 @Component({
@@ -19,7 +20,7 @@ import { SeoService } from "../../seo.service";
   templateUrl: "./products-list.page.html",
   styleUrls: ["./products-list.page.scss"]
 })
-export class ProductsListPage implements OnInit {
+export class ProductsListPage implements OnInit, CanComponentDeactivate {
   ViewType = ViewType;
   userStore: Observable<Extended<StoreInfo>>;
   views = [ViewType.GRID, ViewType.LIST, ViewType.CARDS];
@@ -69,6 +70,15 @@ export class ProductsListPage implements OnInit {
 
 
   slideIndex = 0;
+  async canDeactivate(): Promise<boolean> {
+    const topModal = await this.modalController.getTop();
+    if (topModal) {
+     // console.log(" A Modal is already opened , cant go back");
+      topModal.dismiss();
+      return false;
+    }
+    return true;
+  }
 
   ionViewDidLoad() {
     // searchControl.valueChanges will not emit values untill the user make input

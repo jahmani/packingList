@@ -8,10 +8,12 @@ import { IonicModule } from '@ionic/angular';
 import { EditOrderHeaderPage } from './edit-order-header.page';
 import { SharedModule } from '../../shared/shared.module';
 import { Ionic4DatepickerModule } from '@logisticinfotech/ionic4-datepicker';
+import { CanDeactivateGuard } from '../../providers/routGuards/can-deactivate.guard';
 const routes: Routes = [
   {
     path: '',
-    component: EditOrderHeaderPage
+    component: EditOrderHeaderPage,
+    canDeactivate: [CanDeactivateGuard]
   }
 ];
 

@@ -18,13 +18,14 @@ import { ModalController, PopoverController } from "@ionic/angular";
 import { OrderRowEditorComponent } from "../../shared/order-row-editor/order-row-editor.component";
 import { datePickerObj } from "./date-picker-options";
 import { EditOptionsPopoverComponent, PageActions } from "../../shared/edit-options-popover/edit-options-popover.component";
+import { CanComponentDeactivate } from "../../providers/routGuards/can-deactivate.guard";
 
 @Component({
   selector: "app-edit-order-header",
   templateUrl: "./edit-order-header.page.html",
   styleUrls: ["./edit-order-header.page.scss"]
 })
-export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit {
+export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit, CanComponentDeactivate {
   packinglists: Observable<Extended<PackinglistInfo>[]>;
   actions = [PageActions.SAVE, PageActions.COPY, PageActions.DELETE];
   // orderId$: Observable<string>;
@@ -38,7 +39,15 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit {
   order: Extended<Order>;
   forProductId: string;
   @ViewChild('newRowComponent', { static: false }) newRowComponent: OrderRowEditorComponent;
-
+  async canDeactivate(): Promise<boolean> {
+    const topModal = await this.modalController.getTop();
+    if (topModal) {
+     // console.log(" A Modal is already opened , cant go back");
+      topModal.dismiss();
+      return false;
+    }
+    return true;
+  }
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -46,7 +55,7 @@ export class EditOrderHeaderPage implements OnInit, OnDestroy, AfterViewInit {
     private location: Location,
     private router: Router,
     private plInfoDataService: PackinglistInfoDataService,
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private popoverController: PopoverController
   ) {
     this.form = this.fb.group({

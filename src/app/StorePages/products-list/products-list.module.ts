@@ -10,12 +10,15 @@ import { SharedModule } from '../../shared/shared.module';
 import { ProductsSlidesPage } from './products-slides.page';
 import { ProductsListDataService } from './products-list-data.service';
 import { ProductsListModalContainerComponent } from './products-list-modal-container/products-list-modal-container.component';
+import { CanDeactivateGuard } from '../../providers/routGuards/can-deactivate.guard';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: ProductsListPage
+    component: ProductsListPage,
+    canDeactivate: [CanDeactivateGuard]
+
   },
   {
     path: 'slideView',
