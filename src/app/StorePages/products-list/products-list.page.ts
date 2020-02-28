@@ -13,6 +13,7 @@ import { PageActions, ViewType } from "../../shared/edit-options-popover/edit-op
 import { ActivePListService } from "../../providers/StoreData/active-plist.service";
 import { SeoService } from "../../seo.service";
 import { CanComponentDeactivate } from "../../providers/routGuards/can-deactivate.guard";
+import { Location } from "@angular/common";
 
 
 @Component({
@@ -38,7 +39,8 @@ export class ProductsListPage implements OnInit, CanComponentDeactivate {
     private prodListServ: ProductsListDataService,
     private ass: ActiveStoreService,
     private apls: ActivePListService,
-    private seos: SeoService
+    private seos: SeoService,
+    private location: Location
   ) {
     this.canSelect = false; // this.navParams.get("canSelect");
     // const productsFsRepository = productsRep; // this.navParams.get("productsFsRepository");
@@ -48,6 +50,14 @@ export class ProductsListPage implements OnInit, CanComponentDeactivate {
       this.products = this.apls.activePlistProducts;
 
     }
+    this.activatedRoute.queryParamMap.subscribe(val => {
+      console.log(val);
+      const editProductModal = val.get('editProductModal');
+      if (editProductModal) {
+        const editProductModalData = JSON.parse(editProductModal);
+        this.presentEditProductModal(editProductModalData.id, editProductModalData.copy);
+      }
+    });
 
     this.userStore = this.ass.activeStoreInfo;
     // const allProducts = this.apls.activePlistId.pipe(filter((id, index) => !id), flatMap(() => this.productsRep.List));
@@ -73,9 +83,9 @@ export class ProductsListPage implements OnInit, CanComponentDeactivate {
   async canDeactivate(): Promise<boolean> {
     const topModal = await this.modalController.getTop();
     if (topModal) {
-     // console.log(" A Modal is already opened , cant go back");
+      // console.log(" A Modal is already opened , cant go back");
       topModal.dismiss();
-      return false;
+      return true;
     }
     return true;
   }
@@ -181,21 +191,53 @@ export class ProductsListPage implements OnInit, CanComponentDeactivate {
     if (this.dynamicList) {
       await this.dynamicList.closeSlidingItems();
     }
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute, queryParams: {
+        editProductModal: JSON.stringify({id, copy})
+      },
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: false
+    });
+
+    //// return await this.presentEditProductModal(id, copy);
+  }
+  private async presentEditProductModal(id: any, copy?: any) {
+    let isDismissed = false;
+    let isNavigatedBack = false;
     const modal = await this.modalController.create({
       component: EditProductPage,
       componentProps: {
         id,
-        copy
+        copy,
+        isModal: true
       }, cssClass: "edit-modal"
     });
-    modal.present();
-    return modal.onDidDismiss();
-  }
-  async showNewProduct() {
-    return this.presentEditProduct("new").then(data => {
-      if (data) {
-        this.slideIndex = 0;
+    // todo. cancel subscription on destroy component
+    const sub = this.location.subscribe(val => {
+      isNavigatedBack = true;
+      if (!isDismissed) {
+        modal.dismiss(null);
       }
+      console.log('location.subscribe', val);
+      sub.unsubscribe();
+    });
+    modal.present();
+    return modal.onDidDismiss().then(val => {
+      isDismissed = true;
+      if (!isNavigatedBack) {
+        this.location.back();
+      }
+      return val;
+    });
+  }
+
+  async showNewProduct() {
+
+    return this.presentEditProduct("new").then(data => {
+      // if (data) {
+      //   this.slideIndex = 0;
+      // }
     });
   }
 

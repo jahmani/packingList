@@ -3,6 +3,7 @@ import { Extended, Product, StoreInfo } from '../../interfaces/data-models';
 import { ActiveStoreService } from '../../providers/AppData/active-store.service';
 import { IonItemSliding, ModalController } from '@ionic/angular';
 import { EditProductPage } from '../../StorePages/edit-product/edit-product.page';
+import { Router, ActivatedRoute } from '@angular/router';
 
 export interface ProductViewOptions {
   editable: boolean;
@@ -42,8 +43,9 @@ export class ProductViewComponent implements AfterViewInit {
   @Output() imgClick = new EventEmitter();
   constructor(
     private ass: ActiveStoreService,
-    private modalControler: ModalController
-
+    private modalControler: ModalController,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.storeInfo = ass.activeStoreInfoValue;
   }
@@ -64,7 +66,20 @@ export class ProductViewComponent implements AfterViewInit {
     copy = { ...copy, id: null, data: { ...copy.data, name: 'copy - ' + copy.data.name } };
     return this.presentEditProduct('new', copy);
   }
-  async presentEditProduct(id, copy?: Extended<Product>) {
+  async presentEditProduct(id, copy?) {
+
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute, queryParams: {
+        editProductModal: JSON.stringify({id, copy})
+      },
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: false
+    });
+
+    // return await this.presentEditProductModal(id, copy);
+  }
+  async presentEditProduct2(id, copy?: Extended<Product>) {
     if (this.slidingItem) {
       await this.slidingItem.closeOpened();
     }
