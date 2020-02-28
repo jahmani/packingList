@@ -12,7 +12,7 @@
 
   </ion-toolbar>
 </ion-header>
-<ion-content no-padding>
+<ion-content class="ion-no-padding">
   <ng-container *ngIf="{pLists: packinglists|async, activePlistId: activePlistId|async} as data">
     <ion-item *ngFor="let pl of data.pLists, let i=index" (click)="open(pl.id)">
       <ion-icon slot="end" name="checkmark" *ngIf='data.activePlistId == pl.id'></ion-icon>

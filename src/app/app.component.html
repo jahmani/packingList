@@ -1,9 +1,9 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu #menu> 
-       <app-menu [menu]="menu"
+  <ion-split-pane contentId="main">
+    <ion-menu contentId="main" #menu> 
+       <app-menu [menu]="menu" 
        [user]="user$|async" [store]="activeStore$|async"></app-menu>
     </ion-menu>
-    <ion-router-outlet  stack="true" main></ion-router-outlet>
+    <ion-router-outlet  stack="true" id="main"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

@@ -32,7 +32,7 @@
 <ion-content no-badding color="dark">
   <ion-list #slidingItem1 *ngIf="view === 'LIST'; else cardsView">
       <ion-item *ngFor="let product of filteredProducts|async">
-        <ion-thumbnail slot="end" no-margin >
+        <ion-thumbnail slot="end" class="ion-no-margin" >
           <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
             onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
         </ion-thumbnail>
@@ -42,7 +42,7 @@
               <span>{{product.data.name}}</span>
             </ion-col>
           </ion-row>
-          <ion-row no-padding class="row-revers font-small">
+          <ion-row class="ion-no-padding" class="row-revers font-small">
             <ion-col  class="font-bold" size="auto" *ngIf="product.data.sPrice">
               <ion-badge>{{product.data.sPrice}} JOD</ion-badge>
             </ion-col>
@@ -82,10 +82,10 @@
           onerror="this.src='assets/img/no-image.jpg';this.onerror='';">
         <ion-card-header>
           <ion-card-title>
-              <ion-item  no-padding>
+              <ion-item  class="ion-no-padding">
                 <ion-label>
                   <h1>{{product.data.name}}</h1>
-                  <ion-row no-padding class="row-revers font-small">
+                  <ion-row class="ion-no-padding" class="row-revers font-small">
                     <div *ngIf="product.data.sPrice">
                       <ion-badge color="primary" class="font-bold">{{product.data.sPrice}} JOD</ion-badge>
                     </div>
@@ -104,7 +104,7 @@
 
               </ion-item>
 
-              <ion-row no-padding class="row-revers font-small">
+              <ion-row class="ion-no-padding" class="row-revers font-small">
               <ion-col size="auto" *ngIf="product.data.code">
                 <span color="drafts"> mark :</span>
                 <ion-text color="drafts"> {{product.data.code}}</ion-text>
@@ -165,7 +165,7 @@
                   <ion-item  style="opacity:1">
                     <ion-label>
                       <h1>{{product.data.name}}</h1>
-                      <ion-row no-padding class="row-revers font-small">
+                      <ion-row class="ion-no-padding" class="row-revers font-small">
                         <div *ngIf="product.data.sPrice">
                           <ion-badge color="primary">{{product.data.sPrice}} JOD</ion-badge>
                         </div>
@@ -183,7 +183,7 @@
                     </ion-label>
 
                   </ion-item>
-                <!-- <ion-row no-padding class="row-revers font-small">
+                <!-- <ion-row class="ion-no-padding" class="row-revers font-small">
                   <ion-col size="auto" *ngIf="product.data.code">
                     <span color="drafts"> mark :</span>
                     <ion-text color="drafts"> {{product.data.code}}</ion-text>

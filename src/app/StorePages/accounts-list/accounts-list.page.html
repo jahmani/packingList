@@ -20,7 +20,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding  #dynamicList>
+<ion-content class="ion-padding"  #dynamicList>
   <ion-list>
     <ion-item *ngIf="totalBalanceObj|async as _totalBalanceObj">
       Total Balances :
@@ -30,7 +30,7 @@
     </ion-item>
     <ion-item-sliding *ngFor="let account of filteredAccounts |async">
       <!--[routerLink]="['/StoreBase/AccountTransactionsList', account.id]" -->
-      <ion-item (click)="onClick(account)" text-wrap>
+      <ion-item (click)="onClick(account)" class="ion-text-wrap">
         <ion-icon name="person" slot="start"></ion-icon>
         <ion-label>
           <span>{{account.data.name}}</span>
@@ -60,7 +60,7 @@
     <ion-button (click)="presentNewAccountModal()" icon-only color="royal">
       <ion-icon name="person-add"></ion-icon>
     </ion-button>
-    <ion-searchbar aria-label="search" [showCancelButton]="true" [formControl]="searchControl"></ion-searchbar>
+    <ion-searchbar aria-label="search" show-cancel-button="always" [formControl]="searchControl"></ion-searchbar>
   </ion-buttons>
 </ion-toolbar>
 </ion-footer>

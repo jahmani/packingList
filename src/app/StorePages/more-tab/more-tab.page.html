@@ -6,7 +6,7 @@
 <ion-content>
 <ng-container *ngIf="user$|async as user; else noUser" >
   <!-- store links -->
-    <ion-list *ngIf="activeStore$|async as store" padding>
+    <ion-list *ngIf="activeStore$|async as store" class="ion-padding">
         <ion-item-divider color="light">
             <ion-button slot="end" fill="clear" routerLink="EditStoreInfo">
               <ion-icon slot="icon-only" name="settings"></ion-icon>
@@ -21,7 +21,7 @@
         </ion-item>
       </ion-list>
       <!-- user links  -->
-      <ion-list padding>
+      <ion-list class="ion-padding">
           <ion-item-divider color="light">
                 <ion-avatar slot="start">
                   <img src="./assets/img/avatar.jpg">

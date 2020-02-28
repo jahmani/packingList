@@ -13,12 +13,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <ion-list *ngIf='userStores | async as ss'>
     <ng-container *ngFor="let userStore of ss">
       <ion-item (click)="onStoreSelected(userStore)" *ngIf="userStore.data.status !== 'INVITED'; else invited">
         <ion-icon name="person" slot="start"></ion-icon>
-        <ion-label text-wrap>
+        <ion-label class="ion-text-wrap">
           {{ userStore.data.storeInfo.name }}
           <ion-note>{{ userStore.id }}</ion-note>
         </ion-label>
@@ -27,7 +27,7 @@
       <ng-template #invited>
         <ion-item>
           <ion-icon name="person" slot="start"></ion-icon>
-          <ion-label text-wrap>
+          <ion-label class="ion-text-wrap">
             {{ userStore.data.storeInfo.name }}
             <ion-note>{{ userStore.id }}</ion-note>
           </ion-label>

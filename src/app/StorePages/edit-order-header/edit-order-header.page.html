@@ -32,7 +32,7 @@
           <app-photo-picker formControlName="imageUrl"></app-photo-picker>
         </ion-thumbnail>
       </ion-item>
-      <ion-row no-padding>
+      <ion-row class="ion-no-padding">
         <ion-col>
           <ion-item>
             <ion-label position="stacked">Order No.</ion-label>
@@ -70,7 +70,7 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row no-padding>
+      <ion-row class="ion-no-padding">
 
         <ion-col>
           <ion-item>
@@ -105,7 +105,7 @@
 
     <ion-list class="order-rows-list" formArrayName="rows">
       <div class="header-item">
-        <ion-item no-padding>
+        <ion-item class="ion-no-padding">
           <ion-thumbnail style="height: auto " class="thumbnail-placeholderr" slot="start">
             <ion-button (click)="showNewOrderRow()" expand="full">
               <ion-icon name="add" slot="icon-only"></ion-icon>
@@ -114,13 +114,13 @@
           </ion-thumbnail>
           <ion-label>
             <ion-row>
-              <ion-col size="4" text-center>
+              <ion-col size="4" class="ion-text-center">
                 <span title="quantity">quantity</span>
               </ion-col>
-              <ion-col size="4" text-center>
+              <ion-col size="4" class="ion-text-center">
                 <span title="price">Price </span>
               </ion-col>
-              <ion-col size="4" text-center>
+              <ion-col size="4" class="ion-text-center">
                 <span title="AMMOUNT">ammount</span>
               </ion-col>
             </ion-row>
@@ -136,8 +136,8 @@
     </ion-list>
   </form>
 </ion-content>
-<!-- <ion-footer no-padding>
-  <ion-row no-padding>
+<!-- <ion-footer class="ion-no-padding">
+  <ion-row class="ion-no-padding">
     <ion-col>
       <ion-button type="button" expand="full" (click)="onCancel()" color="light">cancel</ion-button>
     </ion-col>

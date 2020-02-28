@@ -17,11 +17,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content no-padding>
+<ion-content class="ion-no-padding">
   <div>
   </div>
   <ion-list lines="full">
-    <ion-item text-wrap *ngIf="extAccount |async as account">
+    <ion-item class="ion-text-wrap" *ngIf="extAccount |async as account">
       <span class="balance ammount-bold" text-end>الرصيد : </span>
       <span slot="end" class="ammount-bold" [style.color]='account.ext?.$balanceObj?.data?.isDirty ? "red" :""'>
         {{account.ext.$balanceObj.data.balance}}
@@ -42,7 +42,7 @@
         </div>
         <ion-label>
 
-          <ion-grid no-padding (click)="presentEditTransactionModal(transSnapshot)">
+          <ion-grid class="ion-no-padding" (click)="presentEditTransactionModal(transSnapshot)">
             <ion-row>
               <ion-col text-start>
                 <span>{{transSnapshot.data.type == 1 ? 'له': 'عليه'}}</span>

@@ -3,7 +3,7 @@
     <ion-title>Menu</ion-title>
   </ion-toolbar>
 </ion-header>
-  <ion-list *ngIf="user && store  && store.data" padding>
+  <ion-list *ngIf="user && store  && store.data" class="ion-padding">
     <ion-item-divider color="light">
       <ion-button (click)="menu.close()"  slot="end" fill="clear" routerLink="/EditStoreInfo">
         <ion-icon slot="icon-only" name="settings"></ion-icon>
@@ -16,7 +16,7 @@
       </ion-label>
     </ion-item>
   </ion-list>
-  <ion-list *ngIf="user" padding>
+  <ion-list *ngIf="user" class="ion-padding">
     <ion-item-divider color="light">{{user.data.email || user.data.phoneNumber}}
       <ion-button slot="end" fill="clear" routerLink="/UserProfile">
         <ion-icon slot="icon-only" name="settings"></ion-icon>
@@ -33,7 +33,7 @@
       </ion-label>
     </ion-item>
   </ion-list>
-  <ion-list *ngIf="!user" padding>
+  <ion-list *ngIf="!user" class="ion-padding">
     <ion-item (click)="menu.close()" [routerLink]="link.path" *ngFor="let link of noUserLinks">
       <ion-label>
         {{link.title}}

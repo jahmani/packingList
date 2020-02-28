@@ -23,7 +23,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
     <form *ngIf="account$|async as account" novalidate (ngSubmit)="onSubmit()" [formGroup]="form">
         <ion-list>
             <ion-item [class.invalid]="!nameControl.valid && (nameControl.touched || submitAttempt)">

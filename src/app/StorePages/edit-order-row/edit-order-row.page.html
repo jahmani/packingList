@@ -22,7 +22,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <form novalidate *ngIf="orderRow" ng-submit="onSubmit()" [formGroup]="form">
     <ion-list>
       <app-product-picker formControlName="productId" #productPicker></app-product-picker>
@@ -52,7 +52,7 @@
         <ion-icon slot="end" name="reorder" (click)="reorder= !reorder"></ion-icon>
       </ion-item>
 
-      <!-- <ion-row class="packing-header" align-items-end> -->
+      <!-- <ion-row class="packing-header" class="ion-align-items-end"> -->
       <!-- <ion-col size="1">
           <ion-button expand="full" (click)="addPackingLine()">
             <ion-icon name="add"></ion-icon>
@@ -119,7 +119,7 @@
         </ion-item>
       </div> -->
 
-      <ion-row class="packing-header" align-items-end>
+      <ion-row class="packing-header" class="ion-align-items-end">
         <ion-col>
           <ion-button expand="full" (click)="addPackingLine()">
             <ion-icon name="add"></ion-icon>

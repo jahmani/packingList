@@ -7,7 +7,7 @@
     <ion-card-header>
       <ion-card-title>
         <ion-item-sliding #slidingItem>
-          <ion-item (click)="prodClick.emit(product)" no-padding
+          <ion-item (click)="prodClick.emit(product)" class="ion-no-padding"
             [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
             <ion-label>
               <ng-container *ngTemplateOutlet="productDetails"></ng-container>
@@ -22,8 +22,8 @@
   <ion-card *ngSwitchCase="'ITEM'" class="itemView">
     <ion-card-header class="item-card-header">
       <ion-card-title>
-        <ion-item-sliding no-padding #slidingItem>
-          <ion-item (click)="prodClick.emit(product)" no-padding
+        <ion-item-sliding class="ion-no-padding" #slidingItem>
+          <ion-item (click)="prodClick.emit(product)" class="ion-no-padding"
             [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'">
             <ion-thumbnail class="item-thumb" slot="end" (click)="imgClick.emit($event, product)">
               <img [src]="product.data.thumbUrl ? product.data.thumbUrl: 'assets/img/no-image.jpg'"
@@ -67,7 +67,7 @@
         <ion-card-header>
           <ion-card-title>
             <ion-item-sliding (click)="_expanded = !_expanded; $event.stopPropagation();" #slidingItem>
-              <ion-item [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'" no-padding>
+              <ion-item [lines]="(options.showNotes && product.data.notice) ? 'full' : 'none'" class="ion-no-padding">
                 <ion-label>
                   <ng-container *ngTemplateOutlet="productDetails"></ng-container>
                 </ion-label>
@@ -129,8 +129,8 @@
   </ng-template>
 
   <ng-template #productNotesRow>
-    <ion-item *ngIf="options.showNotes && product.data.notice" no-padding lines="none">
-      <ion-row no-padding>
+    <ion-item *ngIf="options.showNotes && product.data.notice" class="ion-no-padding" lines="none">
+      <ion-row class="ion-no-padding">
         <ion-col size="auto" >
           <ion-note class="font-small">{{product.data.notice}}</ion-note>
         </ion-col>
@@ -141,14 +141,14 @@
 
 
   <ng-template #productDetails>
-    <span class="font-bold" text-wrap>{{product.data.name}}</span>
+    <span class="font-bold" class="ion-text-wrap">{{product.data.name}}</span>
     <ion-note *ngIf="product.data.style">
       - {{product.data.style}}
     </ion-note>
     <ion-badge *ngIf="product.data.sPrice && options.showPrice" color="primary" class="font-bold float-end">
       {{product.data.sPrice | storeCurrency : storeInfo}}</ion-badge>
     <ion-row class="ion-no-padding">
-      <ion-col text-wrap size="auto">
+      <ion-col class="ion-text-wrap" size="auto">
         <ion-note *ngIf="product.data.size">size:{{product.data.size}} | </ion-note>
         <ion-note *ngIf="product.data.code">mark:{{product.data.code}} | </ion-note>
         <ion-note *ngIf="product.data.tags">tags:{{product.data.tags}} | </ion-note>

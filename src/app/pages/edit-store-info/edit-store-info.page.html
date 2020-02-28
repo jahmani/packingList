@@ -15,7 +15,7 @@
 
 
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <form *ngIf="storeDoc$|async as storeDoc" novalidate (ngSubmit)="onSubmit(form)" [formGroup]="form">
     <ion-list>
       <ion-item [class.invalid]="!nameCtrl.valid && (nameCtrl.touched || submitAttempt)">

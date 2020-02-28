@@ -4,16 +4,16 @@
   <!-- <div *ngIf='showListHeader' class="header-item, list-header" color="light">
 
     <ion-row>
-      <ion-col size="3" text-center>
+      <ion-col size="3" class="ion-text-center">
         <span title="quantity">No.</span>
       </ion-col>
-      <ion-col size="3" text-center>
+      <ion-col size="3" class="ion-text-center">
         <span title="quantity">date</span>
       </ion-col>
-      <ion-col size="2" text-center>
+      <ion-col size="2" class="ion-text-center">
         <span title="price">CBM </span>
       </ion-col>
-      <ion-col size="4" text-center>
+      <ion-col size="4" class="ion-text-center">
         <span title="AMMOUNT">ammount</span>
       </ion-col>
     </ion-row>
@@ -40,19 +40,19 @@
     </div>
   </ion-reorder-group>
   <div *ngIf="totals" class="header-item">
-    <ion-item no-padding>
+    <ion-item class="ion-no-padding">
       <ion-thumbnail style="height: 10px " class="thumbnail-placeholderr" slot="start">
         <span>Totals</span>
       </ion-thumbnail>
       <ion-label>
         <ion-row>
-          <ion-col size="4" text-center>
+          <ion-col size="4" class="ion-text-center">
             <span title="quantity">{{totals.qty}}</span>
           </ion-col>
-          <ion-col size="4" text-center>
+          <ion-col size="4" class="ion-text-center">
             <span title="price">{{totals.cbm}} </span>
           </ion-col>
-          <ion-col size="4" text-center>
+          <ion-col size="4" class="ion-text-center">
             <span title="AMMOUNT">{{totals.ammount  | storeCurrency : storeInfo}}</span>
           </ion-col>
         </ion-row>

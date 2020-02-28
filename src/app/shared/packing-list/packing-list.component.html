@@ -1,4 +1,4 @@
-<ion-row class="packing-header" align-items-end>
+<ion-row class="packing-header" class="ion-align-items-end">
   <ion-col class="text-center"> <span>Ctn. No.</span> </ion-col>
   <ion-col class="text-center"> <span>ctns</span> </ion-col>
   <ion-col class="text-center"> <span>packing</span> </ion-col>
@@ -18,7 +18,7 @@
 
       <ng-container *ngIf="orderRow.data.packingLines && orderRow.data.packingLines.length; else noPackingLines">
 
-        <ion-row align-items-center *ngFor="let packingLine of orderRow.data.packingLines; let i = index">
+        <ion-row class="ion-align-items-center" *ngFor="let packingLine of orderRow.data.packingLines; let i = index">
           <ion-col class="text-center italic">
             <span class="input-small-padding">{{ packingLine.ctnNo }}</span>
           </ion-col>
@@ -35,7 +35,7 @@
               }}</span>
           </ion-col>
 
-          <ion-col text-wrap class="text-center italic">
+          <ion-col class="ion-text-wrap" class="text-center italic">
             <span class="input-small-padding">{{ packingLine.shippingMark }}</span>
           </ion-col>
         </ion-row>

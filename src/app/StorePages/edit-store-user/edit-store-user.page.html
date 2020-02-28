@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <form [formGroup]="permissionsCtrlsGroup" #frm (ngSubmit)="onSubmit(permissionsCtrlsGroup)">
 
       <ion-list *ngIf="(storeUser|async) as su">
